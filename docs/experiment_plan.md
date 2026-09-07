@@ -26,7 +26,7 @@ VLFM 上游固定为 bdaiinstitute/vlfm 提交 584ed56008754fde7997d904983607def
 
 当前服务器数据位于 /home/zyq/vlfm/data。新目录链接既有数据、权重、YOLOv7 与 GroundingDINO 资源，避免重复下载。正式报告必须同时记录 episode 数据版本、场景资源版本和传感器设置，不能仅凭目录名 v1 推断 HM3D 场景版本。
 
-模型服务使用独立端口 13181 至 13184，分别运行 GroundingDINO、BLIP2 图文匹配、MobileSAM 和 YOLOv7。第一轮选择 GPU 3；每次启动前检查显存及既有作业。服务只监听本机，推理缓存优先使用已有离线权重。
+模型服务使用独立端口 13181 至 13184，分别运行 GroundingDINO、BLIP2 图文匹配、MobileSAM 和 YOLOv7。既有 CUDA 11.3 与 RTX Ada 的 DINO NVRTC 运算不兼容，因此 DINO 默认使用 CPU，其余模型与导航使用 GPU 3。所有对照共享该设置；启动前检查显存及既有作业。服务只监听本机，使用已有离线权重，不升级原 conda 环境。
 
 ## 3 第一版实现与后续研究范围
 

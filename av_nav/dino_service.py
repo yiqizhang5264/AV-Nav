@@ -1,6 +1,5 @@
 """Use explicit paths instead of the upstream script's hard-coded defaults."""
 import argparse
-import numpy as np
 import torch
 import torchvision.transforms.functional as F
 from groundingdino.util.inference import predict
