@@ -32,8 +32,10 @@ def main():
     install()
     if os.environ.get("AV_STRATEGY") != "baseline":
         import av_nav.policy  # noqa: F401
-    from vlfm.run import main as run
-    run()
+    # Execute as __main__ so Hydra resolves upstream's relative config directory
+    # as a filesystem path, rather than trying to import a Python package 'config'.
+    import runpy
+    runpy.run_module("vlfm.run", run_name="__main__")
 
 
 if __name__ == "__main__":
