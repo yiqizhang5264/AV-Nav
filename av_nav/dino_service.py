@@ -18,10 +18,17 @@ class Service(ServerMixin, GroundingDINO):
         # to GroundingDINO's inference utility (its default is otherwise CUDA).
         caption=self.caption if caption is None else caption
         tensor=F.normalize(F.to_tensor(image),mean=[.485,.456,.406],std=[.229,.224,.225])
-        with torch.inference_mode():
-            boxes,logits,phrases=predict(model=self.model,image=tensor,caption=caption,
-                                        box_threshold=self.box_threshold,text_threshold=self.text_threshold,
-                                        device=self.inference_device)
+        # A failed forward in this installed DINO version leaves cached image
+        # features behind. Never reuse them for a different service request.
+        clear_cache=getattr(self.model,'unset_image_tensor',lambda:None)
+        clear_cache()
+        try:
+            with torch.inference_mode():
+                boxes,logits,phrases=predict(model=self.model,image=tensor,caption=caption,
+                                            box_threshold=self.box_threshold,text_threshold=self.text_threshold,
+                                            device=self.inference_device)
+        finally:
+            clear_cache()
         detections=ObjectDetections(boxes,logits,phrases,image_source=image)
         detections.filter_by_class(caption[:-len(' .')].split(' . '))
         return detections
