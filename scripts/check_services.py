@@ -10,12 +10,14 @@ sys.path.insert(0,str(ROOT/'external/vlfm'))
 import requests
 from vlfm.vlm.server_wrapper import image_to_str
 
-image=np.zeros((128,128,3),dtype=np.uint8)
+# Use the actual navigation resolution: DINO's fixed proposal count is not
+# compatible with a tiny 128x128 synthetic input.
+image=np.zeros((480,640,3),dtype=np.uint8)
 payload=image_to_str(image,quality=90)
 requests_by_service=[
     ('gdino','GROUNDING_DINO_PORT',13181,dict(image=payload,caption='chair .')),
     ('blip2itm','BLIP2ITM_PORT',13182,dict(image=payload,txt='a photo of a chair')),
-    ('mobile_sam','SAM_PORT',13183,dict(image=payload,bbox=[20,20,100,100])),
+    ('mobile_sam','SAM_PORT',13183,dict(image=payload,bbox=[100,100,300,300])),
     ('yolov7','YOLOV7_PORT',13184,dict(image=payload))]
 results={}
 for name,key,default,data in requests_by_service:
