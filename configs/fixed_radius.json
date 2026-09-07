@@ -1,0 +1,6 @@
+{
+  "strategy": "active",
+  "seed": 17,
+  "adaptive": false,
+  "surface_correction": false
+}
