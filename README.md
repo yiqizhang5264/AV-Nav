@@ -36,6 +36,8 @@ source scripts/server.env.example
 
 端口已占用时先检查 `runs/services/pids.json` 和日志，不启动第二套相同端口服务。首次模型加载后确认服务就绪。
 
+服务器原环境的 CUDA 11.3 与 RTX Ada 在 GroundingDINO 的 NVRTC 运算上不兼容，因此启动脚本默认仅将 DINO 放到 CPU。BLIP2、SAM、YOLOv7 与导航仍使用 GPU。所有对照共用同一服务设置；不改动现有 conda 环境。以后升级到兼容环境时可显式传 `--dino-device cuda` 并重新验证。
+
 ```bash
 "$VLFM_PYTHON" scripts/check_services.py
 ```

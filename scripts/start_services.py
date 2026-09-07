@@ -15,6 +15,8 @@ def main():
     p.add_argument("--gpu", default="3")
     p.add_argument("--dino-config", required=True)
     p.add_argument("--only",choices=['grounding_dino','blip2itm','sam','yolov7'])
+    p.add_argument("--dino-device",choices=['cpu','cuda'],default='cpu',
+                   help='CPU avoids CUDA 11.3 NVRTC incompatibility with RTX Ada on the existing environment')
     args = p.parse_args()
     upstream = ROOT/"external/vlfm"
     logs = ROOT/"runs/services"
@@ -42,7 +44,8 @@ def main():
         command=[sys.executable,"-u","-m",f"vlfm.vlm.{name}","--port",str(port)]
         if name=='grounding_dino':
             command=[sys.executable,'-u','-m','av_nav.dino_service','--port',str(port),
-                     '--config',env['GROUNDING_DINO_CONFIG'],'--weights',env['GROUNDING_DINO_WEIGHTS']]
+                     '--config',env['GROUNDING_DINO_CONFIG'],'--weights',env['GROUNDING_DINO_WEIGHTS'],
+                     '--device',args.dino_device]
         with (logs/f"{name}.log").open("w") as stream:
             child = subprocess.Popen(command,
                                      cwd=upstream,env=env,stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
