@@ -96,8 +96,17 @@ class AVHabitatPolicy(HabitatITMPolicyV2):
         negative = self._itm.cosine(crop, "a photo of a " + ", ".join(negatives))
         self._av_calls += 2
         obs.score = float(positive-negative)  # ITC margin, NOT a calibrated probability.
+        evidence_path = None
+        if self.av.record_evidence:
+            import cv2
+            folder=Path(os.environ['AV_RUN_DIR'])/'evidence'
+            folder.mkdir(exist_ok=True)
+            evidence_path=f'evidence/ep{self._av_episode}_step{obs.step}_call{self._av_calls}.jpg'
+            if not cv2.imwrite(str(Path(os.environ['AV_RUN_DIR'])/evidence_path),cv2.cvtColor(crop,cv2.COLOR_RGB2BGR)):
+                raise RuntimeError('Could not save candidate evidence image')
         self._event("evidence", score=obs.score, quality=obs.quality, area=obs.area,
-                    center=obs.center, position=obs.position, source_step=obs.step)
+                    center=obs.center, position=obs.position, source_step=obs.step,
+                    target=self._target_object, crop=evidence_path)
         return obs.score
 
     def _matching_observation(self, goal):
@@ -232,4 +241,5 @@ class AVHabitatPolicy(HabitatITMPolicyV2):
         info.update(av_actions=self._av_total_actions, av_path=self._av_path,
                     av_model_calls=self._av_calls, av_triggers=self._av_triggers,
                     av_episode_index=self._av_episode)
+        info['av_active_at_step']=self._av_active is not None
         return info

@@ -2,5 +2,8 @@
   "strategy": "active",
   "seed": 17,
   "low": -1.0,
-  "high": 1.0
+  "high": 1.0,
+  "max_actions": 48,
+  "max_path": 5.0,
+  "max_episode_actions": 96
 }

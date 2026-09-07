@@ -7,6 +7,7 @@ from pathlib import Path
 class Config:
     strategy: str = "active"
     seed: int = 17
+    record_evidence: bool = True
     low: float = -0.03
     high: float = 0.03
     min_quality: float = 0.35

@@ -36,6 +36,10 @@ source scripts/server.env.example
 
 端口已占用时先检查 `runs/services/pids.json` 和日志，不启动第二套相同端口服务。首次模型加载后确认服务就绪。
 
+```bash
+"$VLFM_PYTHON" scripts/check_services.py
+```
+
 ## 训练集冒烟测试
 
 ```bash
@@ -76,3 +80,5 @@ python scripts/sync.py push
 `baseline` 直接运行官方策略；其他策略共享裁剪 BLIP2 ITC 间隔验证器和候选入口。随机、最近与主动策略共享可行视点集合。MVP 使用局部点云关联、二维可见性和启发式距离，不宣称完整三维恢复或真实信息增益。原地组采用有界转向观测，不能称为完全静止视频。`unsuccessful_target_stops` 不等同于语义假阳性率。
 
 每个运行记录提交、配置、数据哈希、逐回合指标、事件和退出码。仅完整成功退出且 episode 集一致的结果可用于配对比较。
+
+`configs/diagnostic_force_review.json` 放宽工程诊断预算并强制进入模糊区间，用于执行路径检查，禁止纳入方法性能表。默认验证组会将候选裁剪保存到各自 `runs/.../evidence/`，便于训练集人工标签审计；图像不进入 Git。

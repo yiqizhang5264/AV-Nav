@@ -35,12 +35,16 @@ def main():
                MOBILE_SAM_CHECKPOINT=str(upstream/"data/mobile_sam.pt"),
                GROUNDING_DINO_WEIGHTS=str(upstream/"data/groundingdino_swint_ogc.pth"),
                CLASSES_PATH=str(upstream/"vlfm/vlm/classes.txt"),
-               PYTHONPATH=os.pathsep.join([str(upstream),str(upstream/"yolov7"),env.get("PYTHONPATH","")]))
+               PYTHONPATH=os.pathsep.join([str(ROOT),str(upstream),str(upstream/"yolov7"),env.get("PYTHONPATH","")]))
     processes = json.loads((logs/'pids.json').read_text()) if (logs/'pids.json').exists() else {}
     for name,key,default in services:
         port = int(env.get(key,default))
+        command=[sys.executable,"-u","-m",f"vlfm.vlm.{name}","--port",str(port)]
+        if name=='grounding_dino':
+            command=[sys.executable,'-u','-m','av_nav.dino_service','--port',str(port),
+                     '--config',env['GROUNDING_DINO_CONFIG'],'--weights',env['GROUNDING_DINO_WEIGHTS']]
         with (logs/f"{name}.log").open("w") as stream:
-            child = subprocess.Popen([sys.executable,"-u","-m",f"vlfm.vlm.{name}","--port",str(port)],
+            child = subprocess.Popen(command,
                                      cwd=upstream,env=env,stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
         processes[name] = dict(pid=child.pid,port=port)
     (logs/"pids.json").write_text(json.dumps(processes,indent=2))

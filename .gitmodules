@@ -1,3 +1,4 @@
 [submodule "external/vlfm"]
 	path = external/vlfm
 	url = https://github.com/bdaiinstitute/vlfm.git
+	ignore = untracked

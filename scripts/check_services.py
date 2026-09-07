@@ -11,7 +11,7 @@ import requests
 from vlfm.vlm.server_wrapper import image_to_str
 
 image=np.zeros((128,128,3),dtype=np.uint8)
-payload=image_to_str(image)
+payload=image_to_str(image,quality=90)
 requests_by_service=[
     ('gdino','GROUNDING_DINO_PORT',13181,dict(image=payload,caption='chair .')),
     ('blip2itm','BLIP2ITM_PORT',13182,dict(image=payload,txt='a photo of a chair')),
