@@ -3,6 +3,7 @@ import argparse
 from dataclasses import asdict
 from datetime import datetime, timezone
 import hashlib
+import gzip
 import json
 import os
 from pathlib import Path
@@ -25,6 +26,8 @@ def main():
     p.add_argument("--gpu", default="3")
     p.add_argument("--dry-run", action="store_true")
     args = p.parse_args()
+    if args.episodes == 0 or args.episodes < -1 or args.max_steps < 1:
+        p.error('episodes must be positive or -1, and max-steps must be positive')
     if Path(args.run_id).name != args.run_id or args.run_id in {".",".."}:
         p.error("run-id must be a directory name")
     cfg_path = Path(args.config).resolve()
@@ -69,8 +72,24 @@ def main():
     (run/"environment.txt").write_text(freeze.stdout,encoding="utf-8")
     with (run/"console.log").open("w",encoding="utf-8") as f:
         result = subprocess.run(command,cwd=upstream,env=env,stdout=f,stderr=subprocess.STDOUT)
-    (run/"exit.json").write_text(json.dumps(dict(returncode=result.returncode)),encoding="utf-8")
-    raise SystemExit(result.returncode)
+    code=result.returncode
+    completion=dict(returncode=code)
+    if code==0:
+        log=run/'episodes.jsonl'
+        records=[json.loads(line) for line in log.read_text().splitlines() if line.strip()] if log.exists() else []
+        keys={(r['scene_id'],r['episode_id']) for r in records}
+        expected=args.episodes
+        if args.dataset:
+            with gzip.open(args.dataset,'rt') as f:
+                dataset=json.load(f)
+            if '__no_external_content__' in dataset.get('content_scenes_path',''):
+                expected=len(dataset['episodes']) if expected==-1 else min(expected,len(dataset['episodes']))
+        if not records or len(keys)!=len(records) or (expected!=-1 and len(records)!=expected):
+            code=2
+            completion.update(returncode=code,error='Incomplete or duplicate episode logs',
+                              expected_episodes=expected,logged_episodes=len(records))
+    (run/"exit.json").write_text(json.dumps(completion),encoding="utf-8")
+    raise SystemExit(code)
 
 
 if __name__ == "__main__":
