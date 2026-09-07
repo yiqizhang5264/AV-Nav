@@ -1,0 +1,15 @@
+{"episode_index": 1, "step": 46, "event": "evidence", "score": 0.1376342475414276, "quality": 0.893756078767182, "area": 0.035696614583333335, "center": [-1.1727811535470396, 2.3100774122412058, 0.35937167172678985], "position": [1.2832844257354736, 2.838740110397339], "source_step": 46, "target": "potted plant", "crop": "evidence/ep1_step46_call2.jpg"}
+{"episode_index": 1, "step": 46, "event": "trigger", "goal": [-0.8606530836127768, 2.3195878439390887], "quality": 0.893756078767182, "score": 0.1376342475414276}
+{"episode_index": 1, "step": 46, "event": "no_feasible_view"}
+{"episode_index": 1, "step": 46, "event": "finish", "status": "unresolved", "rounds": 1, "path": 0.0, "actions": 0, "goal": [-0.8606530836127768, 2.3195878439390887]}
+{"episode_index": 1, "step": 87, "event": "evidence", "score": 0.18102511763572693, "quality": 0.7508862979011517, "area": 0.021168619791666666, "center": [-1.2051437865475174, 2.2717403062856736, 0.3412597188284521], "position": [1.902258038520813, 3.2347793579101562], "source_step": 87, "target": "potted plant", "crop": "evidence/ep1_step87_call4.jpg"}
+{"episode_index": 1, "step": 87, "event": "trigger", "goal": [-0.8588829682745454, 2.320027122046757], "quality": 0.7508862979011517, "score": 0.18102511763572693}
+{"episode_index": 1, "step": 87, "event": "view_selected", "xy": [-0.18469378656405344, 3.2921903062691373], "planned_cost": 2.4520815280171306, "utility": 0.6544264626619334, "feasible_count": 1}
+{"episode_index": 1, "step": 113, "event": "evidence", "score": 0.23856359720230103, "quality": 0.98126888731483, "area": 0.08328776041666666, "center": [-1.1792959545041461, 2.3112861233103024, 0.3652887625937085], "position": [-0.07979283481836319, 3.167792558670044], "source_step": 108, "target": "potted plant", "crop": "evidence/ep1_step108_call6.jpg"}
+{"episode_index": 1, "step": 113, "event": "fusion", "margin": 0.21362076512965467, "observations": 2}
+{"episode_index": 1, "step": 113, "event": "view_selected", "xy": [-0.097828470059377, 3.3927536077550715], "planned_cost": 0.25, "utility": 1.0486846653204762, "feasible_count": 1}
+{"episode_index": 1, "step": 132, "event": "target_missing"}
+{"episode_index": 1, "step": 132, "event": "finish", "status": "unresolved", "rounds": 2, "path": 3.2500000341128255, "actions": 46, "goal": [-0.8588829682745454, 2.320027122046757]}
+{"episode_index": 1, "step": 174, "event": "evidence", "score": 0.17214293777942657, "quality": 0.8174094600158075, "area": 0.027307942708333335, "center": [-1.2184420388071344, 2.293538859195161, 0.3363846004651949], "position": [1.6387701034545898, 3.17557954788208], "source_step": 174, "target": "potted plant", "crop": "evidence/ep1_step174_call8.jpg"}
+{"episode_index": 1, "step": 174, "event": "trigger", "goal": [-0.8584319100047968, 2.320681362484521], "quality": 0.8174094600158075, "score": 0.17214293777942657}
+{"episode_index": 1, "step": 174, "event": "view_selected", "xy": [-0.16114778977147415, 3.3508331082308214], "planned_cost": 2.2106601717798213, "utility": 0.6841006631194269, "feasible_count": 1}

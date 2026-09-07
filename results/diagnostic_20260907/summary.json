@@ -1,0 +1,11 @@
+{
+  "trigger": 3,
+  "no_feasible_view": 1,
+  "view_selected": 3,
+  "evidence": 4,
+  "fusion": 1,
+  "target_missing": 1,
+  "finish": 2,
+  "purpose": "Forced-review engineering check only; not efficacy evidence",
+  "observed_complete_chain": true
+}

@@ -1,0 +1,18 @@
+test_unknown_key_fails (test_core.ConfigTests) ... ok
+test_angle_wrap (test_core.GeometryTests) ... ok
+test_invalid_depth_rejected (test_core.GeometryTests) ... ok
+test_metric_depth_and_axis (test_core.GeometryTests) ... ok
+test_surface_distance_clamp_and_truncation (test_core.GeometryTests) ... ok
+test_budget_uses_path_not_euclidean (test_core.PlannerTests) ... ok
+test_corner_cutting_forbidden (test_core.PlannerTests) ... ok
+test_no_candidate_is_safe (test_core.PlannerTests) ... ok
+test_seeded_view_path_and_budget (test_core.PlannerTests) ... ok
+test_wall_cannot_be_crossed (test_core.PlannerTests) ... ok
+test_mismatched_episode_sets_rejected (test_workflow.MetricsTests) ... ok
+test_paired_recovery_and_regression (test_workflow.MetricsTests) ... ok
+test_disjoint_scenes_deterministic_ids_and_goals (test_workflow.SplitTests) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.811s
+
+OK
