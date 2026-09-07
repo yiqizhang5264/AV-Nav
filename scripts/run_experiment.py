@@ -29,6 +29,8 @@ def main():
         p.error("run-id must be a directory name")
     cfg_path = Path(args.config).resolve()
     cfg = Config.load(cfg_path)
+    if args.dataset and not any(x in str(Path(args.dataset).resolve()).lower() for x in ('hm3d','mp3d')):
+        p.error('Pinned VLFM infers dataset type from path: include hm3d or mp3d in the split filename')
     run = ROOT/"runs"/args.run_id
     if run.exists():
         p.error(f"Run exists: {run}")
