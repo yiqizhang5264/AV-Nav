@@ -21,7 +21,7 @@ def summarize(records):
                 unsuccessful_target_stops_per_episode=len(failed_stops)/len(rows),
                 unsuccessful_target_stops_per_stop=len(failed_stops)/len(stops) if stops else None)
     for key in ('success','spl','distance_to_goal','av_actions','av_path','av_model_calls','av_triggers'):
-        values=[r['metrics'][key] for r in rows if key in r['metrics']]
+        values=[r['metrics'][key] for r in rows if r['metrics'].get(key) is not None]
         result[key]=float(np.mean(values)) if values else None
     # Unsuccessful STOP is broader than semantic false-positive; do not conflate.
     return result

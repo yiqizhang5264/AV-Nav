@@ -1,5 +1,6 @@
 """Non-policy instrumentation for pinned VLFM evaluation."""
 import json
+import gzip
 import os
 from pathlib import Path
 import numpy as np
@@ -8,6 +9,12 @@ import numpy as np
 def install():
     import vlfm.utils.episode_stats_logger as logger
     original = logger.log_episode_stats
+    source_episodes = None
+    if os.environ.get('AV_DATASET_FILE'):
+        with gzip.open(os.environ['AV_DATASET_FILE'],'rt') as f:
+            data=json.load(f)
+        if '__no_external_content__' in data.get('content_scenes_path',''):
+            source_episodes=data['episodes']
 
     def log(episode_id, scene_id, infos):
         try:
@@ -16,11 +23,19 @@ def install():
             failure = "unclassified"
         def scalar(value):
             if isinstance(value, np.generic):
-                return value.item()
+                value = value.item()
+            if isinstance(value,float) and not np.isfinite(value):
+                return None
             return value
         metrics = {k:scalar(v) for k,v in infos.items()
                    if isinstance(v,(str,int,float,bool,np.generic))}
-        result = dict(scene_id=scene_id, episode_id=str(episode_id),
+        source_id=str(episode_id)
+        if source_episodes is not None:
+            source=source_episodes[int(episode_id)]
+            if not scene_id.endswith(source['scene_id']):
+                raise RuntimeError('Dataset episode identity mismatch')
+            source_id=str(source['episode_id'])
+        result = dict(scene_id=scene_id, episode_id=source_id, runtime_episode_id=str(episode_id),
                       failure_cause=failure, metrics=metrics)
         with (Path(os.environ["AV_RUN_DIR"])/"episodes.jsonl").open("a", encoding="utf-8") as f:
             f.write(json.dumps(result, allow_nan=False)+"\n")

@@ -50,6 +50,7 @@ def main():
     if cfg.strategy != "baseline":
         command += ["habitat_baselines.rl.policy.name=AVHabitatPolicy"]
     if args.dataset:
+        env['AV_DATASET_FILE']=str(Path(args.dataset).resolve())
         command += [f"habitat.dataset.data_path={Path(args.dataset).resolve()}"]
     metadata = dict(config=asdict(cfg), command=command, gpu=args.gpu,
                     started=datetime.now(timezone.utc).isoformat(),

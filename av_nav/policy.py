@@ -230,5 +230,6 @@ class AVHabitatPolicy(HabitatITMPolicyV2):
     def _get_policy_info(self, detections):
         info = super()._get_policy_info(detections)
         info.update(av_actions=self._av_total_actions, av_path=self._av_path,
-                    av_model_calls=self._av_calls, av_triggers=self._av_triggers)
+                    av_model_calls=self._av_calls, av_triggers=self._av_triggers,
+                    av_episode_index=self._av_episode)
         return info
