@@ -1,0 +1,30 @@
+{
+  "baseline_train_smoke5_v3": {
+    "episodes": 5,
+    "target_stop_count": 1,
+    "unsuccessful_target_stop_count": 0,
+    "unsuccessful_target_stops_per_episode": 0.0,
+    "unsuccessful_target_stops_per_stop": 0.0,
+    "success": 0.2,
+    "spl": 0.15951684923557827,
+    "distance_to_goal": 7.451208206638694,
+    "av_actions": null,
+    "av_path": null,
+    "av_model_calls": null,
+    "av_triggers": null
+  },
+  "active_train_smoke5_v1": {
+    "episodes": 5,
+    "target_stop_count": 1,
+    "unsuccessful_target_stop_count": 0,
+    "unsuccessful_target_stops_per_episode": 0.0,
+    "unsuccessful_target_stops_per_stop": 0.0,
+    "success": 0.2,
+    "spl": 0.15951684923557827,
+    "distance_to_goal": 7.451208206638694,
+    "av_actions": 0.0,
+    "av_path": 0.0,
+    "av_model_calls": 1.2,
+    "av_triggers": 0.0
+  }
+}

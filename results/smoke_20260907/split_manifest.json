@@ -1,0 +1,28 @@
+{
+  "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train",
+  "seed": 17,
+  "count": 5,
+  "keys": [
+    [
+      "hm3d/train/00081-5biL7VEkByM/5biL7VEkByM.basis.glb",
+      "15"
+    ],
+    [
+      "hm3d/train/00205-NEVASPhcrxR/NEVASPhcrxR.basis.glb",
+      "12"
+    ],
+    [
+      "hm3d/train/00234-nACV8wLu1u5/nACV8wLu1u5.basis.glb",
+      "67"
+    ],
+    [
+      "hm3d/train/00267-gQ3xxshDiCz/gQ3xxshDiCz.basis.glb",
+      "39"
+    ],
+    [
+      "hm3d/train/00529-W9YAR9qcuvN/W9YAR9qcuvN.basis.glb",
+      "108"
+    ]
+  ],
+  "sha256": "099070e6ef898d8222708b3f4a42b80702d3e433afdfc8460b7dd33e98c5227b"
+}
