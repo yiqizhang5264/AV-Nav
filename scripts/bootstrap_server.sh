@@ -3,7 +3,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VLFM_SOURCE="${VLFM_SOURCE:-/home/zyq/vlfm}"
 git -C "$ROOT" submodule update --init --recursive
-for item in data yolov7; do
+for item in data yolov7 GroundingDINO; do
   if [[ ! -e "$ROOT/external/vlfm/$item" ]]; then
     ln -s "$VLFM_SOURCE/$item" "$ROOT/external/vlfm/$item"
   elif [[ "$item" == data && -d "$ROOT/external/vlfm/data" && ! -L "$ROOT/external/vlfm/data" ]]; then
