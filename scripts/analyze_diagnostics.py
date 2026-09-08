@@ -6,8 +6,8 @@ from av_nav.diagnostic import camera_point
 
 def main():
     import cv2,numpy as np,quaternion
-    ap=argparse.ArgumentParser();ap.add_argument('--run-id',required=True);args=ap.parse_args()
-    root=ROOT/'runs'/args.run_id;out=root/'analysis_v1';out.mkdir(exist_ok=False)
+    ap=argparse.ArgumentParser();ap.add_argument('--run-id',required=True);ap.add_argument('--analysis-id',default='analysis_v2');args=ap.parse_args()
+    root=ROOT/'runs'/args.run_id;out=root/args.analysis_id;out.mkdir(exist_ok=False)
     points=json.loads((ROOT/'configs/diagnostics/hm3dv1_fp12_pixels.json').read_text())['cases']
     summaries=[]
     for spec in points:
@@ -51,7 +51,7 @@ def main():
                 center=np.asarray(obj['center']);half=np.asarray(obj['sizes'])/2
                 residual=np.maximum(np.abs(np.asarray(world)-center)-half,0) if world is not None else None
                 bbox_distance=float(np.linalg.norm(residual)) if residual is not None else None
-                included_floor=e['episode']['start_position'][1]<=center[1]<e['episode']['start_position'][1]+2
+                included_floor=bool(e['episode']['start_position'][1]<=center[1]<e['episode']['start_position'][1]+2)
             else:bbox_distance=None;included_floor=None
             probes.append(dict(pixel=[u,v],semantic_id=sid,semantic_name=obj['name'] if obj else None,
                 task_goal=obj['task_goal'] if obj else None,depth_m=dep,within_vlfm_depth_range=.5<=dep<=5,
