@@ -1,0 +1,145 @@
+{
+  "purpose": "Manually selected pixels inside visually inspected detector-associated objects; not historical nav_goal",
+  "cases": [
+    {
+      "num": 309,
+      "replay_step": 94,
+      "video_frame": 93,
+      "pixels": [
+        [
+          250,
+          80
+        ]
+      ]
+    },
+    {
+      "num": 1850,
+      "replay_step": 200,
+      "video_frame": 199,
+      "pixels": [
+        [
+          170,
+          110
+        ]
+      ]
+    },
+    {
+      "num": 1340,
+      "replay_step": 263,
+      "video_frame": 262,
+      "pixels": [
+        [
+          320,
+          330
+        ]
+      ]
+    },
+    {
+      "num": 1,
+      "replay_step": 79,
+      "video_frame": 78,
+      "pixels": [
+        [
+          132,
+          165
+        ]
+      ]
+    },
+    {
+      "num": 638,
+      "replay_step": 24,
+      "video_frame": 23,
+      "pixels": [
+        [
+          260,
+          278
+        ]
+      ]
+    },
+    {
+      "num": 625,
+      "replay_step": 177,
+      "video_frame": 176,
+      "pixels": [
+        [
+          335,
+          325
+        ]
+      ]
+    },
+    {
+      "num": 1558,
+      "replay_step": 64,
+      "video_frame": 63,
+      "pixels": [
+        [
+          40,
+          284
+        ],
+        [
+          385,
+          290
+        ]
+      ]
+    },
+    {
+      "num": 1517,
+      "replay_step": 18,
+      "video_frame": 17,
+      "pixels": [
+        [
+          255,
+          270
+        ],
+        [
+          480,
+          270
+        ]
+      ]
+    },
+    {
+      "num": 5,
+      "replay_step": 164,
+      "video_frame": 163,
+      "pixels": [
+        [
+          295,
+          287
+        ]
+      ]
+    },
+    {
+      "num": 1796,
+      "replay_step": 468,
+      "video_frame": 467,
+      "pixels": [
+        [
+          210,
+          365
+        ]
+      ]
+    },
+    {
+      "num": 1894,
+      "replay_step": 298,
+      "video_frame": 297,
+      "pixels": [
+        [
+          100,
+          464
+        ]
+      ]
+    },
+    {
+      "num": 1600,
+      "replay_step": 36,
+      "video_frame": 35,
+      "pixels": [
+        [
+          170,
+          245
+        ]
+      ]
+    }
+  ]
+}
