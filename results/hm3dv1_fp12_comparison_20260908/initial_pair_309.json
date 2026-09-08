@@ -84,5 +84,70 @@
         "crop": "evidence/ep1_step79_call2.jpg"
       }
     ]
+  },
+  "active": {
+    "episode": {
+      "scene_id": "data/scene_datasets/hm3d/val/00802-wcojb4TFT35/wcojb4TFT35.basis.glb",
+      "episode_id": "40",
+      "runtime_episode_id": "0",
+      "failure_cause": "false_positive",
+      "metrics": {
+        "distance_to_goal": 11.006349563598633,
+        "success": 0.0,
+        "spl": 0.0,
+        "soft_spl": 0.0,
+        "distance_to_goal_reward": -0.0,
+        "traveled_stairs": 0,
+        "target_object": "tv",
+        "gps": "[   -0.97735     0.55406]",
+        "yaw": -89.99996835353231,
+        "target_detected": true,
+        "stop_called": true,
+        "trace_episode_index": 0,
+        "trace_path_m": 13.003907318019722,
+        "av_actions": 0,
+        "av_path": 0.0,
+        "av_model_calls": 2,
+        "av_triggers": 0,
+        "av_episode_index": 1,
+        "av_active_at_step": false
+      }
+    },
+    "events": [
+      {
+        "episode_index": 0,
+        "scene_id": "hm3d/val/00802-wcojb4TFT35/wcojb4TFT35.basis.glb",
+        "episode_id": "40",
+        "step": 79,
+        "candidate_spatial_id": 0,
+        "event": "evidence",
+        "score": 0.13680711388587952,
+        "quality": 0.5941709849115305,
+        "area": 0.013173828125,
+        "center": [
+          -1.8277039797592565,
+          -0.9712281740180857,
+          1.589383086285574
+        ],
+        "position": [
+          0.8551773428916931,
+          2.6199769973754883
+        ],
+        "source_step": 79,
+        "bbox": [
+          571,
+          121,
+          640,
+          203
+        ],
+        "positive": 0.29040098190307617,
+        "negative": 0.15359386801719666,
+        "target": "tv",
+        "crop": "evidence/ep1_step79_call2.jpg"
+      }
+    ],
+    "exit": {
+      "returncode": 0
+    }
   }
 }
