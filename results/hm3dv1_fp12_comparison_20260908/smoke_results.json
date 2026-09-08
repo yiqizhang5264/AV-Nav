@@ -1,0 +1,91 @@
+{
+  "fp12_trace_smoke_baseline_v1": {
+    "exit": {
+      "returncode": 0
+    },
+    "episodes": [
+      {
+        "scene_id": "data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.basis.glb",
+        "episode_id": "0",
+        "runtime_episode_id": "0",
+        "failure_cause": "false_positive",
+        "metrics": {
+          "distance_to_goal": 6.303871154785156,
+          "success": 0.0,
+          "spl": 0.0,
+          "soft_spl": 0.0,
+          "distance_to_goal_reward": 0.12585830688476562,
+          "traveled_stairs": 0,
+          "target_object": "chair",
+          "gps": "[   -0.84138    -0.54726]",
+          "yaw": 30.00000424992064,
+          "target_detected": true,
+          "stop_called": false,
+          "trace_episode_index": 0,
+          "trace_path_m": 1.2153130466415423
+        }
+      }
+    ],
+    "events": {},
+    "decisions": []
+  },
+  "fp12_trace_smoke_active_v1": {
+    "exit": {
+      "returncode": 0
+    },
+    "episodes": [
+      {
+        "scene_id": "data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.basis.glb",
+        "episode_id": "0",
+        "runtime_episode_id": "0",
+        "failure_cause": "false_positive",
+        "metrics": {
+          "distance_to_goal": 4.608791351318359,
+          "success": 0.0,
+          "spl": 0.0,
+          "soft_spl": 0.15089558733185526,
+          "distance_to_goal_reward": 0.2425975799560547,
+          "traveled_stairs": 0,
+          "target_object": "chair",
+          "gps": "[    0.21663     0.53527]",
+          "yaw": -59.99999483946294,
+          "target_detected": true,
+          "stop_called": false,
+          "trace_episode_index": 0,
+          "trace_path_m": 2.965313029073723,
+          "av_actions": 0,
+          "av_path": 0.0,
+          "av_model_calls": 2,
+          "av_triggers": 0,
+          "av_episode_index": 1,
+          "av_active_at_step": false
+        }
+      }
+    ],
+    "events": {
+      "association": 1,
+      "evidence": 1,
+      "decision": 1,
+      "exploration_resume": 1,
+      "candidate_suppressed": 13
+    },
+    "decisions": [
+      {
+        "episode_index": 0,
+        "scene_id": "hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.basis.glb",
+        "episode_id": "0",
+        "step": 36,
+        "candidate_spatial_id": 0,
+        "event": "decision",
+        "status": "rejected",
+        "reason": "low_margin_or_single",
+        "goal": [
+          2.382803332569744,
+          -0.0008278624102325827
+        ],
+        "score": -0.1198779046535492,
+        "quality": 0.6304522976100277
+      }
+    ]
+  }
+}
