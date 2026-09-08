@@ -47,6 +47,8 @@ def main():
     install()
     if os.environ.get("AV_STRATEGY") != "baseline":
         import av_nav.policy  # noqa: F401
+    elif os.environ.get('AV_TRACE')=='1':
+        import av_nav.trace_policy  # noqa: F401
     # Execute as __main__ so Hydra resolves upstream's relative config directory
     # as a filesystem path, rather than trying to import a Python package 'config'.
     import runpy

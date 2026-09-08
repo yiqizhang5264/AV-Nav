@@ -1,0 +1,43 @@
+{
+  "strategy": "passive",
+  "seed": 100,
+  "record_evidence": true,
+  "low": -0.03,
+  "high": 0.03,
+  "min_quality": 0.35,
+  "target_area": 0.08,
+  "min_range": 1.0,
+  "max_range": 2.5,
+  "fixed_range": 1.5,
+  "adaptive": true,
+  "surface_correction": true,
+  "diversity_weight": 1.0,
+  "scale_weight": 1.0,
+  "cost_weight": 0.6,
+  "max_path": 3.0,
+  "max_actions": 24,
+  "max_rounds": 2,
+  "max_episode_actions": 64,
+  "arrival_radius": 0.2,
+  "association_radius": 0.75,
+  "independent_distance": 0.25,
+  "cooldown_steps": 30,
+  "directions": 8,
+  "angles": [
+    0.0,
+    -30.0,
+    30.0
+  ],
+  "negatives": [
+    "chair",
+    "bed",
+    "potted plant",
+    "toilet",
+    "tv",
+    "couch",
+    "table",
+    "cabinet",
+    "picture",
+    "lamp"
+  ]
+}

@@ -10,6 +10,7 @@ from vlfm.mapping.obstacle_map import ObstacleMap
 from .config import Config
 from .geometry import observe, angle_delta
 from .planner import Grid, select_view
+from .trace import TraceMixin, native
 
 
 class CapturingSAM:
@@ -26,7 +27,7 @@ class CapturingSAM:
 
 
 @baseline_registry.register_policy
-class AVHabitatPolicy(HabitatITMPolicyV2):
+class AVHabitatPolicy(TraceMixin, HabitatITMPolicyV2):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.av = Config.load(os.environ["AV_CONFIG"])
@@ -74,14 +75,15 @@ class AVHabitatPolicy(HabitatITMPolicyV2):
         if goal is not None:
             for center, status, until in self._av_decisions:
                 if np.linalg.norm(goal[:2]-center) < self.av.association_radius and until >= self._num_steps and status != "confirmed":
+                    self._event('candidate_suppressed',goal=goal,center=center,status=status,until=until)
                     return None
         return goal
 
     def _event(self, kind, **values):
         path = Path(os.environ["AV_RUN_DIR"]) / "verification.jsonl"
         with path.open("a", encoding="utf-8") as f:
-            f.write(json.dumps(dict(episode_index=self._av_episode, step=self._num_steps,
-                                   event=kind, **values), default=lambda x:x.tolist()) + "\n")
+            f.write(json.dumps(dict(**self._trace_identity(), step=self._num_steps,
+                                   candidate_spatial_id=self._trace_candidate,event=kind, **values), default=native) + "\n")
 
     def _score(self, obs):
         if obs.score is not None:
@@ -106,16 +108,19 @@ class AVHabitatPolicy(HabitatITMPolicyV2):
                 raise RuntimeError('Could not save candidate evidence image')
         self._event("evidence", score=obs.score, quality=obs.quality, area=obs.area,
                     center=obs.center, position=obs.position, source_step=obs.step,
+                    bbox=obs.bbox,positive=float(positive),negative=float(negative),
                     target=self._target_object, crop=evidence_path)
         return obs.score
 
     def _matching_observation(self, goal):
         items = [o for o in self._av_observations if np.linalg.norm(o.center[:2]-goal[:2]) <= self.av.association_radius]
+        self._event('association',goal=goal,observations=[dict(center=o.center,distance=float(np.linalg.norm(o.center[:2]-goal[:2])),quality=o.quality,bbox=o.bbox) for o in self._av_observations],matched=len(items))
         return max(items, key=lambda o:o.quality) if items else None
 
     def _resume(self):
         action = super()._explore(self._av_raw_observations)
         self._called_stop = False
+        self._event('exploration_resume',action=int(action.item()))
         return action
 
     def _finish(self, status):
@@ -167,29 +172,36 @@ class AVHabitatPolicy(HabitatITMPolicyV2):
             confirmed = any(s == "confirmed" and np.linalg.norm(goal[:2]-p)<cfg.association_radius
                             for p,s,_ in self._av_decisions)
             if confirmed:
+                self._event('decision',status='confirmed',reason='reuse_confirmation',goal=goal)
                 return super()._pointnav(goal, stop=True)
             obs = self._matching_observation(goal)
             if obs is None:
+                self._event('decision',status='approach_without_match',reason='no_matching_observation',goal=goal)
                 # Allow approach, but do not let a stale map candidate directly STOP.
                 if np.linalg.norm(robot-goal[:2]) < self._pointnav_stop_radius:
                     self._av_decisions.append((goal[:2].copy(), "unobserved", self._num_steps+cfg.cooldown_steps))
+                    self._event('decision',status='unobserved',reason='prevent_stale_target_stop',goal=goal)
                     return self._resume()
                 action = super()._pointnav(goal, stop=False)
                 return TorchActionIDs.TURN_LEFT if int(action.item()) == 0 else action
             score = self._score(obs)
             if obs.quality >= cfg.min_quality and score >= cfg.high:
+                self._event('decision',status='confirmed',reason='high_quality_high_margin',goal=goal,score=score,quality=obs.quality)
                 self._av_decisions.append((goal[:2].copy(), "confirmed", math.inf))
                 return super()._pointnav(goal, stop=True)
             if (obs.quality >= cfg.min_quality and score < cfg.low) or cfg.strategy == "single":
+                self._event('decision',status='rejected',reason='low_margin_or_single',goal=goal,score=score,quality=obs.quality)
                 self._av_decisions.append((goal[:2].copy(), "rejected", self._num_steps+cfg.cooldown_steps))
                 return self._resume()
             if self._av_total_actions >= cfg.max_episode_actions:
+                self._event('decision',status='budget',reason='episode_verification_budget',goal=goal)
                 self._av_decisions.append((goal[:2].copy(), "budget", self._num_steps+cfg.cooldown_steps))
                 return self._resume()
             self._av_triggers += 1
             self._av_active = dict(goal=goal[:2].copy(), evidence=[obs], round=0, actions=0,
                                    travel=0.0, last_position=robot.copy())
-            self._event("trigger", goal=goal[:2], quality=obs.quality, score=score)
+            self._event("trigger", goal=goal[:2], quality=obs.quality, score=score,
+                        reason='low_quality' if obs.quality<cfg.min_quality else 'uncertain_margin')
             if not self._new_round(self._av_active):
                 return self._finish("unresolved")
         state = self._av_active

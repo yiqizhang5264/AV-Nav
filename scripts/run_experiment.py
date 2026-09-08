@@ -25,6 +25,7 @@ def main():
     p.add_argument("--split", default="val")
     p.add_argument("--gpu", default="3")
     p.add_argument("--dry-run", action="store_true")
+    p.add_argument('--trace',action='store_true')
     args = p.parse_args()
     if args.episodes == 0 or args.episodes < -1 or args.max_steps < 1:
         p.error('episodes must be positive or -1, and max-steps must be positive')
@@ -42,6 +43,7 @@ def main():
     env.update(AV_CONFIG=str(cfg_path), AV_RUN_DIR=str(run), AV_STRATEGY=cfg.strategy,
                CUDA_VISIBLE_DEVICES=args.gpu, PYTHONHASHSEED=str(cfg.seed),
                PYTHONPATH=os.pathsep.join([str(ROOT),str(upstream),env.get("PYTHONPATH","")]))
+    if args.trace:env['AV_TRACE']='1'
     env.update({k:env.get(k,str(v)) for k,v in dict(GROUNDING_DINO_PORT=13181,BLIP2ITM_PORT=13182,SAM_PORT=13183,YOLOV7_PORT=13184).items()})
     command = [sys.executable,"-u","-m","av_nav.runtime",
                f"habitat.seed={cfg.seed}", f"habitat_baselines.test_episode_count={args.episodes}",
@@ -52,6 +54,10 @@ def main():
                f"habitat_baselines.tensorboard_dir={run/'tb'}", f"hydra.run.dir={run/'hydra'}"]
     if cfg.strategy != "baseline":
         command += ["habitat_baselines.rl.policy.name=AVHabitatPolicy"]
+    elif args.trace:
+        command += ['habitat_baselines.rl.policy.name=TracedVLFMPolicy']
+    if args.trace:
+        command += ['habitat.environment.iterator_options.group_by_scene=False']
     if args.dataset:
         env['AV_DATASET_FILE']=str(Path(args.dataset).resolve())
         command += [f"habitat.dataset.data_path={Path(args.dataset).resolve()}"]
