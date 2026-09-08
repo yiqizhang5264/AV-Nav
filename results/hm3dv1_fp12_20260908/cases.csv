@@ -1,0 +1,13 @@
+﻿num,scene,episode_id,category,selection_group,audit_class,finding,video_frame,replay_step,steps,stop_called,historical_distance,replayed_distance,alignment_correlation,historical_nav_goal_available,av_rescue_status
+309,wcojb4TFT35,40,tv_monitor,semantic_fp,semantic_fp,镜子被识别为电视；语义实例 434 为 mirror。,93,94,100,1.0,11.01,11.006349563598633,0.9897799641088223,False,not_tested
+1850,6s7QHgap2fW,68,tv_monitor,semantic_fp,semantic_fp,窗户被识别为电视；语义实例 318 为 window glass。,199,200,206,1.0,15.47,15.468240737915039,0.989351514581447,False,not_tested
+1340,cvZr5TUy5C5,74,bed,semantic_fp,semantic_fp,红色沙发被识别为床；语义实例 709 为 couch。,262,263,321,1.0,28.35,28.347320556640625,0.9839883429020391,False,not_tested
+1,5cdEh9F2hJL,45,tv_monitor,goal_membership,task_goal_excluded,检测到 wall tv 231，但任务 tv_monitor 目标只有 monitor 353、354。,78,79,100,1.0,12.83,12.831645011901855,0.982646109999651,False,not_tested
+638,svBbv1Pavdk,33,chair,goal_membership,valid_instance_navigation_failure,检测到 chair 274，且 274 在任务目标列表内；不能归因于场景中另一把未收录椅子。,23,24,25,1.0,1.94,1.9437181949615479,0.9498015623942256,False,not_tested
+625,svBbv1Pavdk,75,toilet,goal_membership,task_goal_excluded,检测到 toilet 191，但任务目标只有 toilet 41；本例 stop_called=0。,176,177,204,0.0,12.3,12.301913261413574,0.8930038015421385,False,not_tested
+1558,Dd4bFSTQ8gi,96,sofa,geometry_stop,valid_instance_navigation_failure,检测画面包含任务认可的 couch 9；距目标视点 0.329 m。另一个探针落在 pillow 58，说明局部像素标签不可替代候选关联。,63,64,70,1.0,0.33,0.3287194073200226,0.9489102719840016,False,not_tested
+1517,Dd4bFSTQ8gi,74,chair,geometry_stop,category_boundary,检测为 chair 的高脚坐具被场景标为 stool 176、177，均不在 chair 任务目标中。单列类别边界。,17,18,22,1.0,4.25,4.253790378570557,0.9431221979447872,False,not_tested
+5,5cdEh9F2hJL,33,toilet,geometry_stop,valid_instance_navigation_failure,检测到任务认可的 toilet 454，终点距离仍为 2.717 m；历史导航目标点缺失，具体投影/停止机制待定。,163,164,170,1.0,2.72,2.716876983642578,0.9881348906437823,False,not_tested
+1796,DYehNKdT76V,0,toilet,ambiguous,valid_instance_navigation_failure,第 467 视频帧检测到任务认可的 toilet 329；首次 navigate 在第 468 步，500 步超时，未调用目标停止。,467,468,500,0.0,0.77,0.7746367454528809,0.9916226410673636,False,not_tested
+1894,6s7QHgap2fW,32,toilet,ambiguous,semantic_fp,厨房垃圾桶被识别为马桶；语义实例 180 为 trashcan。,297,298,301,1.0,4.04,4.037484645843506,0.9701213031874226,False,not_tested
+1600,Dd4bFSTQ8gi,0,chair,ambiguous,semantic_fp,床头灯附近区域被识别为椅子；检测框内探针对应 lamp 316。,35,36,74,1.0,5.66,5.664980888366699,0.9765749437845598,False,not_tested

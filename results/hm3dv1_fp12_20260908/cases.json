@@ -1,0 +1,913 @@
+[
+  {
+    "num": 309,
+    "scene": "wcojb4TFT35",
+    "episode_id": "40",
+    "category": "tv_monitor",
+    "selection_group": "semantic_fp",
+    "selection_reason": "tv box on mirror",
+    "video_frame": 93,
+    "replay_step": 94,
+    "alignment_correlation": 0.9897799641088223,
+    "crop": [
+      0,
+      513,
+      596,
+      447,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.5527678497609309
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9900083073417213
+      },
+      {
+        "offset": 2,
+        "correlation": 0.48517199712232256
+      }
+    ],
+    "historical_distance": 11.01,
+    "replayed_distance": 11.006349563598633,
+    "distance_delta": -0.0036504364013669743,
+    "steps": 100,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          250,
+          80
+        ],
+        "semantic_id": 434,
+        "semantic_name": "mirror",
+        "task_goal": false,
+        "depth_m": 1.476765513420105,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          -0.8336028234635822,
+          1.502389843336453,
+          -11.614591971647187
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "434": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      349
+    ],
+    "audit_class": "semantic_fp",
+    "finding": "镜子被识别为电视；语义实例 434 为 mirror。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 1850,
+    "scene": "6s7QHgap2fW",
+    "episode_id": "68",
+    "category": "tv_monitor",
+    "selection_group": "semantic_fp",
+    "selection_reason": "tv box on window",
+    "video_frame": 199,
+    "replay_step": 200,
+    "alignment_correlation": 0.989351514581447,
+    "crop": [
+      0,
+      501,
+      612,
+      459,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.5217494035841026
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9892960493255254
+      },
+      {
+        "offset": 2,
+        "correlation": 0.501914116712159
+      }
+    ],
+    "historical_distance": 15.47,
+    "replayed_distance": 15.468240737915039,
+    "distance_delta": -0.001759262084961577,
+    "steps": 206,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          170,
+          110
+        ],
+        "semantic_id": 318,
+        "semantic_name": "window glass",
+        "task_goal": false,
+        "depth_m": 1.6487209796905518,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          10.498072802140575,
+          4.331570768233154,
+          -2.499225102698495
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "318": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      34
+    ],
+    "audit_class": "semantic_fp",
+    "finding": "窗户被识别为电视；语义实例 318 为 window glass。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 1340,
+    "scene": "cvZr5TUy5C5",
+    "episode_id": "74",
+    "category": "bed",
+    "selection_group": "semantic_fp",
+    "selection_reason": "bed target approaching red sofa; provisional semantic confusion",
+    "video_frame": 262,
+    "replay_step": 263,
+    "alignment_correlation": 0.9839883429020391,
+    "crop": [
+      0,
+      519,
+      588,
+      441,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.1414829797670501
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9848424748454359
+      },
+      {
+        "offset": 2,
+        "correlation": 0.1363157633848442
+      }
+    ],
+    "historical_distance": 28.35,
+    "replayed_distance": 28.347320556640625,
+    "distance_delta": -0.002679443359376421,
+    "steps": 321,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          320,
+          330
+        ],
+        "semantic_id": 709,
+        "semantic_name": "couch",
+        "task_goal": false,
+        "depth_m": 0.5532763004302979,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          -10.083761210770788,
+          -2.1761104309827086,
+          6.884900439784177
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "709": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      230,
+      253,
+      342,
+      520
+    ],
+    "audit_class": "semantic_fp",
+    "finding": "红色沙发被识别为床；语义实例 709 为 couch。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 1,
+    "scene": "5cdEh9F2hJL",
+    "episode_id": "45",
+    "category": "tv_monitor",
+    "selection_group": "goal_membership",
+    "selection_reason": "wall television excluded from task tv_monitor list",
+    "video_frame": 78,
+    "replay_step": 79,
+    "alignment_correlation": 0.982646109999651,
+    "crop": [
+      0,
+      516,
+      592,
+      444,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.7380168600131493
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9832506486302226
+      },
+      {
+        "offset": 2,
+        "correlation": 0.7741995264338078
+      }
+    ],
+    "historical_distance": 12.83,
+    "replayed_distance": 12.831645011901855,
+    "distance_delta": 0.0016450119018553977,
+    "steps": 100,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          132,
+          165
+        ],
+        "semantic_id": 231,
+        "semantic_name": "wall tv",
+        "task_goal": false,
+        "depth_m": 3.571403980255127,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          1.7883280880983614,
+          1.5884123708410938,
+          4.061553109944635
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "231": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      353,
+      354
+    ],
+    "audit_class": "task_goal_excluded",
+    "finding": "检测到 wall tv 231，但任务 tv_monitor 目标只有 monitor 353、354。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 638,
+    "scene": "svBbv1Pavdk",
+    "episode_id": "33",
+    "category": "chair",
+    "selection_group": "goal_membership",
+    "selection_reason": "chair visible; scene has excluded chair instance",
+    "video_frame": 23,
+    "replay_step": 24,
+    "alignment_correlation": 0.9498015623942256,
+    "crop": [
+      0,
+      519,
+      588,
+      441,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.479266929656284
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9529035351249351
+      },
+      {
+        "offset": 2,
+        "correlation": 0.9529035351249351
+      }
+    ],
+    "historical_distance": 1.94,
+    "replayed_distance": 1.9437181949615479,
+    "distance_delta": 0.003718194961547905,
+    "steps": 25,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          260,
+          278
+        ],
+        "semantic_id": 274,
+        "semantic_name": "chair",
+        "task_goal": true,
+        "depth_m": 3.6667869091033936,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          6.669841229267831,
+          0.5986058543734377,
+          2.4763840961355275
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "274": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      20,
+      87,
+      274,
+      275,
+      336,
+      337,
+      338,
+      339,
+      340,
+      341
+    ],
+    "audit_class": "valid_instance_navigation_failure",
+    "finding": "检测到 chair 274，且 274 在任务目标列表内；不能归因于场景中另一把未收录椅子。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 625,
+    "scene": "svBbv1Pavdk",
+    "episode_id": "75",
+    "category": "toilet",
+    "selection_group": "goal_membership",
+    "selection_reason": "toilet visible; scene has excluded toilet instance and stop_called=0",
+    "video_frame": 176,
+    "replay_step": 177,
+    "alignment_correlation": 0.8930038015421385,
+    "crop": [
+      0,
+      516,
+      592,
+      444,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.8942697358068704
+      },
+      {
+        "offset": 1,
+        "correlation": 0.8942697358068704
+      },
+      {
+        "offset": 2,
+        "correlation": -0.26656520637727443
+      }
+    ],
+    "historical_distance": 12.3,
+    "replayed_distance": 12.301913261413574,
+    "distance_delta": 0.0019132614135735082,
+    "steps": 204,
+    "stop_called": 0.0,
+    "probes": [
+      {
+        "pixel": [
+          335,
+          325
+        ],
+        "semantic_id": 191,
+        "semantic_name": "toilet",
+        "task_goal": false,
+        "depth_m": 1.8096824884414673,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          2.1343845168463664,
+          0.561291471942757,
+          6.21935058653233
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "191": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      41
+    ],
+    "audit_class": "task_goal_excluded",
+    "finding": "检测到 toilet 191，但任务目标只有 toilet 41；本例 stop_called=0。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 1558,
+    "scene": "Dd4bFSTQ8gi",
+    "episode_id": "96",
+    "category": "sofa",
+    "selection_group": "geometry_stop",
+    "selection_reason": "real sofa visible but distance=0.33m and FP label",
+    "video_frame": 63,
+    "replay_step": 64,
+    "alignment_correlation": 0.9489102719840016,
+    "crop": [
+      0,
+      519,
+      588,
+      441,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.6095417587199916
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9493773482929847
+      },
+      {
+        "offset": 2,
+        "correlation": 0.600060934079627
+      }
+    ],
+    "historical_distance": 0.33,
+    "replayed_distance": 0.3287194073200226,
+    "distance_delta": -0.0012805926799774325,
+    "steps": 70,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          40,
+          284
+        ],
+        "semantic_id": 58,
+        "semantic_name": "pillow",
+        "task_goal": false,
+        "depth_m": 3.0095584392547607,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          6.842520269718689,
+          0.5204896110802368,
+          -6.704505642166267
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "58": 17,
+          "59": 8
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      },
+      {
+        "pixel": [
+          385,
+          290
+        ],
+        "semantic_id": 9,
+        "semantic_name": "couch",
+        "task_goal": true,
+        "depth_m": 2.9526729583740234,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          9.245139714729895,
+          0.48129994678462745,
+          -5.5495790743908735
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "9": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      8,
+      9,
+      171
+    ],
+    "audit_class": "valid_instance_navigation_failure",
+    "finding": "检测画面包含任务认可的 couch 9；距目标视点 0.329 m。另一个探针落在 pillow 58，说明局部像素标签不可替代候选关联。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 1517,
+    "scene": "Dd4bFSTQ8gi",
+    "episode_id": "74",
+    "category": "chair",
+    "selection_group": "geometry_stop",
+    "selection_reason": "real bar chairs visible, inspect goal identity/projection",
+    "video_frame": 17,
+    "replay_step": 18,
+    "alignment_correlation": 0.9431221979447872,
+    "crop": [
+      0,
+      519,
+      588,
+      441,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.5583034237388695
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9463572886619376
+      },
+      {
+        "offset": 2,
+        "correlation": 0.5064373147358889
+      }
+    ],
+    "historical_distance": 4.25,
+    "replayed_distance": 4.253790378570557,
+    "distance_delta": 0.0037903785705566406,
+    "steps": 22,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          255,
+          270
+        ],
+        "semantic_id": 176,
+        "semantic_name": "stool",
+        "task_goal": false,
+        "depth_m": 1.2921981811523438,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          2.1618268847794018,
+          0.8489600338919436,
+          0.39733287502285464
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "176": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      },
+      {
+        "pixel": [
+          480,
+          270
+        ],
+        "semantic_id": 177,
+        "semantic_name": "stool",
+        "task_goal": false,
+        "depth_m": 1.5754449367523193,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          3.0724428392369916,
+          0.8270702895038985,
+          0.4191367394028014
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "177": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      10,
+      11,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      133,
+      134,
+      136
+    ],
+    "audit_class": "category_boundary",
+    "finding": "检测为 chair 的高脚坐具被场景标为 stool 176、177，均不在 chair 任务目标中。单列类别边界。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 5,
+    "scene": "5cdEh9F2hJL",
+    "episode_id": "33",
+    "category": "toilet",
+    "selection_group": "geometry_stop",
+    "selection_reason": "toilet visible at distance, inspect projection/stop",
+    "video_frame": 163,
+    "replay_step": 164,
+    "alignment_correlation": 0.9881348906437823,
+    "crop": [
+      0,
+      516,
+      592,
+      444,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.5247628971311615
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9876284123807282
+      },
+      {
+        "offset": 2,
+        "correlation": 0.40978918869967285
+      }
+    ],
+    "historical_distance": 2.72,
+    "replayed_distance": 2.716876983642578,
+    "distance_delta": -0.0031230163574220704,
+    "steps": 170,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          295,
+          287
+        ],
+        "semantic_id": 454,
+        "semantic_name": "toilet",
+        "task_goal": true,
+        "depth_m": 4.689826011657715,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          1.4580560591973057,
+          0.33058550441052714,
+          -1.5957442983647265
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "454": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      36,
+      454
+    ],
+    "audit_class": "valid_instance_navigation_failure",
+    "finding": "检测到任务认可的 toilet 454，终点距离仍为 2.717 m；历史导航目标点缺失，具体投影/停止机制待定。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 1796,
+    "scene": "DYehNKdT76V",
+    "episode_id": "0",
+    "category": "toilet",
+    "selection_group": "ambiguous",
+    "selection_reason": "timeout and occluded candidate",
+    "video_frame": 467,
+    "replay_step": 468,
+    "alignment_correlation": 0.9916226410673636,
+    "crop": [
+      0,
+      513,
+      596,
+      447,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": -0.25699455972263385
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9921467261588094
+      },
+      {
+        "offset": 2,
+        "correlation": 0.025707685710773222
+      }
+    ],
+    "historical_distance": 0.77,
+    "replayed_distance": 0.7746367454528809,
+    "distance_delta": 0.004636745452880842,
+    "steps": 500,
+    "stop_called": 0.0,
+    "probes": [
+      {
+        "pixel": [
+          210,
+          365
+        ],
+        "semantic_id": 329,
+        "semantic_name": "toilet",
+        "task_goal": true,
+        "depth_m": 1.724382996559143,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          -8.881657589452443,
+          0.46124454815663296,
+          -5.116550362347972
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "329": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      33,
+      115,
+      329
+    ],
+    "audit_class": "valid_instance_navigation_failure",
+    "finding": "第 467 视频帧检测到任务认可的 toilet 329；首次 navigate 在第 468 步，500 步超时，未调用目标停止。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 1894,
+    "scene": "6s7QHgap2fW",
+    "episode_id": "32",
+    "category": "toilet",
+    "selection_group": "ambiguous",
+    "selection_reason": "toilet target but terminal kitchen view",
+    "video_frame": 297,
+    "replay_step": 298,
+    "alignment_correlation": 0.9701213031874226,
+    "crop": [
+      0,
+      498,
+      616,
+      462,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": -0.237603126868832
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9706435284019841
+      },
+      {
+        "offset": 2,
+        "correlation": -0.237603126868832
+      }
+    ],
+    "historical_distance": 4.04,
+    "replayed_distance": 4.037484645843506,
+    "distance_delta": -0.002515354156494176,
+    "steps": 301,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          100,
+          464
+        ],
+        "semantic_id": 180,
+        "semantic_name": "trashcan",
+        "task_goal": false,
+        "depth_m": 0.8997412323951721,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          21.3053578089905,
+          0.4602531965275115,
+          -1.0588751197805482
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "180": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      229
+    ],
+    "audit_class": "semantic_fp",
+    "finding": "厨房垃圾桶被识别为马桶；语义实例 180 为 trashcan。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  },
+  {
+    "num": 1600,
+    "scene": "Dd4bFSTQ8gi",
+    "episode_id": "0",
+    "category": "chair",
+    "selection_group": "ambiguous",
+    "selection_reason": "chair target but terminal wall occlusion",
+    "video_frame": 35,
+    "replay_step": 36,
+    "alignment_correlation": 0.9765749437845598,
+    "crop": [
+      0,
+      519,
+      588,
+      441,
+      0
+    ],
+    "offset_comparisons": [
+      {
+        "offset": 0,
+        "correlation": 0.15103030806017614
+      },
+      {
+        "offset": 1,
+        "correlation": 0.9782330881079554
+      },
+      {
+        "offset": 2,
+        "correlation": 0.20978712125377091
+      }
+    ],
+    "historical_distance": 5.66,
+    "replayed_distance": 5.664980888366699,
+    "distance_delta": 0.004980888366699077,
+    "steps": 74,
+    "stop_called": 1.0,
+    "probes": [
+      {
+        "pixel": [
+          170,
+          245
+        ],
+        "semantic_id": 316,
+        "semantic_name": "lamp",
+        "task_goal": false,
+        "depth_m": 3.0576605796813965,
+        "within_vlfm_depth_range": true,
+        "world_surface_point": [
+          -1.522173220979298,
+          0.9094396432537436,
+          5.234227767999933
+        ],
+        "distance_to_semantic_aabb": 0.0,
+        "object_center_in_initial_floor_mask": true,
+        "patch_semantic_counts": {
+          "316": 25
+        },
+        "point_kind": "diagnostic visible-surface point, NOT historical nav_goal"
+      }
+    ],
+    "historical_nav_goal_available": false,
+    "task_goal_ids": [
+      10,
+      11,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      133,
+      134,
+      136
+    ],
+    "audit_class": "semantic_fp",
+    "finding": "床头灯附近区域被识别为椅子；检测框内探针对应 lamp 316。",
+    "classification_scope": "visually audited detector-associated instance, not complete historical nav_goal causality",
+    "av_rescue_status": "not_tested"
+  }
+]

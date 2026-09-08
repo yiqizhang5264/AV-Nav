@@ -1,0 +1,186 @@
+{
+  "replay_manifest": {
+    "started": "2026-09-08T11:08:37.453620+00:00",
+    "argv": [
+      "scripts/replay_diagnostics.py",
+      "--run-id",
+      "fp12_full_20260908"
+    ],
+    "commit": "58b7a4dfafa0dd1655fe42dd84cd5919719c4873",
+    "dirty": "",
+    "selection_sha256": "a8dc15d3a03e9a3fc4785fc5f8d12c4b0f6efba16e6c389437c6ea3a13ad127c",
+    "habitat_sim": "0.2.4",
+    "source_config": "/home/zyq/vlfm/outputs/2026-02-20/08-29-42/.hydra/config.yaml",
+    "config": {
+      "width": 640,
+      "height": 480,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "forward_step": 0.25,
+      "turn_angle": 30,
+      "allow_sliding": false
+    },
+    "historical_nav_goal_available": false
+  },
+  "replay_exit": {
+    "completed": 12,
+    "returncode": 0
+  },
+  "analysis_commit": "3e45d52",
+  "analysis_directory": "analysis_v2",
+  "tests": "python -m unittest discover -s tests -v: 15 passed",
+  "failed_attempts": [
+    {
+      "directory": "analysis_v1",
+      "status": "failed",
+      "reason": "NumPy bool_ not JSON serializable; fixed with bool conversion; original output retained"
+    }
+  ],
+  "evidence_root": "/home/zyq/AV-Nav/runs/fp12_full_20260908",
+  "case_sources": [
+    {
+      "num": 309,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00802-wcojb4TFT35/wcojb4TFT35.semantic.glb": "9034ff792cd2541106e0c9148dafe37f10b04063905866cdf8b16736faa6da65",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00802-wcojb4TFT35/wcojb4TFT35.basis.navmesh": "ae5ddd8ca77480eea3c401059844ae1ccc42d9cce75770a25b0d79b02d077232",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00802-wcojb4TFT35/wcojb4TFT35.semantic.txt": "ab4447ab24af7189ff915bf0022b29e828f55e8d29e6e4fa2359672de7e8dc02",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00802-wcojb4TFT35/wcojb4TFT35.basis.glb": "075e243b372458df4055a55e27c93885ba44ae8c36b4bc4446e0393c60c14540"
+      },
+      "video_sha256": "4adc240d393a6e7e3ee0a37736b83fdb79080d510b38ff3ced816031f943d715",
+      "dataset_sha256": "6d187a786eb1f3b74106c02990a46d06816d2c49155038ced6af192cd628d485",
+      "log_sha256": "e162dec3984d4874e063e2c3dd3d94d29f031a3eeece8fadbd5892a86c8c683c"
+    },
+    {
+      "num": 1850,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00890-6s7QHgap2fW/6s7QHgap2fW.semantic.glb": "13e90f4197d439256820ae4e797d086863bfe82e4cf13475b84a5d74236d253b",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00890-6s7QHgap2fW/6s7QHgap2fW.basis.glb": "cc8a22a3c62160e2ff035bd00e764494dd9a609c5bb7b1fb0c429a05aaaf8344",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00890-6s7QHgap2fW/6s7QHgap2fW.basis.navmesh": "b8739c2960d431095f59c8200a6b6b316c5b649f6f345f892f123b1220a7dbde",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00890-6s7QHgap2fW/6s7QHgap2fW.semantic.txt": "f3be09840047f61f704773e046ba414f1b43f47527c71262151dace899feb426"
+      },
+      "video_sha256": "9c364c8437c06845750589854c4792c2bdfd4830233430870e83af722f63b332",
+      "dataset_sha256": "90c85659b5e50b81777b6c7344b24084f9f94e16f1cf2d25aecc82effb7b110e",
+      "log_sha256": "37b7bc4f5ae5115b1eb461c33cf3fcaf6a93b1e3ffee723d95f9423b675b9e08"
+    },
+    {
+      "num": 1340,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00891-cvZr5TUy5C5/cvZr5TUy5C5.semantic.txt": "3810d3e247887bd1d556a45e6ea49925f396d555ef309fe693aa81fffee30acc",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00891-cvZr5TUy5C5/cvZr5TUy5C5.basis.navmesh": "cbe678cdbe0e618e90c9d9f5dfd20ef40136a0b1f0294cf95f6c87464cd96ddc",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00891-cvZr5TUy5C5/cvZr5TUy5C5.semantic.glb": "e91b56b6aad71fe0c5ad5959ec979c68747ce910bd5064d2eab96882f104bb53",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00891-cvZr5TUy5C5/cvZr5TUy5C5.basis.glb": "6546eb52bf729e5a2cc8f24c3aa9f3d0c7745a341399643de907add21ed42f81"
+      },
+      "video_sha256": "f0d251faaa65e000792f5358667d4c75106bb5459db6e9baa2e956f6bf404f7e",
+      "dataset_sha256": "790068a596231b593d0b4376ccecb83ea1cd3ceedb392fb690605759b88ac408",
+      "log_sha256": "018abd57f334fa7124e520461db0e223024f0aafa430ab79c887e47e38a235c5"
+    },
+    {
+      "num": 1,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.semantic.txt": "0e2e82f4726dc86df4291ab0911226e01e84bc5d9f511434abfb234f6b9566d8",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.semantic.glb": "927f36670622cac29d1e1b78d5624ae572a7cf51c8278bef0d266024ab609116",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.navmesh": "3d5fdcb1b00629e25a45b3033e69a214c7d2cdd3ec0ac8595c7ed296a3098a56",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.glb": "139dcb5542263b4e00a1daee7054f252253bcd02fb4ac51904886cda9f0cd8b6"
+      },
+      "video_sha256": "f7e8878ff4c7af617652dce9a88deddd55b704ce4686528fa2b5aaca67e19da1",
+      "dataset_sha256": "d0591c97aafd3d3c14f090625c3b75098757c345d3c97a70dbffac2842bdc157",
+      "log_sha256": "3295496e3ae22098337cb2d172e08418161089396e9318cdf04affabbe4d680a"
+    },
+    {
+      "num": 638,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00813-svBbv1Pavdk/svBbv1Pavdk.basis.navmesh": "e38240ef997011c2d6df16e14aaabdaae7e6cdd1c409d62be96afc59e2580665",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00813-svBbv1Pavdk/svBbv1Pavdk.basis.glb": "f84c25a56544d0c85935e9449e45c378fc5435e327fabb4c9174e28dd385ce57",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00813-svBbv1Pavdk/svBbv1Pavdk.semantic.glb": "64cd62e558f9ba5a2d703bcee40fc2dc5e1108c79f9cb393ce26280d68963a01",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00813-svBbv1Pavdk/svBbv1Pavdk.semantic.txt": "9ab4dd8fdabc8f92b00f195d2f6ca00a57472d18e7458613e263ba0e212e58f5"
+      },
+      "video_sha256": "b655c94cd54480f994a9fc6a225f2df5f1982fd512739b25a44aab9e6336315b",
+      "dataset_sha256": "6c7f1a78aae151cb78657c4ef34917271279215b0aedd3d006012ebfaca89b14",
+      "log_sha256": "0c40a0a51b92190d6f9fc34221a16f1e877802b089a0133453bce2f428d57813"
+    },
+    {
+      "num": 625,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00813-svBbv1Pavdk/svBbv1Pavdk.basis.navmesh": "e38240ef997011c2d6df16e14aaabdaae7e6cdd1c409d62be96afc59e2580665",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00813-svBbv1Pavdk/svBbv1Pavdk.basis.glb": "f84c25a56544d0c85935e9449e45c378fc5435e327fabb4c9174e28dd385ce57",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00813-svBbv1Pavdk/svBbv1Pavdk.semantic.glb": "64cd62e558f9ba5a2d703bcee40fc2dc5e1108c79f9cb393ce26280d68963a01",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00813-svBbv1Pavdk/svBbv1Pavdk.semantic.txt": "9ab4dd8fdabc8f92b00f195d2f6ca00a57472d18e7458613e263ba0e212e58f5"
+      },
+      "video_sha256": "d8045415ed1b4ae42a13926302b24be3a1465846975ddd8f777cbe5ff24a61b5",
+      "dataset_sha256": "6c7f1a78aae151cb78657c4ef34917271279215b0aedd3d006012ebfaca89b14",
+      "log_sha256": "3f982775be9bd6fd9978f8e83ac77c2b44820d856a634f42936b51c195826cb0"
+    },
+    {
+      "num": 1558,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.basis.navmesh": "fab3a90f2476e43df8e4580af70d3b29925c5a04aab3ee7acec74a696c1a120e",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.semantic.txt": "9cd76faf5d8621967a2eb59a7921e3b5e0f84ef97270ae4ba5910624ca613e3f",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.basis.glb": "1cba0b073567b8d89ca4e9c4f9b54cd86443e8d57410b2765236cfb7fdc74b50",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.semantic.glb": "43b3186d97d92601567a50a991986c6589e7e2728c0d0d59c8fe384e45c4b510"
+      },
+      "video_sha256": "0609e5b10156bc35eda8224b890264a27ea073c5ca6835fab297bbb4da7c3b2e",
+      "dataset_sha256": "aa0755eada7551a555b96801600f6148c17f3584244d8abebbdc91c765b95659",
+      "log_sha256": "714842d32780cf00ce3feaf8ee74e891c66f0f50b9b175fc6c6b7fc965e7c663"
+    },
+    {
+      "num": 1517,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.basis.navmesh": "fab3a90f2476e43df8e4580af70d3b29925c5a04aab3ee7acec74a696c1a120e",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.semantic.txt": "9cd76faf5d8621967a2eb59a7921e3b5e0f84ef97270ae4ba5910624ca613e3f",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.basis.glb": "1cba0b073567b8d89ca4e9c4f9b54cd86443e8d57410b2765236cfb7fdc74b50",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.semantic.glb": "43b3186d97d92601567a50a991986c6589e7e2728c0d0d59c8fe384e45c4b510"
+      },
+      "video_sha256": "bafe60f117212faf742e13a94a8fc351563c6144386f28353a29b23cbddf8f35",
+      "dataset_sha256": "aa0755eada7551a555b96801600f6148c17f3584244d8abebbdc91c765b95659",
+      "log_sha256": "93a4ae51877a1b4892f6008f3a906b9b3a533a3bf5f8c569664d393ffaa6e4a8"
+    },
+    {
+      "num": 5,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.semantic.txt": "0e2e82f4726dc86df4291ab0911226e01e84bc5d9f511434abfb234f6b9566d8",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.semantic.glb": "927f36670622cac29d1e1b78d5624ae572a7cf51c8278bef0d266024ab609116",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.navmesh": "3d5fdcb1b00629e25a45b3033e69a214c7d2cdd3ec0ac8595c7ed296a3098a56",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.glb": "139dcb5542263b4e00a1daee7054f252253bcd02fb4ac51904886cda9f0cd8b6"
+      },
+      "video_sha256": "fc54ac05abf33e1d3e898762a3250415555098da722ddd712f5d7ab8afd2661e",
+      "dataset_sha256": "d0591c97aafd3d3c14f090625c3b75098757c345d3c97a70dbffac2842bdc157",
+      "log_sha256": "3295496e3ae22098337cb2d172e08418161089396e9318cdf04affabbe4d680a"
+    },
+    {
+      "num": 1796,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00843-DYehNKdT76V/DYehNKdT76V.semantic.glb": "d97f06caa721df4f7f6684105fe2b5019f6cba5b6ca387f902b6abfb48fb2f98",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00843-DYehNKdT76V/DYehNKdT76V.semantic.txt": "d6ef75ae1f63f55358442438ad91d692052ca1ee1434105e6fe288cfb5634e50",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00843-DYehNKdT76V/DYehNKdT76V.basis.glb": "a0aec6e55825e1c8ee50436e1ca7c123b8f10f2dbfdc88372357c39706e3a319",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00843-DYehNKdT76V/DYehNKdT76V.basis.navmesh": "d2a62a51f47b0af6cbed504b6746df628c728a0124685d65f47a49d379401ae9"
+      },
+      "video_sha256": "8dc70ec57f441d1cec67298d59dd6f4ca66066d41586cd72b395b658fc34c815",
+      "dataset_sha256": "5104f7651a5840a3cda1fad26c6902ec8cc69c6dc1f757de833edb5c8aa68a15",
+      "log_sha256": "aa8c816d65dbaf748ff2d8929ffddc2112a5653d2ff14426a2d8b0436057b011"
+    },
+    {
+      "num": 1894,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00890-6s7QHgap2fW/6s7QHgap2fW.semantic.glb": "13e90f4197d439256820ae4e797d086863bfe82e4cf13475b84a5d74236d253b",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00890-6s7QHgap2fW/6s7QHgap2fW.basis.glb": "cc8a22a3c62160e2ff035bd00e764494dd9a609c5bb7b1fb0c429a05aaaf8344",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00890-6s7QHgap2fW/6s7QHgap2fW.basis.navmesh": "b8739c2960d431095f59c8200a6b6b316c5b649f6f345f892f123b1220a7dbde",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00890-6s7QHgap2fW/6s7QHgap2fW.semantic.txt": "f3be09840047f61f704773e046ba414f1b43f47527c71262151dace899feb426"
+      },
+      "video_sha256": "1281ce068bfe28dfbb8f4ddfaf9ae3a3ba88604d3f63135e38030440fa9f2750",
+      "dataset_sha256": "90c85659b5e50b81777b6c7344b24084f9f94e16f1cf2d25aecc82effb7b110e",
+      "log_sha256": "9682de95bffc028b9f321e56247ebbcf8ac099de7b13023e4d32c0547490dba1"
+    },
+    {
+      "num": 1600,
+      "source_hashes": {
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.basis.navmesh": "fab3a90f2476e43df8e4580af70d3b29925c5a04aab3ee7acec74a696c1a120e",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.semantic.txt": "9cd76faf5d8621967a2eb59a7921e3b5e0f84ef97270ae4ba5910624ca613e3f",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.basis.glb": "1cba0b073567b8d89ca4e9c4f9b54cd86443e8d57410b2765236cfb7fdc74b50",
+        "/home/zyq/vlfm/data/scene_datasets/hm3d/val/00824-Dd4bFSTQ8gi/Dd4bFSTQ8gi.semantic.glb": "43b3186d97d92601567a50a991986c6589e7e2728c0d0d59c8fe384e45c4b510"
+      },
+      "video_sha256": "3c2d49995c68f64062197a586b90d5c015c73156c10c11002302642ed6294d01",
+      "dataset_sha256": "aa0755eada7551a555b96801600f6148c17f3584244d8abebbdc91c765b95659",
+      "log_sha256": "a3485f273fdfd3bd198ef636a1e4e46432195ba24f6c5706e21fb5131007e405"
+    }
+  ]
+}
