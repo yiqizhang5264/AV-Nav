@@ -15,7 +15,11 @@ test "$(git -C "$STRIVE" rev-parse HEAD)" = "$STRIVE_COMMIT"
 mkdir -p "$DEPS_ROOT"
 
 if [[ ! -x "$ENV_PREFIX/bin/python" ]]; then
-  "$CONDA" create -y -p "$ENV_PREFIX" python=3.12 pip
+  CONDA_ARGS=(create -y -p "$ENV_PREFIX" python=3.12 pip)
+  if [[ -n "${STRIVE_CONDA_CHANNEL:-}" ]]; then
+    CONDA_ARGS+=(--override-channels -c "$STRIVE_CONDA_CHANNEL")
+  fi
+  "$CONDA" "${CONDA_ARGS[@]}"
 fi
 
 PYTHON="$ENV_PREFIX/bin/python"

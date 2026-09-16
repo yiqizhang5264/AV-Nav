@@ -17,7 +17,7 @@ STRIVE 官方代码要求 Python 3.12、PyTorch 2.5.1、作者的 Habitat 0.3.2 
 cd /home/zyq/AV-Nav
 git pull --ff-only
 git submodule update --init --recursive external/strive
-bash scripts/setup_strive_server.sh
+bash -ic 'proxy_on; cd /home/zyq/AV-Nav; STRIVE_CONDA_CHANNEL=https://repo.anaconda.com/pkgs/main bash scripts/setup_strive_server.sh'
 ```
 
 权重、数据和密钥不进入 Git。服务器私有配置文件为 `/home/zyq/.config/av-nav/strive.env`：
