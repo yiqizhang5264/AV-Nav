@@ -1,5 +1,6 @@
 import os
 import sys
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -50,6 +51,22 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         runtime = VLMRuntime("gemini", "model", "https://example.test", "secret")
         self.assertEqual(runtime.public_dict()["api_key_configured"], True)
         self.assertNotIn("secret", repr(runtime.public_dict()))
+
+    def test_call_telemetry_records_hash_not_prompt_or_key(self):
+        runtime = VLMRuntime("gemini", "model", "https://example.test", "secret")
+        with tempfile.TemporaryDirectory() as directory:
+            path = os.path.join(directory, "calls.jsonl")
+            with patch.dict(os.environ, {"STRIVE_VLM_LOG": path}):
+                client = make_client_class(_FakeClient, runtime)()
+                client.beta.chat.completions.parse(
+                    model="ignored", messages=[{"role": "user", "content": "private prompt"}]
+                )
+            with open(path, encoding="utf-8") as stream:
+                content = stream.read()
+        self.assertIn('"ok": true', content)
+        self.assertIn('"request_sha256"', content)
+        self.assertNotIn("private prompt", content)
+        self.assertNotIn("secret", content)
 
 
 if __name__ == "__main__":

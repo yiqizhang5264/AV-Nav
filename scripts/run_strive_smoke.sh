@@ -19,6 +19,8 @@ if [[ -f "$ENV_FILE" ]]; then
   set +a
 fi
 
+export STRIVE_VLM_LOG="$RUN_ROOT/vlm_calls.jsonl"
+
 set +e
 "$PYTHON" "$ROOT/scripts/strive_preflight.py" \
   --root "$ROOT" --output "$RUN_ROOT/preflight.json" \
