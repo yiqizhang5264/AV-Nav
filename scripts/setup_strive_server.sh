@@ -32,7 +32,13 @@ PYTHON="$ENV_PREFIX/bin/python"
 # pkg_resources module that openmim still imports, so keep the compatible band.
 "$PYTHON" -m pip install --upgrade 'setuptools>=70,<81'
 "$ENV_PREFIX/bin/mim" install mmengine
-"$ENV_PREFIX/bin/mim" install 'mmcv==2.1.0'
+# Python 3.12 has no OpenMMLab wheel for this old MMCV release. Build in the
+# current environment so setup can see torch and the compatible setuptools.
+export CUDA_HOME="${CUDA_HOME:-/usr/local/cuda}"
+export MMCV_WITH_OPS=1
+export MAX_JOBS="${MAX_JOBS:-8}"
+"$PYTHON" -m pip install ninja
+"$PYTHON" -m pip install --no-build-isolation 'mmcv==2.1.0'
 
 if [[ ! -d "$DEPS_ROOT/habitat-sim/.git" ]]; then
   git clone --branch release/v0.3.2 https://github.com/zwandering/habitat-sim.git "$DEPS_ROOT/habitat-sim"
