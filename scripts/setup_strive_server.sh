@@ -10,6 +10,7 @@ STRIVE="$ROOT/external/strive"
 STRIVE_COMMIT="1872d73b7db297705d251df73bf5f08ffed0d749"
 HABITAT_SIM_COMMIT="1075d95dde5605957aa3ce3792718b8edabb784f"
 HABITAT_LAB_COMMIT="cb02f030655f9a475b379ec8d269979d9e17688d"
+MMDETECTION_COMMIT="cfd5d3a985b0249de009b67d04f37263e11cdf3d"
 
 test "$(git -C "$STRIVE" rev-parse HEAD)" = "$STRIVE_COMMIT"
 mkdir -p "$DEPS_ROOT"
@@ -44,6 +45,7 @@ export MAX_JOBS="${MAX_JOBS:-8}"
 if [[ ! -d "$DEPS_ROOT/habitat-sim/.git" ]]; then
   git clone --branch release/v0.3.2 https://github.com/zwandering/habitat-sim.git "$DEPS_ROOT/habitat-sim"
 fi
+git -C "$DEPS_ROOT/habitat-sim" checkout --detach "$HABITAT_SIM_COMMIT"
 test "$(git -C "$DEPS_ROOT/habitat-sim" rev-parse HEAD)" = "$HABITAT_SIM_COMMIT"
 HABITAT_PATCH="$ROOT/patches/strive/habitat-sim-configurable-cuda.patch"
 if git -C "$DEPS_ROOT/habitat-sim" apply --reverse --check "$HABITAT_PATCH" 2>/dev/null; then
@@ -63,13 +65,16 @@ fi
 if [[ ! -d "$DEPS_ROOT/habitat-lab/.git" ]]; then
   git clone --branch release/v0.3.2 https://github.com/zwandering/habitat-lab.git "$DEPS_ROOT/habitat-lab"
 fi
+git -C "$DEPS_ROOT/habitat-lab" checkout --detach "$HABITAT_LAB_COMMIT"
 test "$(git -C "$DEPS_ROOT/habitat-lab" rev-parse HEAD)" = "$HABITAT_LAB_COMMIT"
 "$PYTHON" -m pip install -e "$DEPS_ROOT/habitat-lab/habitat-lab"
 
 if [[ ! -d "$DEPS_ROOT/mmdetection/.git" ]]; then
   git clone https://github.com/open-mmlab/mmdetection.git "$DEPS_ROOT/mmdetection"
 fi
-"$PYTHON" -m pip install -v -e "$DEPS_ROOT/mmdetection"
+git -C "$DEPS_ROOT/mmdetection" checkout --detach "$MMDETECTION_COMMIT"
+test "$(git -C "$DEPS_ROOT/mmdetection" rev-parse HEAD)" = "$MMDETECTION_COMMIT"
+"$PYTHON" -m pip install --no-build-isolation -v -e "$DEPS_ROOT/mmdetection"
 
 "$PYTHON" - <<'PY'
 import habitat
