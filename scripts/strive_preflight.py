@@ -21,6 +21,11 @@ REQUIRED_ENV = (
     "HM3D_DATA_PATH",
 )
 
+EXPECTED_DEPENDENCIES = {
+    "HABITAT_LAB_PATH": "cb02f030655f9a475b379ec8d269979d9e17688d",
+    "GROUNDING_DINO_PATH": "cfd5d3a985b0249de009b67d04f37263e11cdf3d",
+}
+
 
 def git_head(path: pathlib.Path) -> str | None:
     result = subprocess.run(
@@ -65,6 +70,13 @@ def main() -> int:
         **{name: pathlib.Path(values[name]).is_file() if values[name] else False for name in file_vars},
         **{name: pathlib.Path(values[name]).is_dir() if values[name] else False for name in dir_vars},
     }
+    checks["dependency_commits"] = {
+        name: {
+            "actual": git_head(pathlib.Path(values[name])) if values[name] else None,
+            "expected": expected,
+        }
+        for name, expected in EXPECTED_DEPENDENCIES.items()
+    }
     hm3d_root = pathlib.Path(values["HM3D_DATA_PATH"]) if values["HM3D_DATA_PATH"] else pathlib.Path()
     expected_data = {
         "episode_dataset": hm3d_root / "objectnav_hm3d_v2" / "val" / "val.json.gz",
@@ -85,6 +97,10 @@ def main() -> int:
         checks["strive_commit"] == checks["expected_strive_commit"]
         and all(checks["environment"].values())
         and all(checks["paths"].values())
+        and all(
+            item["actual"] == item["expected"]
+            for item in checks["dependency_commits"].values()
+        )
         and all(item["exists"] for item in checks["hm3d"].values())
     )
 

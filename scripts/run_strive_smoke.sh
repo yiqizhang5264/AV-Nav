@@ -19,12 +19,21 @@ if [[ -f "$ENV_FILE" ]]; then
   set +a
 fi
 
+set +e
 "$PYTHON" "$ROOT/scripts/strive_preflight.py" \
-  --root "$ROOT" --output "$RUN_ROOT/preflight.json"
+  --root "$ROOT" --output "$RUN_ROOT/preflight.json" \
+  > "$RUN_ROOT/preflight.log" 2>&1
+PREFLIGHT_CODE=$?
+set -e
+printf '%s\n' "$PREFLIGHT_CODE" > "$RUN_ROOT/preflight_exit_code.txt"
 
 git -C "$ROOT" rev-parse HEAD > "$RUN_ROOT/av_nav_commit.txt"
 git -C "$ROOT/external/strive" rev-parse HEAD > "$RUN_ROOT/strive_commit.txt"
 "$PYTHON" -m pip freeze > "$RUN_ROOT/environment.txt"
+if [[ "$PREFLIGHT_CODE" -ne 0 ]]; then
+  printf '%s\n' "$PREFLIGHT_CODE" > "$RUN_ROOT/exit_code.txt"
+  exit "$PREFLIGHT_CODE"
+fi
 
 cd "$ROOT/external/strive"
 export CUDA_VISIBLE_DEVICES="${STRIVE_GPU:-0}"
