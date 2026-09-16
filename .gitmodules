@@ -2,3 +2,6 @@
 	path = external/vlfm
 	url = https://github.com/bdaiinstitute/vlfm.git
 	ignore = untracked
+[submodule "external/strive"]
+	path = external/strive
+	url = https://github.com/igzat1no/STRIVE.git
