@@ -34,7 +34,8 @@ PYTHON="$ENV_PREFIX/bin/python"
 "$ENV_PREFIX/bin/mim" install mmengine
 # Python 3.12 has no OpenMMLab wheel for this old MMCV release. Build in the
 # current environment so setup can see torch and the compatible setuptools.
-export CUDA_HOME="${CUDA_HOME:-/usr/local/cuda}"
+export CUDA_HOME="${STRIVE_CUDA_HOME:-/usr/local/cuda}"
+export CUDACXX="$CUDA_HOME/bin/nvcc"
 export MMCV_WITH_OPS=1
 export MAX_JOBS="${MAX_JOBS:-8}"
 "$PYTHON" -m pip install ninja
