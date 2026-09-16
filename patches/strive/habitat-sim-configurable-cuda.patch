@@ -1,0 +1,15 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 8ef6bd6..f58f5ac 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -8,7 +8,9 @@ option(BUILD_WITH_CUDA "Build Habitat-Sim with CUDA features enabled -- Requires CUDA"
+        OFF
+ )
+ 
+-set(CMAKE_CUDA_COMPILER "/usr/local/cuda-12.2/bin/nvcc")
++if(NOT DEFINED CMAKE_CUDA_COMPILER)
++  set(CMAKE_CUDA_COMPILER "/usr/local/cuda-12.2/bin/nvcc")
++endif()
+ set(CMAKE_CUDA_ARCHITECTURES 52 60 61 75 86 89)
+ 
+ if(BUILD_WITH_CUDA)

@@ -45,11 +45,18 @@ if [[ ! -d "$DEPS_ROOT/habitat-sim/.git" ]]; then
   git clone --branch release/v0.3.2 https://github.com/zwandering/habitat-sim.git "$DEPS_ROOT/habitat-sim"
 fi
 test "$(git -C "$DEPS_ROOT/habitat-sim" rev-parse HEAD)" = "$HABITAT_SIM_COMMIT"
+HABITAT_PATCH="$ROOT/patches/strive/habitat-sim-configurable-cuda.patch"
+if git -C "$DEPS_ROOT/habitat-sim" apply --reverse --check "$HABITAT_PATCH" 2>/dev/null; then
+  : # already applied
+else
+  git -C "$DEPS_ROOT/habitat-sim" apply --check "$HABITAT_PATCH"
+  git -C "$DEPS_ROOT/habitat-sim" apply "$HABITAT_PATCH"
+fi
 if ! "$PYTHON" -c 'import habitat_sim' >/dev/null 2>&1; then
   "$PYTHON" -m pip install cmake ninja
   rm -rf "$DEPS_ROOT/habitat-sim/build"
   HEADLESS=1 WITH_CUDA=1 \
-    CMAKE_ARGS="${CMAKE_ARGS:-} -DCMAKE_POLICY_VERSION_MINIMUM=3.5" \
+    CMAKE_ARGS="${CMAKE_ARGS:-} -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_CUDA_COMPILER=$CUDACXX" \
     "$PYTHON" -m pip install --no-build-isolation "$DEPS_ROOT/habitat-sim"
 fi
 
