@@ -11,9 +11,10 @@ import pathlib
 import subprocess
 import sys
 
+from strive_vlm_runtime import VLMRuntime
 
-REQUIRED_ENV = (
-    "GEMINI_API_KEY",
+
+REQUIRED_RESOURCE_ENV = (
     "HABITAT_LAB_PATH",
     "SAM_CHECKPOINT",
     "GROUNDING_DINO_PATH",
@@ -55,12 +56,17 @@ def main() -> int:
 
     root = args.root.resolve()
     strive = root / "external" / "strive"
-    values = {name: os.environ.get(name, "") for name in REQUIRED_ENV}
+    runtime = VLMRuntime.from_env()
+    required_env = list(REQUIRED_RESOURCE_ENV)
+    if runtime.backend == "gemini":
+        required_env.append("GEMINI_API_KEY")
+    values = {name: os.environ.get(name, "") for name in required_env}
     checks: dict[str, object] = {
         "python": sys.version,
         "av_nav_commit": git_head(root),
         "strive_commit": git_head(strive),
         "expected_strive_commit": "1872d73b7db297705d251df73bf5f08ffed0d749",
+        "vlm": runtime.public_dict(),
         "environment": {name: bool(value) for name, value in values.items()},
     }
 

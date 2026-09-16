@@ -42,12 +42,25 @@ export GROUNDING_DINO_PATH="/home/zyq/AV-Nav/runs/strive_deps/mmdetection"
 export GROUNDING_DINO_CHECKPOINT="/home/zyq/AV-Nav/runs/strive_resources/weights/grounding_dino_swin-l_pretrain_obj365_goldg-34dcdc53.pth"
 export HM3D_DATA_PATH="/home/zyq/AV-Nav/runs/strive_resources/data"
 export STRIVE_GPU=0
-export STRIVE_GEMINI_MODEL="gemini-3.6-flash"
+export STRIVE_VLM_BACKEND="gemini"
+export STRIVE_VLM_MODEL="gemini-3.6-flash"
 ```
 
 上游提交将 `gemini-2.5-flash` 写死在 `constants.py`。该模型对新 API 用户不可用时，
-`scripts/run_strive_upstream.py` 在进程内应用 `STRIVE_GEMINI_MODEL`，不修改固定的 STRIVE
-子模块。每次运行把实际模型名写入 `gemini_model.txt`。
+`scripts/run_strive_upstream.py` 在进程内应用 `STRIVE_VLM_MODEL`，不修改固定的 STRIVE
+子模块。每次运行把后端、模型和地址写入 `vlm_runtime.json`，不记录密钥。
+
+本地 OpenAI 兼容 VLM（例如通过 vLLM 部署 Qwen3.5-9B）配置为：
+
+```bash
+export STRIVE_VLM_BACKEND="openai_compatible"
+export STRIVE_VLM_MODEL="Qwen/Qwen3.5-9B"
+export STRIVE_VLM_BASE_URL="http://127.0.0.1:8000/v1"
+export STRIVE_VLM_API_KEY="local"
+```
+
+运行时适配器会统一替换上游不同调用点写死的模型名，使 Gemini 与本地模型使用相同的
+STRIVE 提示词和结构化输出 schema。实验记录中必须将这种运行时适配与原论文配置区分开。
 
 HM3D v2 episode 数据来自 Habitat-Lab 官方 `objectnav_hm3d_v2.zip`，预期路径为：
 

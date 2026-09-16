@@ -30,7 +30,8 @@ printf '%s\n' "$PREFLIGHT_CODE" > "$RUN_ROOT/preflight_exit_code.txt"
 git -C "$ROOT" rev-parse HEAD > "$RUN_ROOT/av_nav_commit.txt"
 git -C "$ROOT/external/strive" rev-parse HEAD > "$RUN_ROOT/strive_commit.txt"
 "$PYTHON" -m pip freeze > "$RUN_ROOT/environment.txt"
-printf '%s\n' "${STRIVE_GEMINI_MODEL:-gemini-2.5-flash}" > "$RUN_ROOT/gemini_model.txt"
+"$PYTHON" -c 'import json, sys; sys.path.insert(0, "'"$ROOT"'/scripts"); from strive_vlm_runtime import VLMRuntime; print(json.dumps(VLMRuntime.from_env().public_dict(), indent=2))' \
+  > "$RUN_ROOT/vlm_runtime.json"
 if [[ "$PREFLIGHT_CODE" -ne 0 ]]; then
   printf '%s\n' "$PREFLIGHT_CODE" > "$RUN_ROOT/exit_code.txt"
   exit "$PREFLIGHT_CODE"
