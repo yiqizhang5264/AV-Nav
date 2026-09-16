@@ -44,10 +44,13 @@ if [[ ! -d "$DEPS_ROOT/habitat-sim/.git" ]]; then
   git clone --branch release/v0.3.2 https://github.com/zwandering/habitat-sim.git "$DEPS_ROOT/habitat-sim"
 fi
 test "$(git -C "$DEPS_ROOT/habitat-sim" rev-parse HEAD)" = "$HABITAT_SIM_COMMIT"
-"$PYTHON" -m pip install cmake ninja
-HEADLESS=1 WITH_CUDA=1 \
-  CMAKE_ARGS="${CMAKE_ARGS:-} -DCMAKE_POLICY_VERSION_MINIMUM=3.5" \
-  "$PYTHON" -m pip install --no-build-isolation "$DEPS_ROOT/habitat-sim"
+if ! "$PYTHON" -c 'import habitat_sim' >/dev/null 2>&1; then
+  "$PYTHON" -m pip install cmake ninja
+  rm -rf "$DEPS_ROOT/habitat-sim/build"
+  HEADLESS=1 WITH_CUDA=1 \
+    CMAKE_ARGS="${CMAKE_ARGS:-} -DCMAKE_POLICY_VERSION_MINIMUM=3.5" \
+    "$PYTHON" -m pip install --no-build-isolation "$DEPS_ROOT/habitat-sim"
+fi
 
 if [[ ! -d "$DEPS_ROOT/habitat-lab/.git" ]]; then
   git clone --branch release/v0.3.2 https://github.com/zwandering/habitat-lab.git "$DEPS_ROOT/habitat-lab"
