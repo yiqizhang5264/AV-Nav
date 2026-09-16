@@ -33,9 +33,8 @@ download \
 
 if [[ ! -f "$DATA_ROOT/objectnav_hm3d_v2/val/val.json.gz" ]]; then
   unzip -tq "$DOWNLOAD_DIR/objectnav_hm3d_v2.zip"
-  mkdir -p "$DATA_ROOT/objectnav_hm3d_v2"
   unzip -oq "$DOWNLOAD_DIR/objectnav_hm3d_v2.zip" \
-    -d "$DATA_ROOT/objectnav_hm3d_v2"
+    -d "$DATA_ROOT"
 fi
 
 SCENE_LINK="$DATA_ROOT/scene_datasets/hm3d_v0.2"
