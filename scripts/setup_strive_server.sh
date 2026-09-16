@@ -27,6 +27,10 @@ PYTHON="$ENV_PREFIX/bin/python"
 "$PYTHON" -m pip install -r "$STRIVE/requirements.txt"
 "$PYTHON" -m pip install git+https://github.com/facebookresearch/segment-anything.git
 "$PYTHON" -m pip install openmim
+# openmim 0.3.9 pulls setuptools 60.2.0, which imports the removed
+# pkgutil.ImpImporter symbol on Python 3.12. Restore a compatible build tool
+# before invoking mim; openmim itself does not require that old API at runtime.
+"$PYTHON" -m pip install --upgrade 'setuptools>=70'
 "$ENV_PREFIX/bin/mim" install mmengine
 "$ENV_PREFIX/bin/mim" install 'mmcv==2.1.0'
 
