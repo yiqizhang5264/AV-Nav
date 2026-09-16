@@ -47,6 +47,20 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         self.assertEqual(_FakeClient.last_init["base_url"], "http://vlm/v1")
         self.assertEqual(result["model"], "local-model")
 
+    def test_disable_thinking_is_injected_without_losing_extra_body(self):
+        runtime = VLMRuntime(
+            "openai_compatible", "local-model", "http://vlm/v1", "key", True
+        )
+        client = make_client_class(_FakeClient, runtime)()
+        result = client.beta.chat.completions.parse(
+            messages=[], extra_body={"top_k": 20}
+        )
+        self.assertEqual(result["extra_body"]["top_k"], 20)
+        self.assertEqual(
+            result["extra_body"]["chat_template_kwargs"]["enable_thinking"],
+            False,
+        )
+
     def test_public_config_never_contains_key_value(self):
         runtime = VLMRuntime("gemini", "model", "https://example.test", "secret")
         self.assertEqual(runtime.public_dict()["api_key_configured"], True)

@@ -18,6 +18,7 @@ class VLMRuntime:
     model: str
     base_url: str
     api_key: str
+    disable_thinking: bool = False
 
     @classmethod
     def from_env(cls) -> "VLMRuntime":
@@ -48,7 +49,10 @@ class VLMRuntime:
 
         if not model or not base_url or not api_key:
             raise ValueError(f"Incomplete VLM configuration for backend {backend!r}")
-        return cls(backend, model, base_url, api_key)
+        disable_thinking = os.environ.get(
+            "STRIVE_VLM_DISABLE_THINKING", "0"
+        ).strip().lower() in {"1", "true", "yes", "on"}
+        return cls(backend, model, base_url, api_key, disable_thinking)
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -56,6 +60,7 @@ class VLMRuntime:
             "model": self.model,
             "base_url": self.base_url,
             "api_key_configured": bool(self.api_key),
+            "disable_thinking": self.disable_thinking,
         }
 
 
@@ -86,6 +91,12 @@ class _CompletionsProxy:
 
     def parse(self, *args: Any, **kwargs: Any) -> Any:
         kwargs["model"] = self._runtime.model
+        if self._runtime.disable_thinking:
+            extra_body = dict(kwargs.get("extra_body") or {})
+            template_kwargs = dict(extra_body.get("chat_template_kwargs") or {})
+            template_kwargs["enable_thinking"] = False
+            extra_body["chat_template_kwargs"] = template_kwargs
+            kwargs["extra_body"] = extra_body
         event = {
             "backend": self._runtime.backend,
             "model": self._runtime.model,

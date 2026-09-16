@@ -18,6 +18,10 @@ Qwen 服务使用独立环境 `/home/zyq/miniconda3/envs/strive-qwen`。服务�
 `libstdc++`，并默认关闭 Hugging Face Xet 下载。模型缓存可通过 `HF_HOME` 指向仓库外的
 持久目录，实验目录只保存日志、PID 和公开配置。
 
+Qwen3.5 默认使用 thinking 模式，而 STRIVE 的调用要求短结构化结果。Qwen 组设置
+`STRIVE_VLM_DISABLE_THINKING=1`，适配器按官方接口传递
+`chat_template_kwargs.enable_thinking=false`。该设置会写入公开运行配置；Gemini 组不使用此参数。
+
 ## 分阶段验证
 
 1. 接口 smoke：文本房间选择与图像目标核验均须通过结构化输出解析。
