@@ -31,6 +31,15 @@ download \
   "https://dl.fbaipublicfiles.com/habitat/data/datasets/objectnav/hm3d/v2/objectnav_hm3d_v2.zip" \
   "$DOWNLOAD_DIR/objectnav_hm3d_v2.zip"
 
+printf '%s  %s\n' \
+  "a7bf3b02f3ebf1267aba913ff637d9a2d5c33d3173bb679e46d9f338c26f262e" \
+  "$WEIGHT_DIR/sam_vit_h_4b8939.pth" \
+  "34dcdc535a0eb020deda881fe8b4c49b324defe764d85f94d8282fb287cd0208" \
+  "$WEIGHT_DIR/grounding_dino_swin-l_pretrain_obj365_goldg-34dcdc53.pth" \
+  "f551a0d8560804dc385c52f9aedb646c70917da36c1902d848b4fbc1615515d0" \
+  "$DOWNLOAD_DIR/objectnav_hm3d_v2.zip" \
+  | sha256sum --check --strict
+
 if [[ ! -f "$DATA_ROOT/objectnav_hm3d_v2/val/val.json.gz" ]]; then
   unzip -tq "$DOWNLOAD_DIR/objectnav_hm3d_v2.zip"
   unzip -oq "$DOWNLOAD_DIR/objectnav_hm3d_v2.zip" \
