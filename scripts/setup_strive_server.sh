@@ -33,6 +33,7 @@ PYTHON="$ENV_PREFIX/bin/python"
 # pkg_resources module that openmim still imports, so keep the compatible band.
 "$PYTHON" -m pip install --upgrade 'setuptools>=70,<81'
 "$ENV_PREFIX/bin/mim" install mmengine
+"$PYTHON" -m pip install fairscale
 # Python 3.12 has no OpenMMLab wheel for this old MMCV release. Build in the
 # current environment so setup can see torch and the compatible setuptools.
 export CUDA_HOME="${STRIVE_CUDA_HOME:-/usr/local/cuda}"
