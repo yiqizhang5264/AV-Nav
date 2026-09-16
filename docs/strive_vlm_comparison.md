@@ -13,6 +13,11 @@
 两组均通过 `scripts/run_strive_upstream.py` 进入固定的 STRIVE 子模块。适配器只替换 API
 地址和模型名，不更改 STRIVE 提示词或导航逻辑。
 
+Qwen 服务使用独立环境 `/home/zyq/miniconda3/envs/strive-qwen`。服务器的 NVIDIA 570
+驱动对应 CUDA 12.8，因此固定使用 vLLM 0.18.1；启动脚本还会优先加载该环境中的
+`libstdc++`，并默认关闭 Hugging Face Xet 下载。模型缓存可通过 `HF_HOME` 指向仓库外的
+持久目录，实验目录只保存日志、PID 和公开配置。
+
 ## 分阶段验证
 
 1. 接口 smoke：文本房间选择与图像目标核验均须通过结构化输出解析。
