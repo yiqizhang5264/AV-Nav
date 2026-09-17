@@ -9,7 +9,7 @@ import json
 import os
 import pathlib
 import time
-from typing import Any
+from typing import Annotated, Any
 
 
 @dataclass(frozen=True)
@@ -20,6 +20,7 @@ class VLMRuntime:
     api_key: str
     disable_thinking: bool = False
     max_completion_tokens: int | None = None
+    max_reasoning_steps: int | None = None
 
     @classmethod
     def from_env(cls) -> "VLMRuntime":
@@ -62,6 +63,15 @@ class VLMRuntime:
             max_completion_tokens = 1024
         else:
             max_completion_tokens = None
+        raw_max_steps = os.environ.get("STRIVE_VLM_MAX_REASONING_STEPS", "").strip()
+        if raw_max_steps:
+            max_reasoning_steps = int(raw_max_steps)
+            if max_reasoning_steps <= 0:
+                raise ValueError("STRIVE_VLM_MAX_REASONING_STEPS must be positive")
+        elif backend == "openai_compatible":
+            max_reasoning_steps = 3
+        else:
+            max_reasoning_steps = None
         return cls(
             backend,
             model,
@@ -69,6 +79,7 @@ class VLMRuntime:
             api_key,
             disable_thinking,
             max_completion_tokens,
+            max_reasoning_steps,
         )
 
     def public_dict(self) -> dict[str, object]:
@@ -79,6 +90,7 @@ class VLMRuntime:
             "api_key_configured": bool(self.api_key),
             "disable_thinking": self.disable_thinking,
             "max_completion_tokens": self.max_completion_tokens,
+            "max_reasoning_steps": self.max_reasoning_steps,
         }
 
 
@@ -114,6 +126,23 @@ def _concise_retry_messages(messages: list[Any]) -> list[Any]:
     return [{"role": "system", "content": instruction}, *retried]
 
 
+def _bounded_response_format(response_format: Any, max_steps: int | None) -> Any:
+    if max_steps is None:
+        return response_format
+    model_fields = getattr(response_format, "model_fields", None)
+    if not model_fields or "steps" not in model_fields:
+        return response_format
+    from pydantic import Field, create_model
+
+    annotation = model_fields["steps"].annotation
+    bounded_steps = Annotated[annotation, Field(max_length=max_steps)]
+    return create_model(
+        f"{response_format.__name__}Bounded{max_steps}",
+        __base__=response_format,
+        steps=(bounded_steps, ...),
+    )
+
+
 class _CompletionsProxy:
     def __init__(self, wrapped: Any, runtime: VLMRuntime, log_path: str):
         self._wrapped = wrapped
@@ -122,6 +151,10 @@ class _CompletionsProxy:
 
     def parse(self, *args: Any, **kwargs: Any) -> Any:
         kwargs["model"] = self._runtime.model
+        if "response_format" in kwargs:
+            kwargs["response_format"] = _bounded_response_format(
+                kwargs["response_format"], self._runtime.max_reasoning_steps
+            )
         if self._runtime.max_completion_tokens is not None:
             kwargs.setdefault(
                 "max_completion_tokens", self._runtime.max_completion_tokens

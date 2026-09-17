@@ -1,6 +1,7 @@
 import os
 import sys
 import tempfile
+import types
 import unittest
 from unittest.mock import patch
 
@@ -53,6 +54,7 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         self.assertEqual(runtime.base_url, "http://127.0.0.1:8000/v1")
         self.assertEqual(runtime.api_key, "local")
         self.assertEqual(runtime.max_completion_tokens, 1024)
+        self.assertEqual(runtime.max_reasoning_steps, 3)
 
     def test_client_overrides_endpoint_key_and_every_model_argument(self):
         runtime = VLMRuntime("openai_compatible", "local-model", "http://vlm/v1", "key")
@@ -89,6 +91,57 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         client = make_client_class(_FakeClient, runtime)()
         result = client.beta.chat.completions.parse(messages=[])
         self.assertEqual(result["max_completion_tokens"], 768)
+
+    def test_reasoning_steps_schema_is_bounded(self):
+        class FieldInfo:
+            annotation = list[str]
+
+        class Result:
+            model_fields = {"steps": FieldInfo()}
+
+        captured = {}
+
+        def field(**kwargs):
+            return kwargs
+
+        def create_model(name, __base__, **fields):
+            captured.update({"name": name, "base": __base__, "fields": fields})
+            return type(name, (__base__,), {})
+
+        runtime = VLMRuntime(
+            "openai_compatible",
+            "local-model",
+            "http://vlm/v1",
+            "key",
+            max_reasoning_steps=3,
+        )
+        client = make_client_class(_FakeClient, runtime)()
+        fake_pydantic = types.SimpleNamespace(Field=field, create_model=create_model)
+        with patch.dict(sys.modules, {"pydantic": fake_pydantic}):
+            result = client.beta.chat.completions.parse(
+                messages=[], response_format=Result
+            )
+        self.assertEqual(captured["base"], Result)
+        annotation = captured["fields"]["steps"][0]
+        self.assertEqual(annotation.__metadata__[0]["max_length"], 3)
+        self.assertIs(result["response_format"].__mro__[1], Result)
+
+    def test_non_reasoning_list_is_not_bounded(self):
+        class Result:
+            model_fields = {"res": object()}
+
+        runtime = VLMRuntime(
+            "openai_compatible",
+            "local-model",
+            "http://vlm/v1",
+            "key",
+            max_reasoning_steps=3,
+        )
+        client = make_client_class(_FakeClient, runtime)()
+        result = client.beta.chat.completions.parse(
+            messages=[], response_format=Result
+        )
+        self.assertIs(result["response_format"], Result)
 
     def test_length_failure_retries_with_concise_instruction(self):
         class LengthThenSuccessClient(_FakeClient):
