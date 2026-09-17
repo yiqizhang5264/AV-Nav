@@ -1,0 +1,2 @@
+Episode,success,spl,distance_to_goal,Episode Steps,start and goal distance,travel distance,Found Goal,End,object_goal
+0,1.0,0.4013376757768213,0.020553087815642357,249,10.068647384643555,24.999995678663254,True,1,Find the <tv_monitor>.

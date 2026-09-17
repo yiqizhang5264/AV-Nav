@@ -1,0 +1,13 @@
+{
+  "http_attempts": 16,
+  "logical_calls_succeeded": 14,
+  "failed_attempts": 2,
+  "successful_retries": 2,
+  "successful_prompt_tokens": 26660,
+  "successful_completion_tokens": 1932,
+  "max_successful_completion_tokens": 449,
+  "total_attempt_latency_seconds": 82.27722705714405,
+  "failure_types": {
+    "LengthFinishReasonError": 2
+  }
+}
