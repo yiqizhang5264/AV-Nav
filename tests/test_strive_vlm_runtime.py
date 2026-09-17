@@ -19,6 +19,22 @@ class _FakeCompletions:
         return kwargs
 
 
+class LengthFinishReasonError(Exception):
+    pass
+
+
+class _LengthThenSuccessCompletions(_FakeCompletions):
+    def __init__(self):
+        super().__init__()
+        self.calls = []
+
+    def parse(self, *args, **kwargs):
+        self.calls.append(kwargs)
+        if len(self.calls) == 1:
+            raise LengthFinishReasonError("too long")
+        return kwargs
+
+
 class _FakeClient:
     last_init = None
 
@@ -36,6 +52,7 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         self.assertEqual(runtime.model, "Qwen/Qwen3.5-9B")
         self.assertEqual(runtime.base_url, "http://127.0.0.1:8000/v1")
         self.assertEqual(runtime.api_key, "local")
+        self.assertEqual(runtime.max_completion_tokens, 1024)
 
     def test_client_overrides_endpoint_key_and_every_model_argument(self):
         runtime = VLMRuntime("openai_compatible", "local-model", "http://vlm/v1", "key")
@@ -60,6 +77,39 @@ class StriveVLMRuntimeTests(unittest.TestCase):
             result["extra_body"]["chat_template_kwargs"]["enable_thinking"],
             False,
         )
+
+    def test_completion_limit_is_injected(self):
+        runtime = VLMRuntime(
+            "openai_compatible",
+            "local-model",
+            "http://vlm/v1",
+            "key",
+            max_completion_tokens=768,
+        )
+        client = make_client_class(_FakeClient, runtime)()
+        result = client.beta.chat.completions.parse(messages=[])
+        self.assertEqual(result["max_completion_tokens"], 768)
+
+    def test_length_failure_retries_with_concise_instruction(self):
+        class LengthThenSuccessClient(_FakeClient):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.beta.chat.completions = _LengthThenSuccessCompletions()
+
+        runtime = VLMRuntime(
+            "openai_compatible",
+            "local-model",
+            "http://vlm/v1",
+            "key",
+            max_completion_tokens=512,
+        )
+        client = make_client_class(LengthThenSuccessClient, runtime)()
+        result = client.beta.chat.completions.parse(
+            messages=[{"role": "user", "content": "classify"}]
+        )
+        self.assertEqual(result["max_completion_tokens"], 512)
+        self.assertEqual(result["messages"][0]["role"], "system")
+        self.assertIn("at most three", result["messages"][0]["content"])
 
     def test_public_config_never_contains_key_value(self):
         runtime = VLMRuntime("gemini", "model", "https://example.test", "secret")
