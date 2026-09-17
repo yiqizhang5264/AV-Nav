@@ -8,7 +8,11 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
-from strive_vlm_runtime import VLMRuntime, make_client_class
+from strive_vlm_runtime import (
+    VLMRuntime,
+    _final_only_response_format,
+    make_client_class,
+)
 
 
 class _FakeCompletions:
@@ -204,9 +208,9 @@ class StriveVLMRuntimeTests(unittest.TestCase):
             messages=[{"role": "user", "content": "classify"}]
         )
         self.assertEqual(result["temperature"], 0.0)
-        self.assertEqual(result["max_completion_tokens"], 1024)
+        self.assertEqual(result["max_completion_tokens"], 512)
         self.assertEqual(result["messages"][0]["role"], "system")
-        self.assertIn("at most three", result["messages"][0]["content"])
+        self.assertIn("only the final", result["messages"][0]["content"])
 
     def test_length_retry_merges_existing_system_message(self):
         class LengthThenSuccessClient(_FakeClient):
@@ -231,7 +235,31 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         self.assertEqual(len(result["messages"]), 2)
         self.assertEqual(result["messages"][0]["role"], "system")
         self.assertIn("choose a room", result["messages"][0]["content"])
-        self.assertIn("at most three", result["messages"][0]["content"])
+        self.assertIn("only the final", result["messages"][0]["content"])
+
+    def test_final_only_retry_schema_removes_steps(self):
+        class FieldInfo:
+            def __init__(self, annotation):
+                self.annotation = annotation
+
+        class Result:
+            model_fields = {
+                "steps": FieldInfo(list[str]),
+                "res": FieldInfo(str),
+            }
+
+        def create_model(name, **fields):
+            generated_fields = {
+                field_name: FieldInfo(definition[0])
+                for field_name, definition in fields.items()
+            }
+            return type(name, (), {"model_fields": generated_fields})
+
+        fake_pydantic = types.SimpleNamespace(create_model=create_model)
+        with patch.dict(sys.modules, {"pydantic": fake_pydantic}):
+            final_only = _final_only_response_format(Result)
+        self.assertNotIn("steps", final_only.model_fields)
+        self.assertIn("res", final_only.model_fields)
 
     def test_public_config_never_contains_key_value(self):
         runtime = VLMRuntime("gemini", "model", "https://example.test", "secret")

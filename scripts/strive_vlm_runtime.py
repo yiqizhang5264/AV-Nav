@@ -124,7 +124,7 @@ def _append_event(path: str, event: dict[str, object]) -> None:
 def _concise_retry_messages(messages: list[Any]) -> list[Any]:
     instruction = (
         "Return a concise valid response matching the requested schema. "
-        "Use at most three reasoning steps and do not repeat text."
+        "Return only the final answer fields, with no reasoning or repeated text."
     )
     retried = [dict(message) for message in messages]
     if retried and retried[0].get("role") == "system":
@@ -132,6 +132,20 @@ def _concise_retry_messages(messages: list[Any]) -> list[Any]:
         retried[0]["content"] = f"{original}\n\n{instruction}"
         return retried
     return [{"role": "system", "content": instruction}, *retried]
+
+
+def _final_only_response_format(response_format: Any) -> Any:
+    model_fields = getattr(response_format, "model_fields", None)
+    if not model_fields or "steps" not in model_fields:
+        return response_format
+    from pydantic import create_model
+
+    fields = {
+        name: (info.annotation, ...)
+        for name, info in model_fields.items()
+        if name != "steps"
+    }
+    return create_model(f"{response_format.__name__}FinalOnly", **fields)
 
 
 def _bounded_response_format(
@@ -223,11 +237,14 @@ class _CompletionsProxy:
             retry_kwargs["messages"] = _concise_retry_messages(
                 list(kwargs.get("messages", []))
             )
+            retry_kwargs["response_format"] = _final_only_response_format(
+                kwargs.get("response_format")
+            )
             retry_kwargs["temperature"] = 0.0
             if self._runtime.max_completion_tokens is not None:
                 retry_kwargs["max_completion_tokens"] = min(
-                    self._runtime.max_completion_tokens * 2,
-                    4096,
+                    self._runtime.max_completion_tokens,
+                    512,
                 )
             event.update({
                 "ok": False,
