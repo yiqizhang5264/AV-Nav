@@ -1,0 +1,2 @@
+Episode,success,spl,distance_to_goal,Episode Steps,start and goal distance,travel distance,Found Goal,End,object_goal
+10,1.0,0.3590229169008879,0.154636412858963,187,7.413824081420898,20.499999165534973,True,1,Find the <sofa>.

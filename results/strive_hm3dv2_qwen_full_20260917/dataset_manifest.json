@@ -1,0 +1,197 @@
+{
+  "dataset": "objectnav_hm3d_v2/val",
+  "content_files": 36,
+  "episodes": 1000,
+  "scenes": 36,
+  "categories": {
+    "bed": 165,
+    "chair": 195,
+    "plant": 152,
+    "sofa": 187,
+    "toilet": 166,
+    "tv_monitor": 135
+  },
+  "content_manifest_sha256": "0c2e16c6aad0ec3e75c2c609dae8187cd51ec6f6dfc31a7ade2767c955bf8d3c",
+  "files": [
+    {
+      "path": "objectnav_hm3d_v2/val/content/4ok3usBNeis.json.gz",
+      "sha256": "742cbb85de5f5673f85663caaa774d52bd74935a0084d1657fca20424afd10a4",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/5cdEh9F2hJL.json.gz",
+      "sha256": "c20a18c5204408fe010e6828c7709b62b6181df2d31b59ab6a4bb708e913e13f",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/6s7QHgap2fW.json.gz",
+      "sha256": "9ad01b637841b4af53ec0663aefaa7568cb78bfc23698c16026ce85ee47a048c",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/7MXmsvcQjpJ.json.gz",
+      "sha256": "6042dbeeb8bac7b6633af2714ab40132541af1a6e021fa01e9b1104591c9fc23",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/BAbdmeyTvMZ.json.gz",
+      "sha256": "a05a2804afdd82370a2da125cc3974d39e6902d21c4376e98e706c6d2d668ca8",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/CrMo8WxCyVb.json.gz",
+      "sha256": "53e0a31e626baf34cffa19fd76a56b3be06373c2ee7c175e9f6bb98cf67615a1",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/DYehNKdT76V.json.gz",
+      "sha256": "0b8c888c3a24945e390a5301d596601987c221dae1257d576c981511150f3641",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/Dd4bFSTQ8gi.json.gz",
+      "sha256": "8ea79847b436a0585a2ddeef5515dcafc5f776282bdd18a5d8462583b0f72038",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/GLAQ4DNUx5U.json.gz",
+      "sha256": "5026c89e177d239b03bba88f716424571cd92885c9a78f3261234366ca3a4b27",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/HY1NcmCgn3n.json.gz",
+      "sha256": "646aa1a1c36b8b63a51788152d698fe997203db6b2fce845ed61b8f03bc51fca",
+      "episodes": 27
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/LT9Jq6dN3Ea.json.gz",
+      "sha256": "6931ff6ee712794f772965c398a2102142600669faf354fa25531f36ba2a9c4f",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/MHPLjHsuG27.json.gz",
+      "sha256": "196b02c75ecd64bdc08d2bbf2ad4159380402083855618578659ccd6abd3d0d5",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/Nfvxx8J5NCo.json.gz",
+      "sha256": "147504d3040795f54da6bb3989b0489d66c47b02308a0127aea6639a85dc79c1",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/QaLdnwvtxbs.json.gz",
+      "sha256": "a854ed723c88f405313fd605204ccd6f7cfcbfa83f0f0b47efa7a4bb1eccff1b",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/TEEsavR23oF.json.gz",
+      "sha256": "370c1e887dc97003ad4975498c812b160e14d43c2a2f2da30414acc5104b8f96",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/VBzV5z6i1WS.json.gz",
+      "sha256": "3ea6166cb1de17a264aef61c78c03e44470e09fcc8344472d867933b68ff885b",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/XB4GS9ShBRE.json.gz",
+      "sha256": "28721fd23e2667efbfe8e14bb01ab0a9d027fa83dd42f800813edd4afe6f31fd",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/a8BtkwhxdRV.json.gz",
+      "sha256": "5cd764105e1fd494fe4224d16f156ef6ecbe976e984461e6929e8c93207b1680",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/bCPU9suPUw9.json.gz",
+      "sha256": "1a80e3603f7312e926fe7b5547be0db27bfdef96fddb34f50fbd57508bdbfc20",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/bxsVRursffK.json.gz",
+      "sha256": "5639059bc486dc409d1e8ed957c3443b2ae61c9e81920a0a594720a3db6762a0",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/cvZr5TUy5C5.json.gz",
+      "sha256": "037e3e0371d8d85a73179bc1d740170cbb2ccee476189c89f4aee85488a1999b",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/eF36g7L6Z9M.json.gz",
+      "sha256": "26b74f7f5aa81e8861b8c666c238c1842834448c5adbd2443315f92ba2457d66",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/h1zeeAwLh9Z.json.gz",
+      "sha256": "cc961c2e3f89af02c85f1f62f097974a6616d052b6d892c6b8fee54c5c6e3fac",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/k1cupFYWXJ6.json.gz",
+      "sha256": "36043b415007b00e8ff1d1870513f7c890c3ef64d5436a1e8c3d81ef3cc577f3",
+      "episodes": 27
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/mL8ThkuaVTM.json.gz",
+      "sha256": "29d526993203610712b14e9d2e85632f87118eef1bfa4d5714a916cf425d899b",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/mv2HUxq3B53.json.gz",
+      "sha256": "8474c7f14e8db5ae5c6ce9f0708d548c6a0d50b3aa88ce3047613f07e8406be3",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/p53SfW6mjZe.json.gz",
+      "sha256": "51dde504fb211aa0dff501e90b1a1b8edcec722446072ed4a712903873b4472d",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/q3zU7Yy5E5s.json.gz",
+      "sha256": "e58a90398ace81cd33739f36aece6ebeb923255f257f66db7b986b2699a32e51",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/q5QZSEeHe5g.json.gz",
+      "sha256": "c68398a213f81780b8eead3e0913ec0efae723aa40aa05f1be8ff8a739536435",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/qyAac8rV8Zk.json.gz",
+      "sha256": "fc08c0ff7ffd391c4f30be307ff5f6085a683ff532ee2119388ca31e1e9e7583",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/svBbv1Pavdk.json.gz",
+      "sha256": "70c78916c994ab7f8b7f7fec11d0a6da76449470b527bf907539841ee9a96d38",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/wcojb4TFT35.json.gz",
+      "sha256": "58bf3bc0c953c9f9cf2d5452c8ca6bcb997c7d5e3f41f652a38579bd715cb2bd",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/y9hTuugGdiq.json.gz",
+      "sha256": "3415db7a0b5fcc04e339308fe6f1921736de54a0111210218d0fcf825cb452d3",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/yr17PDCnDDW.json.gz",
+      "sha256": "6c4f0e2913f922148bae130b11e7e3c0489fd197903a42ff3746a52537d5b284",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/ziup5kvtCCR.json.gz",
+      "sha256": "3efa9cd9cbde5d062cb4eb34a011b15889bd622941058eb9e75b250c39e38f5f",
+      "episodes": 28
+    },
+    {
+      "path": "objectnav_hm3d_v2/val/content/zt1RVoi7PcG.json.gz",
+      "sha256": "b818e1cfdc9f9ecc218f3142e91a29b0280f2a423614846beda39763316b7c75",
+      "episodes": 22
+    }
+  ]
+}

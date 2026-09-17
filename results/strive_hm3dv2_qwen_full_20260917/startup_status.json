@@ -1,0 +1,43 @@
+{
+  "observed_at": "2026-09-17T22:47:06+08:00",
+  "status": "running",
+  "supervisor_pid": 455179,
+  "worker_pids": [455204, 455205],
+  "startup_acceptance": {
+    "both_workers_wrote_a_formal_episode": true,
+    "processes_alive_after_first_episode": true,
+    "episodes": [
+      {
+        "episode": 0,
+        "object_goal": "toilet",
+        "success": 1.0,
+        "spl": 0.47088843247658624,
+        "distance_to_goal": 0.02127319946885109,
+        "episode_steps": 128,
+        "worker_shard": "0000_0009"
+      },
+      {
+        "episode": 10,
+        "object_goal": "sofa",
+        "success": 1.0,
+        "spl": 0.3590229169008879,
+        "distance_to_goal": 0.154636412858963,
+        "episode_steps": 187,
+        "worker_shard": "0010_0019"
+      }
+    ],
+    "vlm_calls_snapshot": {
+      "shard_0000_0009": {
+        "logged_calls": 16,
+        "length_errors": 2,
+        "successful_final_only_retries": 2
+      },
+      "shard_0010_0019": {
+        "logged_calls": 23,
+        "length_errors": 2,
+        "successful_final_only_retries": 2
+      }
+    }
+  },
+  "note": "This is a startup-health snapshot, not an efficacy result. The suite remains incomplete."
+}
