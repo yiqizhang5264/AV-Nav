@@ -1,0 +1,7 @@
+{
+  "backend": "openai_compatible",
+  "model": "Qwen/Qwen3.5-9B",
+  "base_url": "http://127.0.0.1:8000/v1",
+  "api_key_configured": true,
+  "disable_thinking": true
+}

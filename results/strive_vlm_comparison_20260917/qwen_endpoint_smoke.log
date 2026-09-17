@@ -1,0 +1,1 @@
+{'text': {'final_answer': 2, 'reason': 'The candidate rooms are [1, 2]. Only room 2 is known to contain a bed. Therefore, room 2 is the bedroom.'}, 'image': {'flag': True, 'label': 'red'}}

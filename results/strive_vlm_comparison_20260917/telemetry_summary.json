@@ -1,0 +1,39 @@
+{
+  "qwen_complete": {
+    "calls": 11,
+    "successful_calls": 11,
+    "failed_calls": 0,
+    "image_calls": 7,
+    "text_calls": 4,
+    "successful_latency_seconds": {
+      "sum": 81.91756246052682,
+      "mean": 7.447051132775166,
+      "median": 2.4479324985295534,
+      "max": 41.58679137006402
+    },
+    "prompt_tokens": 18078,
+    "completion_tokens": 3876,
+    "total_tokens": 21954
+  },
+  "gemini_current_partial": {
+    "calls_recorded": 5,
+    "successful_calls": 4,
+    "failed_calls": 1,
+    "image_calls_including_failed": 3,
+    "successful_latency_seconds": {
+      "sum": 65.91476922109723,
+      "mean": 16.478692305274308,
+      "median": 9.930506082251668,
+      "max": 42.17159705236554
+    },
+    "successful_prompt_tokens": 9962,
+    "successful_completion_tokens": 383,
+    "failure_type": "RateLimitError",
+    "failure_reason": "Gemini free-tier daily request quota exhausted"
+  },
+  "request_alignment": {
+    "first_two_request_hashes_match": true,
+    "third_request_hash_matches": false,
+    "note": "Later requests cannot be treated as naturally paired after the trajectories diverge."
+  }
+}
