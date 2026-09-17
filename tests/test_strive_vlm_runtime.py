@@ -111,6 +111,31 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         self.assertEqual(result["messages"][0]["role"], "system")
         self.assertIn("at most three", result["messages"][0]["content"])
 
+    def test_length_retry_merges_existing_system_message(self):
+        class LengthThenSuccessClient(_FakeClient):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.beta.chat.completions = _LengthThenSuccessCompletions()
+
+        runtime = VLMRuntime(
+            "openai_compatible",
+            "local-model",
+            "http://vlm/v1",
+            "key",
+            max_completion_tokens=512,
+        )
+        client = make_client_class(LengthThenSuccessClient, runtime)()
+        result = client.beta.chat.completions.parse(
+            messages=[
+                {"role": "system", "content": "choose a room"},
+                {"role": "user", "content": "options"},
+            ]
+        )
+        self.assertEqual(len(result["messages"]), 2)
+        self.assertEqual(result["messages"][0]["role"], "system")
+        self.assertIn("choose a room", result["messages"][0]["content"])
+        self.assertIn("at most three", result["messages"][0]["content"])
+
     def test_public_config_never_contains_key_value(self):
         runtime = VLMRuntime("gemini", "model", "https://example.test", "secret")
         self.assertEqual(runtime.public_dict()["api_key_configured"], True)

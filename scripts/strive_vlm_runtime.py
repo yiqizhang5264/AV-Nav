@@ -101,6 +101,19 @@ def _append_event(path: str, event: dict[str, object]) -> None:
         stream.write(json.dumps(event, ensure_ascii=False, sort_keys=True) + "\n")
 
 
+def _concise_retry_messages(messages: list[Any]) -> list[Any]:
+    instruction = (
+        "Return a concise valid response matching the requested schema. "
+        "Use at most three reasoning steps and do not repeat text."
+    )
+    retried = [dict(message) for message in messages]
+    if retried and retried[0].get("role") == "system":
+        original = retried[0].get("content", "")
+        retried[0]["content"] = f"{original}\n\n{instruction}"
+        return retried
+    return [{"role": "system", "content": instruction}, *retried]
+
+
 class _CompletionsProxy:
     def __init__(self, wrapped: Any, runtime: VLMRuntime, log_path: str):
         self._wrapped = wrapped
@@ -138,16 +151,9 @@ class _CompletionsProxy:
                 raise
 
             retry_kwargs = dict(kwargs)
-            retry_kwargs["messages"] = [
-                {
-                    "role": "system",
-                    "content": (
-                        "Return a concise valid response matching the requested schema. "
-                        "Use at most three reasoning steps and do not repeat text."
-                    ),
-                },
-                *list(kwargs.get("messages", [])),
-            ]
+            retry_kwargs["messages"] = _concise_retry_messages(
+                list(kwargs.get("messages", []))
+            )
             event.update({
                 "ok": False,
                 "latency_seconds": time.perf_counter() - started,
