@@ -154,6 +154,12 @@ class _CompletionsProxy:
             retry_kwargs["messages"] = _concise_retry_messages(
                 list(kwargs.get("messages", []))
             )
+            retry_kwargs["temperature"] = 0.0
+            if self._runtime.max_completion_tokens is not None:
+                retry_kwargs["max_completion_tokens"] = min(
+                    self._runtime.max_completion_tokens * 2,
+                    4096,
+                )
             event.update({
                 "ok": False,
                 "latency_seconds": time.perf_counter() - started,

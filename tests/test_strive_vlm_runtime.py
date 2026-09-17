@@ -107,7 +107,8 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         result = client.beta.chat.completions.parse(
             messages=[{"role": "user", "content": "classify"}]
         )
-        self.assertEqual(result["max_completion_tokens"], 512)
+        self.assertEqual(result["temperature"], 0.0)
+        self.assertEqual(result["max_completion_tokens"], 1024)
         self.assertEqual(result["messages"][0]["role"], "system")
         self.assertIn("at most three", result["messages"][0]["content"])
 
