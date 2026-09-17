@@ -55,6 +55,8 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         self.assertEqual(runtime.api_key, "local")
         self.assertEqual(runtime.max_completion_tokens, 1024)
         self.assertEqual(runtime.max_reasoning_steps, 3)
+        self.assertEqual(runtime.max_string_chars, 256)
+        self.assertEqual(runtime.max_list_items, 32)
 
     def test_client_overrides_endpoint_key_and_every_model_argument(self):
         runtime = VLMRuntime("openai_compatible", "local-model", "http://vlm/v1", "key")
@@ -94,10 +96,20 @@ class StriveVLMRuntimeTests(unittest.TestCase):
 
     def test_reasoning_steps_schema_is_bounded(self):
         class FieldInfo:
-            annotation = list[str]
+            def __init__(self, annotation):
+                self.annotation = annotation
+
+        class Step:
+            model_fields = {
+                "explanation": FieldInfo(str),
+                "output": FieldInfo(str),
+            }
 
         class Result:
-            model_fields = {"steps": FieldInfo()}
+            model_fields = {
+                "steps": FieldInfo(list[Step]),
+                "answer": FieldInfo(str),
+            }
 
         captured = {}
 
@@ -105,8 +117,12 @@ class StriveVLMRuntimeTests(unittest.TestCase):
             return kwargs
 
         def create_model(name, __base__, **fields):
-            captured.update({"name": name, "base": __base__, "fields": fields})
-            return type(name, (__base__,), {})
+            captured[name] = {"base": __base__, "fields": fields}
+            generated_fields = {
+                field_name: FieldInfo(definition[0])
+                for field_name, definition in fields.items()
+            }
+            return type(name, (__base__,), {"model_fields": generated_fields})
 
         runtime = VLMRuntime(
             "openai_compatible",
@@ -114,6 +130,8 @@ class StriveVLMRuntimeTests(unittest.TestCase):
             "http://vlm/v1",
             "key",
             max_reasoning_steps=3,
+            max_string_chars=256,
+            max_list_items=32,
         )
         client = make_client_class(_FakeClient, runtime)()
         fake_pydantic = types.SimpleNamespace(Field=field, create_model=create_model)
@@ -121,14 +139,35 @@ class StriveVLMRuntimeTests(unittest.TestCase):
             result = client.beta.chat.completions.parse(
                 messages=[], response_format=Result
             )
-        self.assertEqual(captured["base"], Result)
-        annotation = captured["fields"]["steps"][0]
-        self.assertEqual(annotation.__metadata__[0]["max_length"], 3)
-        self.assertIs(result["response_format"].__mro__[1], Result)
+        result_model = result["response_format"]
+        outer = captured["ResultBounded"]
+        steps_annotation = outer["fields"]["steps"][0]
+        self.assertEqual(steps_annotation.__metadata__[0]["max_length"], 3)
+        bounded_step = steps_annotation.__origin__.__args__[0]
+        explanation = captured[bounded_step.__name__]["fields"]["explanation"][0]
+        self.assertEqual(explanation.__metadata__[0]["max_length"], 256)
+        answer = outer["fields"]["answer"][0]
+        self.assertEqual(answer.__metadata__[0]["max_length"], 256)
+        self.assertEqual(result_model.__name__, "ResultBounded")
 
-    def test_non_reasoning_list_is_not_bounded(self):
+    def test_non_reasoning_list_uses_general_bound(self):
+        class FieldInfo:
+            def __init__(self, annotation):
+                self.annotation = annotation
+
         class Result:
-            model_fields = {"res": object()}
+            model_fields = {"res": FieldInfo(list[str])}
+
+        def field(**kwargs):
+            return kwargs
+
+        def create_model(name, __base__, **fields):
+            generated_fields = dict(getattr(__base__, "model_fields", {}))
+            generated_fields.update({
+                field_name: FieldInfo(definition[0])
+                for field_name, definition in fields.items()
+            })
+            return type(name, (__base__,), {"model_fields": generated_fields})
 
         runtime = VLMRuntime(
             "openai_compatible",
@@ -136,12 +175,16 @@ class StriveVLMRuntimeTests(unittest.TestCase):
             "http://vlm/v1",
             "key",
             max_reasoning_steps=3,
+            max_list_items=32,
         )
         client = make_client_class(_FakeClient, runtime)()
-        result = client.beta.chat.completions.parse(
-            messages=[], response_format=Result
-        )
-        self.assertIs(result["response_format"], Result)
+        fake_pydantic = types.SimpleNamespace(Field=field, create_model=create_model)
+        with patch.dict(sys.modules, {"pydantic": fake_pydantic}):
+            result = client.beta.chat.completions.parse(
+                messages=[], response_format=Result
+            )
+        annotation = result["response_format"].model_fields["res"].annotation
+        self.assertEqual(annotation.__metadata__[0]["max_length"], 32)
 
     def test_length_failure_retries_with_concise_instruction(self):
         class LengthThenSuccessClient(_FakeClient):

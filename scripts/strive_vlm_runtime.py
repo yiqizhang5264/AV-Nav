@@ -9,7 +9,7 @@ import json
 import os
 import pathlib
 import time
-from typing import Annotated, Any
+from typing import Annotated, Any, get_args, get_origin
 
 
 @dataclass(frozen=True)
@@ -21,6 +21,8 @@ class VLMRuntime:
     disable_thinking: bool = False
     max_completion_tokens: int | None = None
     max_reasoning_steps: int | None = None
+    max_string_chars: int | None = None
+    max_list_items: int | None = None
 
     @classmethod
     def from_env(cls) -> "VLMRuntime":
@@ -72,6 +74,8 @@ class VLMRuntime:
             max_reasoning_steps = 3
         else:
             max_reasoning_steps = None
+        max_string_chars = 256 if backend == "openai_compatible" else None
+        max_list_items = 32 if backend == "openai_compatible" else None
         return cls(
             backend,
             model,
@@ -80,6 +84,8 @@ class VLMRuntime:
             disable_thinking,
             max_completion_tokens,
             max_reasoning_steps,
+            max_string_chars,
+            max_list_items,
         )
 
     def public_dict(self) -> dict[str, object]:
@@ -91,6 +97,8 @@ class VLMRuntime:
             "disable_thinking": self.disable_thinking,
             "max_completion_tokens": self.max_completion_tokens,
             "max_reasoning_steps": self.max_reasoning_steps,
+            "max_string_chars": self.max_string_chars,
+            "max_list_items": self.max_list_items,
         }
 
 
@@ -126,21 +134,46 @@ def _concise_retry_messages(messages: list[Any]) -> list[Any]:
     return [{"role": "system", "content": instruction}, *retried]
 
 
-def _bounded_response_format(response_format: Any, max_steps: int | None) -> Any:
-    if max_steps is None:
+def _bounded_response_format(
+    response_format: Any,
+    max_steps: int | None,
+    max_string_chars: int | None,
+    max_list_items: int | None,
+) -> Any:
+    if max_steps is None and max_string_chars is None and max_list_items is None:
         return response_format
     model_fields = getattr(response_format, "model_fields", None)
-    if not model_fields or "steps" not in model_fields:
+    if not model_fields:
         return response_format
     from pydantic import Field, create_model
 
-    annotation = model_fields["steps"].annotation
-    bounded_steps = Annotated[annotation, Field(max_length=max_steps)]
-    return create_model(
-        f"{response_format.__name__}Bounded{max_steps}",
-        __base__=response_format,
-        steps=(bounded_steps, ...),
-    )
+    def bound_annotation(annotation: Any, field_name: str) -> Any:
+        if annotation is str and max_string_chars is not None:
+            return Annotated[str, Field(max_length=max_string_chars)]
+        origin = get_origin(annotation)
+        if origin is list:
+            item_annotation = bound_annotation(get_args(annotation)[0], "")
+            bounded_list = list[item_annotation]
+            limit = max_steps if field_name == "steps" else max_list_items
+            if limit is not None:
+                return Annotated[bounded_list, Field(max_length=limit)]
+            return bounded_list
+        if getattr(annotation, "model_fields", None):
+            return build_model(annotation)
+        return annotation
+
+    def build_model(model: Any) -> Any:
+        fields = {
+            name: (bound_annotation(info.annotation, name), ...)
+            for name, info in model.model_fields.items()
+        }
+        return create_model(
+            f"{model.__name__}Bounded",
+            __base__=model,
+            **fields,
+        )
+
+    return build_model(response_format)
 
 
 class _CompletionsProxy:
@@ -153,7 +186,10 @@ class _CompletionsProxy:
         kwargs["model"] = self._runtime.model
         if "response_format" in kwargs:
             kwargs["response_format"] = _bounded_response_format(
-                kwargs["response_format"], self._runtime.max_reasoning_steps
+                kwargs["response_format"],
+                self._runtime.max_reasoning_steps,
+                self._runtime.max_string_chars,
+                self._runtime.max_list_items,
             )
         if self._runtime.max_completion_tokens is not None:
             kwargs.setdefault(
