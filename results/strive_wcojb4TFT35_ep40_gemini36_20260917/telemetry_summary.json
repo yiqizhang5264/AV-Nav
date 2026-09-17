@@ -1,0 +1,16 @@
+{
+  "http_attempts": 14,
+  "successful_attempts": 14,
+  "failed_attempts": 0,
+  "prompt_tokens": 44027,
+  "visible_completion_tokens": 1201,
+  "reported_total_tokens": 50506,
+  "total_latency_seconds": 756.6815343964845,
+  "max_latency_seconds": 346.2657791785896,
+  "max_visible_completion_tokens": 305,
+  "latency_outliers_seconds": [
+    346.2657791785896,
+    154.74244591780007,
+    152.9987927954644
+  ]
+}

@@ -1,0 +1,3 @@
+Answer: steps=[Step(explanation='The bounding box surrounds a framed rectangular object mounted on the wall that shows a reflection of the room (ceiling, pictures on the wall, fan). This object is a mirror.', output='mirror')] res='mirror'
+
+
