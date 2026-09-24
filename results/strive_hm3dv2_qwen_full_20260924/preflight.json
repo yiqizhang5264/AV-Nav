@@ -1,0 +1,54 @@
+{
+  "python": "3.12.14 | packaged by Anaconda, Inc. | (main, Aug 27 2026, 14:46:43) [GCC 14.3.0]",
+  "av_nav_commit": "fe62c0a3d30fe796a0d58990af4e0582064c1294",
+  "strive_commit": "1872d73b7db297705d251df73bf5f08ffed0d749",
+  "expected_strive_commit": "1872d73b7db297705d251df73bf5f08ffed0d749",
+  "vlm": {
+    "backend": "openai_compatible",
+    "model": "Qwen/Qwen3.5-9B",
+    "base_url": "http://127.0.0.1:8000/v1",
+    "api_key_configured": true,
+    "disable_thinking": true,
+    "max_completion_tokens": 1024,
+    "max_reasoning_steps": 3,
+    "max_string_chars": 256,
+    "max_list_items": 32
+  },
+  "environment": {
+    "HABITAT_LAB_PATH": true,
+    "SAM_CHECKPOINT": true,
+    "GROUNDING_DINO_PATH": true,
+    "GROUNDING_DINO_CHECKPOINT": true,
+    "HM3D_DATA_PATH": true
+  },
+  "paths": {
+    "SAM_CHECKPOINT": true,
+    "GROUNDING_DINO_CHECKPOINT": true,
+    "HABITAT_LAB_PATH": true,
+    "GROUNDING_DINO_PATH": true,
+    "HM3D_DATA_PATH": true
+  },
+  "dependency_commits": {
+    "HABITAT_LAB_PATH": {
+      "actual": "cb02f030655f9a475b379ec8d269979d9e17688d",
+      "expected": "cb02f030655f9a475b379ec8d269979d9e17688d"
+    },
+    "GROUNDING_DINO_PATH": {
+      "actual": "cfd5d3a985b0249de009b67d04f37263e11cdf3d",
+      "expected": "cfd5d3a985b0249de009b67d04f37263e11cdf3d"
+    }
+  },
+  "hm3d": {
+    "episode_dataset": {
+      "path": "/home/zyq/AV-Nav/runs/strive_resources/data/objectnav_hm3d_v2/val/val.json.gz",
+      "exists": true,
+      "sha256": "e0f25e8224b7b3931bd1b505482e35d343ebad8a52988c72ae94c3bd6a6b5169"
+    },
+    "scene_config": {
+      "path": "/home/zyq/AV-Nav/runs/strive_resources/data/scene_datasets/hm3d_v0.2/hm3d_annotated_basis.scene_dataset_config.json",
+      "exists": true,
+      "sha256": "c16fa23b09e36d528c3f12c9799eaa9cf0d733dcd22c9f329c0508d551b640a4"
+    }
+  },
+  "ready": true
+}
