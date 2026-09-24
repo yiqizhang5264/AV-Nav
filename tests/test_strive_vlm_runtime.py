@@ -28,6 +28,10 @@ class LengthFinishReasonError(Exception):
     pass
 
 
+class ValidationError(Exception):
+    pass
+
+
 class _LengthThenSuccessCompletions(_FakeCompletions):
     def __init__(self):
         super().__init__()
@@ -37,6 +41,18 @@ class _LengthThenSuccessCompletions(_FakeCompletions):
         self.calls.append(kwargs)
         if len(self.calls) == 1:
             raise LengthFinishReasonError("too long")
+        return kwargs
+
+
+class _InvalidJsonThenSuccessCompletions(_FakeCompletions):
+    def __init__(self):
+        super().__init__()
+        self.calls = []
+
+    def parse(self, *args, **kwargs):
+        self.calls.append(kwargs)
+        if len(self.calls) == 1:
+            raise ValidationError("invalid JSON control character")
         return kwargs
 
 
@@ -235,6 +251,27 @@ class StriveVLMRuntimeTests(unittest.TestCase):
         self.assertEqual(len(result["messages"]), 2)
         self.assertEqual(result["messages"][0]["role"], "system")
         self.assertIn("choose a room", result["messages"][0]["content"])
+        self.assertIn("only the final", result["messages"][0]["content"])
+
+    def test_invalid_json_retries_with_final_only_request(self):
+        class InvalidJsonThenSuccessClient(_FakeClient):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.beta.chat.completions = _InvalidJsonThenSuccessCompletions()
+
+        runtime = VLMRuntime(
+            "openai_compatible",
+            "local-model",
+            "http://vlm/v1",
+            "key",
+            max_completion_tokens=1024,
+        )
+        client = make_client_class(InvalidJsonThenSuccessClient, runtime)()
+        result = client.beta.chat.completions.parse(
+            messages=[{"role": "user", "content": "classify"}]
+        )
+        self.assertEqual(result["temperature"], 0.0)
+        self.assertEqual(result["max_completion_tokens"], 512)
         self.assertIn("only the final", result["messages"][0]["content"])
 
     def test_final_only_retry_schema_removes_steps(self):

@@ -157,6 +157,27 @@ def _run_shard(
     return record
 
 
+def _run_shard_with_retries(
+    suite_root: pathlib.Path,
+    start: int,
+    stop: int,
+    av_nav_commit: str,
+    strive_commit: str,
+    max_attempts: int,
+) -> dict[str, object]:
+    result: dict[str, object] = {}
+    for attempt_number in range(1, max_attempts + 1):
+        result = _run_shard(
+            suite_root, start, stop, av_nav_commit, strive_commit
+        )
+        result["attempts_in_invocation"] = attempt_number
+        if result.get("status") == "skipped_complete" or result.get(
+            "complete", False
+        ):
+            return result
+    return result
+
+
 def _manifest_payload(args: argparse.Namespace) -> dict[str, object]:
     return {
         "suite_id": args.suite_id,
@@ -164,6 +185,7 @@ def _manifest_payload(args: argparse.Namespace) -> dict[str, object]:
         "stop": args.stop,
         "shard_size": args.shard_size,
         "workers": args.workers,
+        "max_shard_attempts": args.max_shard_attempts,
         "av_nav_commit": _git_head(ROOT),
         "strive_commit": _git_head(STRIVE),
         "vlm": VLMRuntime.from_env().public_dict(),
@@ -182,6 +204,7 @@ def _load_or_create_suite(args: argparse.Namespace) -> tuple[pathlib.Path, dict[
             "stop": args.stop,
             "shard_size": args.shard_size,
             "workers": args.workers,
+            "max_shard_attempts": args.max_shard_attempts,
         }
         actual = {key: manifest.get(key) for key in expected}
         if actual != expected:
@@ -238,9 +261,10 @@ def main() -> None:
     parser.add_argument("--stop", type=int, default=1000)
     parser.add_argument("--shard-size", type=int, default=10)
     parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument("--max-shard-attempts", type=int, default=3)
     args = parser.parse_args()
-    if args.workers <= 0:
-        parser.error("--workers must be positive")
+    if args.workers <= 0 or args.max_shard_attempts <= 0:
+        parser.error("--workers and --max-shard-attempts must be positive")
     ranges = shard_ranges(args.start, args.stop, args.shard_size)
     suite_root, manifest = _load_or_create_suite(args)
     _ensure_preflight(suite_root)
@@ -263,12 +287,13 @@ def main() -> None:
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures: Iterable[concurrent.futures.Future[dict[str, object]]] = [
             pool.submit(
-                _run_shard,
+                _run_shard_with_retries,
                 suite_root,
                 start,
                 stop,
                 str(manifest["av_nav_commit"]),
                 str(manifest["strive_commit"]),
+                args.max_shard_attempts,
             )
             for start, stop in pending
         ]

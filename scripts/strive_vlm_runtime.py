@@ -224,7 +224,12 @@ class _CompletionsProxy:
         try:
             result = self._wrapped.parse(*args, **kwargs)
         except Exception as error:
-            if type(error).__name__ != "LengthFinishReasonError":
+            retryable_parse_errors = {
+                "JSONDecodeError",
+                "LengthFinishReasonError",
+                "ValidationError",
+            }
+            if type(error).__name__ not in retryable_parse_errors:
                 event.update({
                     "ok": False,
                     "latency_seconds": time.perf_counter() - started,
