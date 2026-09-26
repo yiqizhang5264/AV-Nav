@@ -38,7 +38,7 @@ def main() -> None:
     # runtime-only edge case here.
     import objnav_agent_with_process_obs
 
-    install_episode_over_guard(objnav_agent_with_process_obs.HabitatAgent)
+    install_episode_over_guard(objnav_agent_with_process_obs.HM3D_Objnav_Agent)
 
     runpy.run_path(
         str(STRIVE / "objnav_benchmark_with_process_obs.py"),
