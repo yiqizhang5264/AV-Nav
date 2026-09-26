@@ -82,7 +82,7 @@ def _voxel_reduce_arrays(
 
 
 def install_large_merge_memory_guard(
-    mapper_module: Any, max_merged_points: int = 100_000, voxel_size: float = 0.05
+    mapper_module: Any, max_merged_points: int = 1, voxel_size: float = 0.05
 ) -> None:
     """Pre-voxelize large CUDA merges on CPU before Open3D's GPU hash table."""
     if getattr(mapper_module, "_av_nav_large_merge_memory_guard", False):
