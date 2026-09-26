@@ -43,7 +43,19 @@ def attempt_is_complete(path: pathlib.Path, start: int, stop: int) -> bool:
     except (FileNotFoundError, ValueError):
         return False
     episode_ids = read_metric_episode_ids(path / "output" / "metrics.csv")
-    return exit_code == 0 and episode_ids == list(range(start, stop))
+    accepted_postrun_abort = (path / "accepted_postrun_abort.txt").is_file()
+    return (exit_code == 0 or accepted_postrun_abort) and episode_ids == list(
+        range(start, stop)
+    )
+
+
+def _is_acceptable_open3d_postrun_abort(
+    exit_code: int, console_path: pathlib.Path, episode_ids: list[int], start: int, stop: int
+) -> bool:
+    if exit_code != -6 or episode_ids != list(range(start, stop)):
+        return False
+    console_tail = console_path.read_text(encoding="utf-8", errors="replace")[-8192:]
+    return "Cacher::~Cacher()" in console_tail and "leaking memory blocks on CUDA" in console_tail
 
 
 def _git_head(path: pathlib.Path) -> str:
@@ -128,7 +140,8 @@ def _run_shard(
         "--save_dir",
         relative_output,
     ]
-    with (attempt / "console.log").open("w", encoding="utf-8") as console:
+    console_path = attempt / "console.log"
+    with console_path.open("w", encoding="utf-8") as console:
         code = subprocess.run(
             command,
             cwd=STRIVE,
@@ -140,6 +153,14 @@ def _run_shard(
 
     (attempt / "exit_code.txt").write_text(f"{code}\n")
     (attempt / "finished_at.txt").write_text(_utc_now() + "\n")
+    episode_ids = read_metric_episode_ids(attempt / "output" / "metrics.csv")
+    accepted_postrun_abort = _is_acceptable_open3d_postrun_abort(
+        code, console_path, episode_ids, start, stop
+    )
+    if accepted_postrun_abort:
+        (attempt / "accepted_postrun_abort.txt").write_text(
+            "All requested metrics were written before the known Open3D CUDA cache destructor abort.\n"
+        )
     complete = attempt_is_complete(attempt, start, stop)
     record: dict[str, object] = {
         "start": start,
@@ -147,9 +168,8 @@ def _run_shard(
         "attempt": attempt.name,
         "returncode": code,
         "complete": complete,
-        "metric_episode_ids": read_metric_episode_ids(
-            attempt / "output" / "metrics.csv"
-        ),
+        "metric_episode_ids": episode_ids,
+        "accepted_postrun_abort": accepted_postrun_abort,
         "finished_at": _utc_now(),
     }
     (attempt / "status.json").write_text(json.dumps(record, indent=2) + "\n")

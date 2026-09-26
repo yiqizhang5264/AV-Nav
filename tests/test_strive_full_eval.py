@@ -10,6 +10,7 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 from run_strive_full_eval import (
+    _is_acceptable_open3d_postrun_abort,
     _run_shard_with_retries,
     attempt_is_complete,
     shard_ranges,
@@ -54,6 +55,24 @@ class StriveFullEvalTests(unittest.TestCase):
         self.assertTrue(result["complete"])
         self.assertEqual(result["attempts_in_invocation"], 2)
         self.assertEqual(run.call_count, 2)
+
+    def test_only_complete_open3d_destructor_abort_is_accepted(self):
+        with tempfile.TemporaryDirectory() as directory:
+            console = pathlib.Path(directory) / "console.log"
+            console.write_text(
+                "Open3D Error Cacher::~Cacher() 1 leaking memory blocks on CUDA:0"
+            )
+            self.assertTrue(
+                _is_acceptable_open3d_postrun_abort(
+                    -6, console, [60, 61], 60, 62
+                )
+            )
+            self.assertFalse(
+                _is_acceptable_open3d_postrun_abort(-6, console, [60], 60, 62)
+            )
+            self.assertFalse(
+                _is_acceptable_open3d_postrun_abort(1, console, [60, 61], 60, 62)
+            )
 
 
 if __name__ == "__main__":
