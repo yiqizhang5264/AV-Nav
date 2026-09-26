@@ -9,6 +9,7 @@ import runpy
 import sys
 
 from strive_vlm_runtime import VLMRuntime, install_openai_runtime
+from strive_upstream_adapter import install_episode_over_guard
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -31,6 +32,13 @@ def main() -> None:
     import constants
 
     constants.MODEL_NAME = runtime.model
+
+    # STRIVE's final-check loop can issue one more action after Habitat ends an
+    # episode at 500 steps. Keep the pinned submodule unchanged and guard that
+    # runtime-only edge case here.
+    import objnav_agent_with_process_obs
+
+    install_episode_over_guard(objnav_agent_with_process_obs.HabitatAgent)
 
     runpy.run_path(
         str(STRIVE / "objnav_benchmark_with_process_obs.py"),
