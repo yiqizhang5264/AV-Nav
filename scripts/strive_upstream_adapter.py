@@ -65,3 +65,62 @@ def install_interpolation_memory_guard(
 
     mapper_class.get_closest_disances_and_points = guarded
     mapper_class._av_nav_interpolation_memory_guard = True
+
+
+def _voxel_reduce_arrays(
+    positions: np.ndarray, colors: np.ndarray, voxel_size: float
+) -> tuple[np.ndarray, np.ndarray]:
+    finite = np.isfinite(positions).all(axis=1)
+    positions = positions[finite]
+    colors = colors[finite]
+    if len(positions) == 0:
+        return positions, colors
+    keys = np.floor(positions / voxel_size).astype(np.int64)
+    _, indices = np.unique(keys, axis=0, return_index=True)
+    indices.sort()
+    return positions[indices], colors[indices]
+
+
+def install_large_merge_memory_guard(
+    mapper_module: Any, max_merged_points: int = 100_000, voxel_size: float = 0.05
+) -> None:
+    """Pre-voxelize large CUDA merges on CPU before Open3D's GPU hash table."""
+    if getattr(mapper_module, "_av_nav_large_merge_memory_guard", False):
+        return
+
+    original = mapper_module.gpu_merge_pointcloud
+
+    def guarded(pcd_a: Any, pcd_b: Any, merge_color: bool = True) -> Any:
+        if pcd_a is None or pcd_a.is_empty() or pcd_b is None or pcd_b.is_empty():
+            return original(pcd_a, pcd_b, merge_color)
+        count_a = int(pcd_a.point.positions.shape[0])
+        count_b = int(pcd_b.point.positions.shape[0])
+        if count_a + count_b <= max_merged_points:
+            return original(pcd_a, pcd_b, merge_color)
+
+        positions_a = pcd_a.point.positions.cpu().numpy()
+        positions_b = pcd_b.point.positions.cpu().numpy()
+        colors_a = pcd_a.point.colors.cpu().numpy()
+        colors_b = pcd_b.point.colors.cpu().numpy()
+        if merge_color and len(colors_a):
+            colors_b = np.repeat(colors_a[:1], len(positions_b), axis=0)
+        positions, colors = _voxel_reduce_arrays(
+            np.concatenate((positions_a, positions_b), axis=0),
+            np.concatenate((colors_a, colors_b), axis=0),
+            voxel_size,
+        )
+        result = mapper_module.o3d.t.geometry.PointCloud(pcd_a.device)
+        result.point.positions = mapper_module.o3d.core.Tensor(
+            positions,
+            dtype=mapper_module.o3d.core.Dtype.Float32,
+            device=pcd_a.device,
+        )
+        result.point.colors = mapper_module.o3d.core.Tensor(
+            colors,
+            dtype=mapper_module.o3d.core.Dtype.Float32,
+            device=pcd_a.device,
+        )
+        return result
+
+    mapper_module.gpu_merge_pointcloud = guarded
+    mapper_module._av_nav_large_merge_memory_guard = True

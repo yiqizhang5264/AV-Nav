@@ -12,6 +12,7 @@ from strive_vlm_runtime import VLMRuntime, install_openai_runtime
 from strive_upstream_adapter import (
     install_episode_over_guard,
     install_interpolation_memory_guard,
+    install_large_merge_memory_guard,
 )
 
 
@@ -44,6 +45,7 @@ def main() -> None:
 
     install_episode_over_guard(objnav_agent_with_process_obs.HM3D_Objnav_Agent)
     install_interpolation_memory_guard(mapper_with_process_obs.Instruct_Mapper)
+    install_large_merge_memory_guard(mapper_with_process_obs)
 
     runpy.run_path(
         str(STRIVE / "objnav_benchmark_with_process_obs.py"),

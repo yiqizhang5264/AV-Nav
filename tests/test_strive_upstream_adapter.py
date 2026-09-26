@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 from strive_upstream_adapter import (
     install_episode_over_guard,
     install_interpolation_memory_guard,
+    _voxel_reduce_arrays,
 )
 
 
@@ -68,6 +69,17 @@ class StriveUpstreamAdapterTests(unittest.TestCase):
         distances, points = Mapper().get_closest_disances_and_points()
         self.assertEqual(distances.tolist(), [1.0])
         self.assertEqual(len(points), 2)
+
+    def test_voxel_reduce_removes_nonfinite_and_duplicate_cells(self):
+        positions = np.array(
+            [[0.01, 0.01, 0.0], [0.02, 0.02, 0.0], [np.nan, 0.0, 0.0], [0.2, 0.0, 0.0]]
+        )
+        colors = np.arange(12).reshape(4, 3)
+        reduced_positions, reduced_colors = _voxel_reduce_arrays(
+            positions, colors, 0.1
+        )
+        self.assertEqual(reduced_positions.shape, (2, 3))
+        self.assertEqual(reduced_colors.tolist(), [colors[0].tolist(), colors[3].tolist()])
 
 
 if __name__ == "__main__":
