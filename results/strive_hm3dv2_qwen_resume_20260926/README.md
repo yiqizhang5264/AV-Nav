@@ -76,3 +76,11 @@ runs/strive_qwen_hm3dv2_resume_4549f75_20260926_launcher.log
 STRIVE为每个完成episode保存三段视频：`fps.mp4`为RGB第一视角轨迹，`depth.mp4`为深度轨迹，`metrics.mp4`为带Success、SPL、距离、步数和目标信息的俯视轨迹。后续未运行episode继续保存这三段视频。视频保留在服务器各suite的`shards/.../output/episode-<id>/`目录，不提交GitHub。
 
 已有旧输出共发现68组episode视频（包含失败attempt产生的重复episode），204个MP4合计约484MB；单个episode通常约7MB。服务器当前剩余约27TB，保存剩余episode视频没有磁盘压力。最终汇总时将为0–999生成去重的视频索引，便于按失败类型逐个查看。
+
+从2026-09-26起，使用`scripts/compose_strive_videos.py`把三段视频横向拼接为`combined_metrics_fps_depth.mp4`，顺序为`metrics | fps | depth`。输出统一为480像素高，各路保持宽高比，使用相同的最短时长以保证同步。episode 46验证输出为1776×480、4 FPS、195帧，与三个输入的48.75秒时长一致。
+
+服务器已启动低优先级后台合成器：先批量处理已有episode，之后每10分钟扫描新完成episode；全量评估结束后再执行一次最终扫描。合成日志位于：
+
+```text
+/home/zyq/AV-Nav-worktrees/strive-full-4549f75/runs/video_composer.log
+```
