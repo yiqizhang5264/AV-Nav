@@ -39,7 +39,7 @@ def install_episode_over_guard(agent_class: type[Any]) -> None:
 
 
 def install_interpolation_memory_guard(
-    mapper_class: type[Any], max_interpolated_points: int = 2_000_000
+    mapper_class: type[Any], max_interpolated_points: int = 120_000
 ) -> None:
     """Voxel-deduplicate pathological ray endpoints before 60x interpolation."""
     if getattr(mapper_class, "_av_nav_interpolation_memory_guard", False):
