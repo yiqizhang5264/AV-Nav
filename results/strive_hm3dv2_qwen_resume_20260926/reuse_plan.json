@@ -1,0 +1,17 @@
+{
+  "target_episode_range": [0, 1000],
+  "policy": "Reuse the earliest complete metric for already evaluated episodes; run only missing episodes; reject duplicates and gaps in the final merge.",
+  "fixed_commit_for_new_runs": "4549f75f0574c1d453e9b7b9ce29f7e02fe743ac",
+  "reused": [
+    {"start": 0, "stop": 40, "source": "strive_qwen_hm3dv2_val1000_fe62c0a_20260924 complete shards"},
+    {"start": 40, "stop": 45, "source": "shard_0040_0049_attempt_001 partial metrics"},
+    {"start": 45, "stop": 46, "source": "smoke_ep45_20260926 at a6ec8f8"},
+    {"start": 50, "stop": 60, "source": "shard_0050_0059_attempt_001 complete shard"},
+    {"start": 60, "stop": 61, "source": "shard_0060_0069_attempt_001 partial metrics"},
+    {"start": 61, "stop": 62, "source": "smoke_ep61_20260926 at ce758df"}
+  ],
+  "scheduled": [
+    {"start": 46, "stop": 50, "suite": "strive_qwen_hm3dv2_missing_0046_0049_4549f75_20260926"},
+    {"start": 62, "stop": 1000, "suite": "strive_qwen_hm3dv2_missing_0062_0999_4549f75_20260926"}
+  ]
+}

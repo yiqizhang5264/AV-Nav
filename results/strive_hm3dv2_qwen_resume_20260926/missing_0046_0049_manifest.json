@@ -1,0 +1,22 @@
+{
+  "suite_id": "strive_qwen_hm3dv2_missing_0046_0049_4549f75_20260926",
+  "start": 46,
+  "stop": 50,
+  "shard_size": 4,
+  "workers": 1,
+  "max_shard_attempts": 3,
+  "av_nav_commit": "4549f75f0574c1d453e9b7b9ce29f7e02fe743ac",
+  "strive_commit": "1872d73b7db297705d251df73bf5f08ffed0d749",
+  "vlm": {
+    "backend": "openai_compatible",
+    "model": "Qwen/Qwen3.5-9B",
+    "base_url": "http://127.0.0.1:8000/v1",
+    "api_key_configured": true,
+    "disable_thinking": true,
+    "max_completion_tokens": 1024,
+    "max_reasoning_steps": 3,
+    "max_string_chars": 256,
+    "max_list_items": 32
+  },
+  "created_at": "2026-09-26T02:21:22.165562+00:00"
+}
