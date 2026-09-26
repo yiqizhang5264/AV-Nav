@@ -2,10 +2,15 @@ import os
 import sys
 import unittest
 
+import numpy as np
+
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
-from strive_upstream_adapter import install_episode_over_guard
+from strive_upstream_adapter import (
+    install_episode_over_guard,
+    install_interpolation_memory_guard,
+)
 
 
 class _Environment:
@@ -46,6 +51,23 @@ class StriveUpstreamAdapterTests(unittest.TestCase):
         agent = Agent()
         self.assertFalse(agent.step_mod())
         self.assertEqual(agent.env.actions, [])
+
+    def test_large_interpolation_endpoints_are_voxel_deduplicated(self):
+        class Mapper:
+            pcd_resolution = 0.1
+
+            def get_closest_disances_and_points(self):
+                points = np.repeat(
+                    np.array([[0.01, 0.01, 0.0], [0.21, 0.01, 0.0]]),
+                    10,
+                    axis=0,
+                )
+                return np.array([1.0]), points
+
+        install_interpolation_memory_guard(Mapper, max_interpolated_points=180)
+        distances, points = Mapper().get_closest_disances_and_points()
+        self.assertEqual(distances.tolist(), [1.0])
+        self.assertEqual(len(points), 2)
 
 
 if __name__ == "__main__":
