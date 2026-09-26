@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pathlib
+import tempfile
 from typing import Any
 
 import numpy as np
@@ -9,6 +11,27 @@ import numpy as np
 
 class _EpisodeAlreadyOver(RuntimeError):
     pass
+
+
+def create_runtime_overlay(strive_root: pathlib.Path) -> tempfile.TemporaryDirectory[str]:
+    """Load one patched STRIVE module without modifying the pinned submodule."""
+    source_path = strive_root / "mapper_with_process_obs.py"
+    source = source_path.read_text(encoding="utf-8")
+    original = """            self.process_obs_pcd = gpu_merge_pointcloud(
+                self.process_obs_pcd,
+                self.current_navigable_pcd).voxel_down_sample(self.pcd_resolution)
+"""
+    replacement = """            self.process_obs_pcd = gpu_merge_pointcloud(
+                self.process_obs_pcd,
+                self.current_navigable_pcd)
+"""
+    if source.count(original) != 1:
+        raise RuntimeError("pinned STRIVE process_obs merge site changed")
+    overlay = tempfile.TemporaryDirectory(prefix="av-nav-strive-overlay-")
+    pathlib.Path(overlay.name, source_path.name).write_text(
+        source.replace(original, replacement), encoding="utf-8"
+    )
+    return overlay
 
 
 def install_episode_over_guard(agent_class: type[Any]) -> None:

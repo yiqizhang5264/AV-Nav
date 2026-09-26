@@ -1,5 +1,7 @@
 import os
+import pathlib
 import sys
+import tempfile
 import unittest
 
 import numpy as np
@@ -11,6 +13,7 @@ from strive_upstream_adapter import (
     install_episode_over_guard,
     install_interpolation_memory_guard,
     _voxel_reduce_arrays,
+    create_runtime_overlay,
 )
 
 
@@ -80,6 +83,24 @@ class StriveUpstreamAdapterTests(unittest.TestCase):
         )
         self.assertEqual(reduced_positions.shape, (2, 3))
         self.assertEqual(reduced_colors.tolist(), [colors[0].tolist(), colors[3].tolist()])
+
+    def test_runtime_overlay_removes_only_redundant_gpu_downsample(self):
+        source = """prefix
+            self.process_obs_pcd = gpu_merge_pointcloud(
+                self.process_obs_pcd,
+                self.current_navigable_pcd).voxel_down_sample(self.pcd_resolution)
+suffix
+"""
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            (root / "mapper_with_process_obs.py").write_text(source)
+            overlay = create_runtime_overlay(root)
+            patched = pathlib.Path(
+                overlay.name, "mapper_with_process_obs.py"
+            ).read_text()
+            overlay.cleanup()
+        self.assertNotIn("current_navigable_pcd).voxel_down_sample", patched)
+        self.assertIn("current_navigable_pcd)\nsuffix", patched)
 
 
 if __name__ == "__main__":

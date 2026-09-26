@@ -13,6 +13,7 @@ from strive_upstream_adapter import (
     install_episode_over_guard,
     install_interpolation_memory_guard,
     install_large_merge_memory_guard,
+    create_runtime_overlay,
 )
 
 
@@ -22,6 +23,8 @@ STRIVE = ROOT / "external" / "strive"
 
 def main() -> None:
     sys.path.insert(0, str(STRIVE))
+    overlay = create_runtime_overlay(STRIVE)
+    sys.path.insert(0, overlay.name)
 
     runtime = VLMRuntime.from_env()
     if runtime.backend == "openai_compatible":
@@ -51,6 +54,7 @@ def main() -> None:
         str(STRIVE / "objnav_benchmark_with_process_obs.py"),
         run_name="__main__",
     )
+    overlay.cleanup()
 
 
 if __name__ == "__main__":
