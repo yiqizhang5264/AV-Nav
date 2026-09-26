@@ -1,9 +1,9 @@
 {
-  "observed_at": "2026-09-26T10:29:00+08:00",
-  "completed_unique_episodes": 59,
-  "successful_episodes": 42,
+  "observed_at": "2026-09-26T10:37:14+08:00",
+  "completed_unique_episodes": 60,
+  "successful_episodes": 43,
   "failed_episodes": 17,
-  "success_rate_snapshot": 0.711864406779661,
+  "success_rate_snapshot": 0.7166666666666667,
   "failure_types": {
     "suspected_false_positive_or_wrong_stop": {
       "count": 8,
@@ -26,5 +26,5 @@
       "definition": "Found Goal is false and the episode ended at 494 steps; inspect video and Habitat termination state before assigning a semantic failure cause."
     }
   },
-  "note": "This is a 59-episode progress snapshot, not the final HM3Dv2 result."
+  "note": "This is a 60-episode progress snapshot, not the final HM3Dv2 result."
 }

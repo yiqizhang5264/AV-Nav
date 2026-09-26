@@ -1,2 +1,3 @@
 Episode,success,spl,distance_to_goal,Episode Steps,start and goal distance,travel distance,Found Goal,End,object_goal
 46,1.0,0.2285453509376036,0.03390805423259735,195,4.457788944244385,19.445723190903664,True,1,Find the <toilet>.
+47,1.0,0.09914438689311693,0.05759178847074509,500,2.1819348335266113,20.00000323355198,True,1,Find the <chair>.

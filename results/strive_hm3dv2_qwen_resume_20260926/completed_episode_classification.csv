@@ -46,6 +46,7 @@
 "44","1","True","88","0.105773240327835","Find the <bed>.","success"
 "45","0","True","500","7.21236181259155","Find the <toilet>.","goal_candidate_but_timeout"
 "46","1","True","195","0.0339080542325974","Find the <toilet>.","success"
+"47","1","True","500","0.0575917884707451","Find the <chair>.","success"
 "50","0","False","500","1.44354450702667","Find the <potted_plant>.","exploration_timeout_no_goal"
 "51","1","True","165","0.0222114846110344","Find the <chair>.","success"
 "52","1","True","143","0.102782972157001","Find the <chair>.","success"
