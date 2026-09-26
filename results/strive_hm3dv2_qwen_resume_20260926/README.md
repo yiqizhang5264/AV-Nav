@@ -55,3 +55,24 @@ runs/strive_qwen_hm3dv2_resume_4549f75_20260926_launcher.log
 ```
 
 当前配置和预检快照见[missing_0046_0049_manifest.json](missing_0046_0049_manifest.json)与[preflight.json](preflight.json)。
+
+## 2026-09-26阶段性成功与失败
+
+截至episode 46完成，共有59个唯一有效episode指标：42个成功、17个失败。该阶段成功率为71.19%，仅用于监控运行，不能作为HM3Dv2全量结果。
+
+失败的操作性分类如下：
+
+| 类型 | 数量 | Episode |
+| --- | ---: | --- |
+| 疑似假阳性或错误停止 | 8 | 9、23、28、30、36、39、40、54 |
+| 未发现目标并探索超时 | 7 | 20、26、33、35、50、57、59 |
+| 已发现候选但导航到500步仍未成功 | 1 | 45 |
+| 未发现目标且提前结束 | 1 | 34 |
+
+“疑似假阳性或错误停止”表示`Found Goal=True`、`success=0`、终点距离标注目标超过1m；仅凭指标不能继续区分检测器误检、VLM语义混淆、停在错误实例或数据集标注缺失，必须结合视频和候选证据复核。逐episode数据见[completed_episode_classification.csv](completed_episode_classification.csv)，结构化汇总见[failure_summary.json](failure_summary.json)。
+
+## 视频保留
+
+STRIVE为每个完成episode保存三段视频：`fps.mp4`为RGB第一视角轨迹，`depth.mp4`为深度轨迹，`metrics.mp4`为带Success、SPL、距离、步数和目标信息的俯视轨迹。后续未运行episode继续保存这三段视频。视频保留在服务器各suite的`shards/.../output/episode-<id>/`目录，不提交GitHub。
+
+已有旧输出共发现68组episode视频（包含失败attempt产生的重复episode），204个MP4合计约484MB；单个episode通常约7MB。服务器当前剩余约27TB，保存剩余episode视频没有磁盘压力。最终汇总时将为0–999生成去重的视频索引，便于按失败类型逐个查看。

@@ -1,0 +1,30 @@
+{
+  "observed_at": "2026-09-26T10:29:00+08:00",
+  "completed_unique_episodes": 59,
+  "successful_episodes": 42,
+  "failed_episodes": 17,
+  "success_rate_snapshot": 0.711864406779661,
+  "failure_types": {
+    "suspected_false_positive_or_wrong_stop": {
+      "count": 8,
+      "episodes": [9, 23, 28, 30, 36, 39, 40, 54],
+      "definition": "Found Goal is true, success is zero, the run ended before 500 steps, and distance to the annotated goal is greater than 1 metre. Video review is required to separate detector/VLM false positives, wrong-instance stops and annotation gaps."
+    },
+    "exploration_timeout_without_goal": {
+      "count": 7,
+      "episodes": [20, 26, 33, 35, 50, 57, 59],
+      "definition": "Found Goal is false and the episode reached 500 steps."
+    },
+    "goal_candidate_but_timeout": {
+      "count": 1,
+      "episodes": [45],
+      "definition": "Found Goal is true, but the episode reached 500 steps without success."
+    },
+    "early_end_without_goal": {
+      "count": 1,
+      "episodes": [34],
+      "definition": "Found Goal is false and the episode ended at 494 steps; inspect video and Habitat termination state before assigning a semantic failure cause."
+    }
+  },
+  "note": "This is a 59-episode progress snapshot, not the final HM3Dv2 result."
+}
