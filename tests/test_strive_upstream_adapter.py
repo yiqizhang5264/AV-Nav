@@ -85,22 +85,35 @@ class StriveUpstreamAdapterTests(unittest.TestCase):
         self.assertEqual(reduced_colors.tolist(), [colors[0].tolist(), colors[3].tolist()])
 
     def test_runtime_overlay_removes_only_redundant_gpu_downsample(self):
-        source = """prefix
+        mapper_source = """prefix
             self.process_obs_pcd = gpu_merge_pointcloud(
                 self.process_obs_pcd,
                 self.current_navigable_pcd).voxel_down_sample(self.pcd_resolution)
 suffix
 """
+        agent_source = """prefix
+        points = np.array(points)
+        # swithc the y and z axis
+        points = np.array([points[:, 0], points[:, 2], points[:, 1]]).T
+suffix
+"""
         with tempfile.TemporaryDirectory() as directory:
             root = pathlib.Path(directory)
-            (root / "mapper_with_process_obs.py").write_text(source)
+            (root / "mapper_with_process_obs.py").write_text(mapper_source)
+            (root / "objnav_agent_with_process_obs.py").write_text(agent_source)
             overlay = create_runtime_overlay(root)
-            patched = pathlib.Path(
+            patched_mapper = pathlib.Path(
                 overlay.name, "mapper_with_process_obs.py"
             ).read_text()
+            patched_agent = pathlib.Path(
+                overlay.name, "objnav_agent_with_process_obs.py"
+            ).read_text()
             overlay.cleanup()
-        self.assertNotIn("current_navigable_pcd).voxel_down_sample", patched)
-        self.assertIn("current_navigable_pcd)\nsuffix", patched)
+        self.assertNotIn("current_navigable_pcd).voxel_down_sample", patched_mapper)
+        self.assertIn("current_navigable_pcd)\nsuffix", patched_mapper)
+        self.assertIn("if points.size == 0:", patched_agent)
+        self.assertIn("self.check_again_postion", patched_agent)
+        self.assertEqual(patched_agent.count("points[:, 0]"), 1)
 
 
 if __name__ == "__main__":

@@ -14,22 +14,44 @@ class _EpisodeAlreadyOver(RuntimeError):
 
 
 def create_runtime_overlay(strive_root: pathlib.Path) -> tempfile.TemporaryDirectory[str]:
-    """Load one patched STRIVE module without modifying the pinned submodule."""
-    source_path = strive_root / "mapper_with_process_obs.py"
-    source = source_path.read_text(encoding="utf-8")
-    original = """            self.process_obs_pcd = gpu_merge_pointcloud(
+    """Load narrowly patched STRIVE modules without modifying the pinned submodule."""
+    mapper_path = strive_root / "mapper_with_process_obs.py"
+    mapper_source = mapper_path.read_text(encoding="utf-8")
+    merge_original = """            self.process_obs_pcd = gpu_merge_pointcloud(
                 self.process_obs_pcd,
                 self.current_navigable_pcd).voxel_down_sample(self.pcd_resolution)
 """
-    replacement = """            self.process_obs_pcd = gpu_merge_pointcloud(
+    merge_replacement = """            self.process_obs_pcd = gpu_merge_pointcloud(
                 self.process_obs_pcd,
                 self.current_navigable_pcd)
 """
-    if source.count(original) != 1:
+    if mapper_source.count(merge_original) != 1:
         raise RuntimeError("pinned STRIVE process_obs merge site changed")
+
+    agent_path = strive_root / "objnav_agent_with_process_obs.py"
+    agent_source = agent_path.read_text(encoding="utf-8")
+    empty_path_original = """        points = np.array(points)
+        # swithc the y and z axis
+        points = np.array([points[:, 0], points[:, 2], points[:, 1]]).T
+"""
+    empty_path_replacement = """        points = np.array(points)
+        if points.size == 0:
+            logger.info("No navigable check-again path; use the current position")
+            self.check_again_postion = np.array(self.mapper.current_position).copy()
+            return
+        # swithc the y and z axis
+        points = np.array([points[:, 0], points[:, 2], points[:, 1]]).T
+"""
+    if agent_source.count(empty_path_original) != 1:
+        raise RuntimeError("pinned STRIVE check-again path site changed")
+
     overlay = tempfile.TemporaryDirectory(prefix="av-nav-strive-overlay-")
-    pathlib.Path(overlay.name, source_path.name).write_text(
-        source.replace(original, replacement), encoding="utf-8"
+    pathlib.Path(overlay.name, mapper_path.name).write_text(
+        mapper_source.replace(merge_original, merge_replacement), encoding="utf-8"
+    )
+    pathlib.Path(overlay.name, agent_path.name).write_text(
+        agent_source.replace(empty_path_original, empty_path_replacement),
+        encoding="utf-8",
     )
     return overlay
 
