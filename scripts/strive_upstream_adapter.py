@@ -64,6 +64,12 @@ def install_episode_over_guard(agent_class: type[Any]) -> None:
     original_step_mod = agent_class.step_mod
 
     def guarded_step_mod(self: Any, *args: Any, **kwargs: Any) -> Any:
+        # The upstream benchmark ignores the False returned by its initial
+        # planning call.  A fully explored episode can therefore enter
+        # step_mod with no waypoint even though there is no action to take.
+        if self.waypoint is None:
+            return False
+
         original_env_step = self.env.step
 
         def guarded_env_step(action: Any, **step_kwargs: Any) -> Any:

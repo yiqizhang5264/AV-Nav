@@ -32,6 +32,7 @@ class StriveUpstreamAdapterTests(unittest.TestCase):
         class Agent:
             def __init__(self):
                 self.env = _Environment()
+                self.waypoint = np.zeros(3)
 
             def step_mod(self):
                 return self.env.step(1)
@@ -45,6 +46,7 @@ class StriveUpstreamAdapterTests(unittest.TestCase):
         class Agent:
             def __init__(self):
                 self.env = _Environment()
+                self.waypoint = np.zeros(3)
 
             def step_mod(self):
                 self.env.episode_over = True
@@ -55,6 +57,18 @@ class StriveUpstreamAdapterTests(unittest.TestCase):
         agent = Agent()
         self.assertFalse(agent.step_mod())
         self.assertEqual(agent.env.actions, [])
+
+    def test_missing_waypoint_ends_fully_explored_episode(self):
+        class Agent:
+            def __init__(self):
+                self.env = _Environment()
+                self.waypoint = None
+
+            def step_mod(self):
+                raise AssertionError("upstream step_mod must not run without a waypoint")
+
+        install_episode_over_guard(Agent)
+        self.assertFalse(Agent().step_mod())
 
     def test_large_interpolation_endpoints_are_voxel_deduplicated(self):
         class Mapper:
