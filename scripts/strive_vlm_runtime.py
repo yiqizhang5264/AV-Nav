@@ -148,6 +148,14 @@ def _final_only_response_format(response_format: Any) -> Any:
     return create_model(f"{response_format.__name__}FinalOnly", **fields)
 
 
+def _is_context_length_error(error: Exception) -> bool:
+    """Recognize OpenAI-compatible context-window rejections without SDK coupling."""
+    if type(error).__name__ != "BadRequestError":
+        return False
+    message = str(error).lower()
+    return "maximum context length" in message or "input_tokens" in message
+
+
 def _bounded_response_format(
     response_format: Any,
     max_steps: int | None,
@@ -229,7 +237,10 @@ class _CompletionsProxy:
                 "LengthFinishReasonError",
                 "ValidationError",
             }
-            if type(error).__name__ not in retryable_parse_errors:
+            if (
+                type(error).__name__ not in retryable_parse_errors
+                and not _is_context_length_error(error)
+            ):
                 event.update({
                     "ok": False,
                     "latency_seconds": time.perf_counter() - started,
