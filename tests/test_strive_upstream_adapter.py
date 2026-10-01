@@ -109,6 +109,9 @@ suffix
         points = np.array(points)
         # swithc the y and z axis
         points = np.array([points[:, 0], points[:, 2], points[:, 1]]).T
+            camera_points = camera_points[flag]
+
+            bbox = np.array([np.min(camera_points, axis=0), np.max(camera_points, axis=0)])
 suffix
 """
         with tempfile.TemporaryDirectory() as directory:
@@ -128,6 +131,8 @@ suffix
         self.assertIn("if points.size == 0:", patched_agent)
         self.assertIn("self.check_again_postion", patched_agent)
         self.assertEqual(patched_agent.count("points[:, 0]"), 1)
+        self.assertIn("if len(camera_points) == 0:", patched_agent)
+        self.assertIn("Skip panoramic verification", patched_agent)
 
 
 if __name__ == "__main__":

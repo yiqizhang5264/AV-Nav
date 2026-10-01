@@ -45,12 +45,28 @@ def create_runtime_overlay(strive_root: pathlib.Path) -> tempfile.TemporaryDirec
     if agent_source.count(empty_path_original) != 1:
         raise RuntimeError("pinned STRIVE check-again path site changed")
 
+    empty_projection_original = """            camera_points = camera_points[flag]
+
+            bbox = np.array([np.min(camera_points, axis=0), np.max(camera_points, axis=0)])
+"""
+    empty_projection_replacement = """            camera_points = camera_points[flag]
+            if len(camera_points) == 0:
+                logger.info("Skip panoramic verification: object has no visible projected pixels")
+                continue
+
+            bbox = np.array([np.min(camera_points, axis=0), np.max(camera_points, axis=0)])
+"""
+    if agent_source.count(empty_projection_original) != 1:
+        raise RuntimeError("pinned STRIVE panoramic projection site changed")
+
     overlay = tempfile.TemporaryDirectory(prefix="av-nav-strive-overlay-")
     pathlib.Path(overlay.name, mapper_path.name).write_text(
         mapper_source.replace(merge_original, merge_replacement), encoding="utf-8"
     )
     pathlib.Path(overlay.name, agent_path.name).write_text(
-        agent_source.replace(empty_path_original, empty_path_replacement),
+        agent_source.replace(empty_path_original, empty_path_replacement).replace(
+            empty_projection_original, empty_projection_replacement
+        ),
         encoding="utf-8",
     )
     return overlay
