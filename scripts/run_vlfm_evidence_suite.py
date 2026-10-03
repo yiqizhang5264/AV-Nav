@@ -96,7 +96,7 @@ def main() -> None:
                 f"habitat_baselines.tensorboard_dir={attempt / 'tb'}",
                 f"habitat_baselines.test_episode_count={args.episodes_per_scene}",
                 "habitat_baselines.num_environments=1", "habitat_baselines.torch_gpu_id=0",
-                f"habitat.dataset.data_path={dataset_root}/{{split}}/{{split}}.json.gz",
+                f"habitat.dataset.data_path='{dataset_root}/{{split}}/{{split}}.json.gz'",
                 f"habitat.dataset.scenes_dir={pathlib.Path(args.scenes_dir).resolve()}",
                 f"habitat.dataset.content_scenes=[{scene}]", f"hydra.run.dir={hydra_dir}",
             ]
