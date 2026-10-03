@@ -1,0 +1,30 @@
+{
+  "status": "incomplete",
+  "dataset": "HM3Dv2 ObjectNav validation",
+  "expected_episodes": 1000,
+  "evaluated_episodes": 988,
+  "missing_episode_ids": [817, 818, 819, 820, 821, 987, 988, 989, 990, 991, 992, 993],
+  "successes": 711,
+  "failures": 277,
+  "success_rate_observed": 0.7196356275303644,
+  "spl_observed": 0.31809875482297767,
+  "success_rate_missing_as_failures": 0.711,
+  "spl_missing_as_zero": 0.31428156976510196,
+  "maximum_possible_final_success_rate": 0.723,
+  "mean_distance_to_goal": 1.7557007581725983,
+  "mean_episode_steps": 216.2844129554656,
+  "found_goal_count": 812,
+  "failed_with_found_goal_true": 126,
+  "failed_with_found_goal_false": 151,
+  "categories": {
+    "bed": {"episodes": 165, "successes": 142, "success_rate": 0.8606060606060606, "spl": 0.3453405354219416},
+    "chair": {"episodes": 192, "successes": 158, "success_rate": 0.8229166666666666, "spl": 0.40291798081770575},
+    "potted_plant": {"episodes": 149, "successes": 78, "success_rate": 0.5234899328859061, "spl": 0.1865095598298006},
+    "sofa": {"episodes": 186, "successes": 141, "success_rate": 0.7580645161290323, "spl": 0.36712635010318},
+    "toilet": {"episodes": 164, "successes": 112, "success_rate": 0.6829268292682927, "spl": 0.28531542012120337},
+    "tv_monitor": {"episodes": 132, "successes": 80, "success_rate": 0.6060606060606061, "spl": 0.2808558687104016}
+  },
+  "aggregation": "Latest metrics.csv row per episode from full and missing HM3Dv2 Qwen suites; smoke and schema suites excluded.",
+  "av_nav_commit": "f344eee6f52ea43d5ddb0cc84a638b27f2ca148d",
+  "strive_commit": "1872d73b7db297705d251df73bf5f08ffed0d749"
+}
