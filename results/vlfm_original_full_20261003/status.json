@@ -1,0 +1,31 @@
+{
+  "status": "running",
+  "started_at": "2026-10-03T22:14:27+08:00",
+  "av_nav_commit": "1224d7e",
+  "vlfm_commit": "584ed56008754fde7997d904983607def8328322",
+  "dataset_order": [
+    "hm3dv1",
+    "hm3dv2",
+    "mp3d"
+  ],
+  "episode_counts": {
+    "hm3dv1": 2000,
+    "hm3dv2": 1000,
+    "mp3d": 2195
+  },
+  "equivalence": {
+    "scene": "4ok3usBNeis",
+    "episode_id": "0057",
+    "steps": 69,
+    "success": 1.0,
+    "spl": 0.8807,
+    "action_sha256": "06280d44a7464a23a12e9af3c0446c3347b79ba078e08bda426b8bb497762a07",
+    "actions_identical": true,
+    "metrics_identical": true
+  },
+  "gpu_assignment": {
+    "model_services": 0,
+    "habitat_evaluation": 1
+  },
+  "server_run_root": "/home/zyq/vlfm_evidence_runs/original_vlfm_584ed56_avnav_1224d7e_20261003"
+}
