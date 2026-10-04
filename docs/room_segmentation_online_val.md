@@ -24,4 +24,30 @@ OccuSG 每帧更新原生点云、OctoMap、mapconversion 和 DuDe。Active 每�
 
 短诊断已完成：初次 5 帧收到 10 个方法确认；最终提交上的 2 帧诊断验证每帧 `发布 < 双方完成 < env.step 完成` 且下一帧发布在上一步完成之后。诊断不作为分割效果结果。服务器 51 项单元测试全部通过，本地 50 项通过、1 项 OpenCV 项在服务器通过。
 
-当前状态：5 条完整在线评估正在运行，代码提交 `9301f80`、收集器提交 `737aff0`。原始输入、地图和即时 PNG 保留在未跟踪 `runs/`，小型配置和结果经 origin 归档。
+已完成：5 条完整在线评估，共 1491 步，10 个方法运行均正常退出。实际步数为 177、300、186、328、500。逐步审计验证了全部 2982 次方法确认，且每步 `发布 < 双方完成 < env.step 完成`、下一帧在上一步之后发布。逐帧 RGB 最大绝对误差和归一化深度最大绝对误差均为 0。
+
+全部 5 条完整动作序列与先前的原始 VLFM 评估相同；这些旧动作仅在运行结束后进行对照，未用于驱动本次评估。导航成功 2 条、失败 3 条，失败轨迹均保留，没有重抽或调参。
+
+| 场景 | 完整步数 | Active 最终区域数 | OccuSG 最终区域数 | Active 自身自由区标注比例 | OccuSG 自身自由区标注比例 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 5cdEh9F2hJL | 177 | 2 | 8 | 67.6% | 85.8% |
+| Nfvxx8J5NCo | 300 | 3 | 11 | 81.0% | 85.6% |
+| XB4GS9ShBRE | 186 | 4 | 5 | 76.8% | 77.4% |
+| bxsVRursffK | 328 | 1 | 6 | 57.8% | 79.1% |
+| mv2HUxq3B53 | 500 | 2 | 7 | 67.0% | 86.4% |
+
+比例的分母是各自地图的已知自由像素，不是共同 GT mask。区域数不是实际房间数，不能用这两个描述性数值做准确率排名。在线结果按本次实际输出独立保存；例如 mv2HUxq3B53 的 OccuSG 本次为 7 个区域，旧离线运行为 6 个，不混用两次输出。最终并排图已检查世界坐标、起点与轨迹对齐。
+
+过程视频由评估中实际保存的三联图编码，没有重新计算分割。分别有 18、30、19、33、50 个视频帧，共 150 帧，H.264 逐帧解码检查全部通过，本地文件与归档 SHA256 相同。视频以 1 fps 播放，每帧对应 10 步间隔或终止步，播放时间不是实际墙钟评估时间。
+
+- [5cdEh9F2hJL 在线过程](../runs/room_online_val_20261004_review/5cdEh9F2hJL_online.mp4)
+- [Nfvxx8J5NCo 在线过程](../runs/room_online_val_20261004_review/Nfvxx8J5NCo_online.mp4)
+- [XB4GS9ShBRE 在线过程](../runs/room_online_val_20261004_review/XB4GS9ShBRE_online.mp4)
+- [bxsVRursffK 在线过程](../runs/room_online_val_20261004_review/bxsVRursffK_online.mp4)
+- [mv2HUxq3B53 在线过程](../runs/room_online_val_20261004_review/mv2HUxq3B53_online.mp4)
+- [最终并排图](../runs/room_online_val_20261004_review/final_comparison.png)
+- [小型结果和复现记录](results/room_segmentation_online_val_20261004/README.md)
+
+运行代码提交 `9301f80`、收集器提交 `737aff0`；正确视频编码提交 `bc4c6c0`。原始输入、地图、即时 PNG 和视频保留在未跟踪 `runs/`，小型配置和结果已通过 origin 归档。实验容器已停止，服务器主 checkout 保持原先提交。
+
+视频首次导出因 FFmpeg 读取 SSH 脚本的标准输入，导致归档脚本中断；增加 `-nostdin` 与 `stdin=DEVNULL` 后，在新目录重新编码并完整检查。该错误发生在全部在线评估结束之后，不影响 5 条轨迹或 10 个方法输出，记录见 [导出和诊断记录](room_segmentation_online_attempts.json)。

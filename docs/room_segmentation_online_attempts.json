@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-04",
+  "records": [
+    {"run": "room-online-f035/runs/online_smoke5", "type": "5-step diagnostic", "returncode": 0, "method_acknowledgments": 10, "efficacy_result": false},
+    {"run": "room-online-9301f80/runs/online_smoke_v2", "type": "2-step diagnostic at final runtime commit", "returncode": 0, "temporal_order_verified": true, "efficacy_result": false},
+    {"run": "room-online-results-20261004/runs/progress_videos", "type": "first video export orchestration", "returncode": 1, "reason": "FFmpeg inherited SSH script stdin and consumed remaining Bash script text", "segmentation_results_affected": false, "included_in_final_artifacts": false, "remedy": "Explicit ffmpeg -nostdin and stdin=DEVNULL; new progress_videos_v2 directory"},
+    {"run": "room-online-results-20261004/runs/progress_videos_v2", "type": "final video encoding", "returncode": 0, "videos": 5, "decoded_frames": 150, "included_in_final_artifacts": true}
+  ]
+}

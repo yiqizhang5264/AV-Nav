@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "complete_5_online_episodes_1491_steps_10_method_runs",
   "dataset": "hm3d/v1/val",
   "scene_assets": "hm3d-0.2/val",
   "scene_count": 5,
@@ -25,5 +25,18 @@
   "smoke_status": "5-step integration and final 2-step temporal ordering checks passed; diagnostic only",
   "test_status": "server 51 passed; local 50 passed and 1 skipped for absent OpenCV",
   "parameter_policy": "reuse frozen method settings; no val tuning",
-  "accuracy_available": false
+  "accuracy_available": false,
+  "shared_steps": 1491,
+  "method_acknowledgments": 2982,
+  "step_ordering_verified": true,
+  "rgb_max_abs_error": 0.0,
+  "normalized_depth_max_abs_error": 0.0,
+  "all_navigation_actions_match_prior_vlfm_evaluation": true,
+  "paired_complete": 5,
+  "result_summary": "docs/results/room_segmentation_online_val_20261004/summary.json",
+  "result_metrics": "docs/results/room_segmentation_online_val_20261004/episodes.csv",
+  "figure_local": "runs/room_online_val_20261004_review/final_comparison.png",
+  "progress_videos_local": "runs/room_online_val_20261004_review/*_online.mp4",
+  "video_generator_commit": "bc4c6c0",
+  "video_playback": "1 fps, each frame is an evaluation-time snapshot at 10-step intervals or terminal step; not wall-clock timing"
 }
