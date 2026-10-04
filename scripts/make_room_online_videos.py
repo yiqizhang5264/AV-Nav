@@ -36,8 +36,9 @@ def main():
             writer.write(data)
         writer.release()
         if encoded!=video:
-            subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-n','-i',str(encoded),
-                            '-c:v','libx264','-crf','18','-pix_fmt','yuv420p','-movflags','+faststart',str(video)],check=True)
+            subprocess.run(['ffmpeg','-nostdin','-hide_banner','-loglevel','error','-n','-i',str(encoded),
+                            '-c:v','libx264','-crf','18','-pix_fmt','yuv420p','-movflags','+faststart',str(video)],
+                           stdin=subprocess.DEVNULL,check=True)
         check=cv2.VideoCapture(str(video));frames=int(check.get(cv2.CAP_PROP_FRAME_COUNT));check.release()
         if frames!=len(images):raise ValueError('Encoded frame count differs')
         records.append(dict(scene=scene,simulation_frames=n,video_frames=frames,fps=1,codec='h264' if encoded!=video else 'mp4v',
