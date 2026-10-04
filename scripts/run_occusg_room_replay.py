@@ -42,6 +42,7 @@ def main():
                                                     profiling_run_name='room_case', profiling_discard_first_n=5)
     pc = params['point_cloud_generator_node']['ros__parameters']
     pc.update(depth_image_topic='/depth', camera_info_topic='/depth/camera_info', output_frame='depth_optical', target_hz=0.0)
+    params['octomap_server']['ros__parameters']['cloud_sub_qos_reliable'] = True
     parameter_file = output / 'pipeline_params.yaml'
     parameter_file.write_text(yaml.safe_dump(params))
     dude = yaml.safe_load((upstream / 'src/incremental_dude_ros2/incremental_dude_ros2/config/inc_dude_params.yaml').read_text())
@@ -170,6 +171,7 @@ def main():
                                     source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                                     rmw_implementation=os.environ.get('RMW_IMPLEMENTATION', 'default'),
                                     ros_domain_id=os.environ.get('ROS_DOMAIN_ID'),
+                                    reliable_cloud_transport=True,
                                     native_nodes=True, object_graph_disabled=True, floor_policy='reject transitions >0.3m'))
         (output / 'summary.json').write_text(json.dumps(summary, indent=2))
         (output / 'exit.json').write_text(json.dumps(dict(returncode=0)))
