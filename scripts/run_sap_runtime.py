@@ -3,7 +3,12 @@ import os
 import runpy
 from av_nav.runtime import install
 
-install()
-if os.environ['SAP_VARIANT'] != 'baseline':
-    import av_nav.sap_policy  # noqa: F401
-runpy.run_module('vlfm.run', run_name='__main__')
+def main():
+    install()
+    if os.environ['SAP_VARIANT'] != 'baseline':
+        import av_nav.sap_policy  # noqa: F401
+    runpy.run_module('vlfm.run', run_name='__main__')
+
+
+if __name__ == '__main__':
+    main()

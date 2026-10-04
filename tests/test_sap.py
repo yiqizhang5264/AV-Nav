@@ -11,6 +11,13 @@ from av_nav.sap_vlm import parse_reply
 
 
 class SAPTests(unittest.TestCase):
+    def test_runtime_import_does_not_start_habitat(self):
+        path = Path(__file__).resolve().parents[1]/'scripts/run_sap_runtime.py'
+        spec = importlib.util.spec_from_file_location('sap_runtime_import_test', path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertTrue(callable(module.main))
+
     def grid(self):
         return Grid(np.ones((100,100), bool), np.zeros((100,100), bool), 10,
                     lambda xy: np.rint(xy*10+50).astype(int), lambda px: (px-50)/10)
