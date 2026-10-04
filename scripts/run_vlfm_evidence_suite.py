@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
 import json
 import os
@@ -99,6 +100,13 @@ def main() -> None:
             continue
         shard.mkdir(parents=True, exist_ok=True)
         completed = completed_episode_ids(shard)
+        with gzip.open(dataset_root / "val" / "content" / f"{scene}.json.gz", "rt", encoding="utf-8") as stream:
+            scene_episode_count = len(json.load(stream)["episodes"])
+        if len(completed) > scene_episode_count:
+            raise RuntimeError(f"recorded {len(completed)} completed IDs for a {scene_episode_count}-episode scene")
+        if len(completed) == scene_episode_count:
+            done.write_text(f"all {scene_episode_count} episodes completed across prior attempts\n", encoding="utf-8")
+            continue
         for attempt_index in range(1, args.max_attempts + 1):
             attempt = shard / "attempts" / f"{attempt_index:03d}"
             if attempt.exists():
@@ -120,12 +128,18 @@ def main() -> None:
             env["VLFM_EVIDENCE_DIR"] = str(evidence)
             env["ZSOS_LOG_DIR"] = str(logs)
             env["ZSOS_DONE_PATH"] = str(attempt_done)
+            remaining_episode_count = scene_episode_count - len(completed)
+            test_episode_count = (
+                remaining_episode_count
+                if args.episodes_per_scene == -1
+                else min(args.episodes_per_scene, remaining_episode_count)
+            )
             command = [
                 sys.executable, str(repo / "scripts" / "run_vlfm_evidence.py"), "--vlfm-root", str(vlfm_root),
                 "habitat_baselines.evaluate=true", "habitat_baselines.eval.video_option=[disk]",
                 f"habitat_baselines.video_dir={attempt / 'combined_videos'}",
                 f"habitat_baselines.tensorboard_dir={attempt / 'tb'}",
-                f"habitat_baselines.test_episode_count={args.episodes_per_scene}",
+                f"habitat_baselines.test_episode_count={test_episode_count}",
                 "habitat_baselines.num_environments=1", "habitat_baselines.torch_gpu_id=0",
                 f"habitat.dataset.data_path='{dataset_root}/{{split}}/{{split}}.json.gz'",
                 f"habitat.dataset.scenes_dir={pathlib.Path(args.scenes_dir).resolve()}",
