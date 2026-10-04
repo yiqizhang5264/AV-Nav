@@ -65,7 +65,9 @@ def main():
             row[name+'_status'] = 'complete'
             row[name+'_regions'] = summary['final_room_count']
             row[name+'_known_area_m2'] = float(known.sum()*resolution**2)
+            row[name+'_free_area_m2'] = float(free.sum()*resolution**2)
             row[name+'_labeled_free_area_m2'] = float(((labels>0)&free).sum()*resolution**2)
+            row[name+'_native_free_label_fraction'] = float(((labels>0)&free).sum()/free.sum()) if free.any() else None
             row[name+'_pipeline_seconds'] = sum(r['seconds'] for r in summary['records'])
             row[name+'_accuracy'] = None
             details.append(dict(scene=scene,method=name,summary=summary))
