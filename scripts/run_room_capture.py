@@ -15,12 +15,17 @@ def main():
     parser.add_argument('--vlfm-root', required=True)
     parser.add_argument('--gpu', default='3')
     parser.add_argument('--max-steps', type=int, default=500)
+    parser.add_argument('--episode-count', type=int)
+    parser.add_argument('--online-settings')
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[1]
     sample = Path(args.sample_dir).resolve()
     output = Path(args.output_dir).resolve()
     vlfm = Path(args.vlfm_root).resolve()
     selection = json.loads((sample / 'selection.json').read_text())
+    count = selection['count'] if args.episode_count is None else args.episode_count
+    if not 1 <= count <= selection['count']:
+        raise ValueError('Episode count exceeds selected sample')
     split = Path(selection['source']).name
     if split not in {'train', 'val'}:
         raise ValueError('Unsupported dataset split')
@@ -38,9 +43,11 @@ def main():
     env.update(CUDA_VISIBLE_DEVICES=args.gpu, VLFM_EVIDENCE_DIR=str(output / 'evidence'),
                ZSOS_LOG_DIR=str(output / 'episode_logs'), ZSOS_DONE_PATH=str(output / 'DONE'),
                PYTHONPATH=os.pathsep.join([str(repo / 'scripts'), str(vlfm), env.get('PYTHONPATH', '')]))
+    if args.online_settings:
+        env['AVNAV_ROOM_ONLINE_SETTINGS'] = str(Path(args.online_settings).resolve())
     command = [sys.executable, '-u', str(repo / 'scripts/run_vlfm_evidence.py'), '--vlfm-root', str(vlfm),
                'habitat_baselines.evaluate=true', 'habitat_baselines.eval.video_option=[]',
-               f'habitat_baselines.test_episode_count={selection["count"]}',
+               f'habitat_baselines.test_episode_count={count}',
                'habitat_baselines.num_environments=1', 'habitat_baselines.torch_gpu_id=0',
                f'habitat_baselines.eval.split={split}', f'habitat.dataset.split={split}',
                'habitat.environment.iterator_options.shuffle=False',
@@ -50,6 +57,7 @@ def main():
                f'habitat_baselines.tensorboard_dir={output / "tb"}', f'hydra.run.dir={output / "hydra"}']
     manifest = dict(command=command, av_nav_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip(),
                     vlfm_commit=pin, selection=selection, gpu=args.gpu, max_steps=args.max_steps,
+                    online_settings=args.online_settings, diagnostic=count != selection['count'] or args.max_steps < 500,
                     purpose='Shared trajectory input for room segmentation; not autonomous exploration comparison',
                     runtime_id_note='Habitat renumbers loaded episodes; match scene/start pose/category and source row, not runtime ID.')
     (output / 'manifest.json').write_text(json.dumps(manifest, indent=2))

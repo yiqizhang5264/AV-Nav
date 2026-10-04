@@ -17,6 +17,7 @@ def main():
     p.add_argument('--output-dir', required=True)
     p.add_argument('--frame-timeout', type=float, default=20)
     p.add_argument('--debug', action='store_true')
+    p.add_argument('--stream', action='store_true')
     args = p.parse_args()
     import cv2
     import numpy as np
@@ -98,7 +99,7 @@ def main():
                                    f'octomap_stamp={received["octomap_stamp"]}, '
                                    f'map_updates={received["map_generation"]}, region_updates={received["region_generation"]}')
             rclpy.spin_once(node, timeout_sec=.02)
-    def snapshot(index):
+    def snapshot(index, latest=False):
         grid, region_msg = received['map'], received['regions']
         if grid is None or region_msg is None:
             raise ValueError('Missing occupancy/region output')
@@ -114,9 +115,12 @@ def main():
                 xy = np.rint((np.asarray(points) - [ox, oy]) / res).astype(np.int32)
                 cv2.fillPoly(labels, [xy], int(region.id) + 1)
         labels[occupancy != 0] = 0
-        np.savez_compressed(output / f'checkpoint_{index:04d}.npz', labels=labels, occupancy=occupancy,
+        target = output / ('latest.tmp.npz' if latest else f'checkpoint_{index:04d}.npz')
+        np.savez_compressed(target, labels=labels, occupancy=occupancy,
                             origin=[ox,oy], resolution=res)
-        (output / f'regions_{index:04d}.json').write_text(json.dumps(polygons, indent=2))
+        if latest:
+            target.replace(output / 'latest.npz')
+        (output / ('latest_regions.json' if latest else f'regions_{index:04d}.json')).write_text(json.dumps(polygons, indent=2))
     try:
         for index, command in enumerate(commands):
             log = (output / f'node_{index}.log').open('w')
@@ -128,9 +132,9 @@ def main():
         discovery_deadline = time.monotonic() + 1
         while time.monotonic() < discovery_deadline:
             rclpy.spin_once(node, timeout_sec=.05)
-        frames = sorted(case.glob('[0-9][0-9][0-9][0-9].npz'))
+        from room_frame_stream import frames, acknowledge
         floor_y = source['episode']['start_position'][1]
-        for index, frame in enumerate(frames):
+        for index, frame, last_frame in frames(case, args.stream):
             started = time.perf_counter()
             data = np.load(frame)
             if abs(float(data['agent_position'][1] - floor_y)) > .3:
@@ -167,13 +171,16 @@ def main():
                 rclpy.spin_once(node, timeout_sec=.01)
             records.append(dict(frame=index, seconds=time.perf_counter()-started,
                                 region_count=len(received['regions'].regions), map_updates=received['map_generation']))
-            if index + 1 in [100,250,500] or index == len(frames)-1:
+            if index + 1 in [100,250,500] or last_frame:
                 snapshot(index + 1)
+            if args.stream:
+                snapshot(index + 1, latest=True)
+                acknowledge(output, index, records[-1])
             if index % 20 == 0:
                 print('OCCUSG',index,records[-1],flush=True)
         summary = dict(source=source, records=records, final_room_count=len(received['regions'].regions),
-                       frames=len(frames), accuracy=None, accuracy_reason='No verified room footprint GT',
-                       adapter=dict(ros_frame='x=world_x,y=-world_z,z=world_y-start_y', pose_source='simulator',
+                       frames=len(records), accuracy=None, accuracy_reason='No verified room footprint GT',
+                       adapter=dict(online_stream=args.stream, ros_frame='x=world_x,y=-world_z,z=world_y-start_y', pose_source='simulator',
                                     source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                                     rmw_implementation=os.environ.get('RMW_IMPLEMENTATION', 'default'),
                                     ros_domain_id=os.environ.get('ROS_DOMAIN_ID'),

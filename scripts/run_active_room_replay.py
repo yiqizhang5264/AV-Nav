@@ -19,6 +19,7 @@ def main():
     p.add_argument('--case-dir', required=True)
     p.add_argument('--output-dir', required=True)
     p.add_argument('--update-every', type=int, default=10)
+    p.add_argument('--stream', action='store_true')
     args = p.parse_args()
     os.environ['MPLBACKEND'] = 'Agg'
     import cv2
@@ -87,8 +88,8 @@ def main():
     from frontier_detection import Frontier_detection
     from topomap_construction import Topomap_construction
     source = json.loads((case / 'manifest.json').read_text())
-    frames = sorted(case.glob('[0-9][0-9][0-9][0-9].npz'))
-    first = np.load(frames[0])
+    from room_frame_stream import frames, wait_file, acknowledge
+    first = np.load(wait_file(case / '0000.npz') if args.stream else sorted(case.glob('[0-9][0-9][0-9][0-9].npz'))[0])
     h, w = first['depth'].shape
     mapper = MapBuilder(dict(frame_width=w, frame_height=h, fov=source['hfov'], resolution=5,
                              map_size_cm=4800, agent_min_z=25, agent_max_z=150, agent_height=source['sensor_height'] * 100,
@@ -100,7 +101,7 @@ def main():
     last_bot = []
     lmb = np.array([0, 960, 0, 960])
     labels = np.zeros((960, 960), np.int32)
-    for index, frame in enumerate(frames):
+    for index, frame, last_frame in frames(case, args.stream):
         began = time.perf_counter()
         data = np.load(frame)
         q = quaternion.from_float_array(data['agent_rotation'])
@@ -128,7 +129,7 @@ def main():
         # upstream global_loc_xy_pix=[absolute_locs[1], absolute_locs[0]].
         pixel_pose = np.rint(pose[:2][::-1] * 20).astype(int).tolist()
         last_bot.append(pixel_pose)
-        if (index + 1) % args.update_every == 0 or index == len(frames) - 1:
+        if (index + 1) % args.update_every == 0 or last_frame:
             # Follow official entry point's transpose/coordinate conventions.
             obs, exp = occupied.T.copy(), explored.T.copy()
             points, lasers = convert_2_laser(pano.T.copy(), pano_exp.T.copy(), pose)
@@ -164,16 +165,21 @@ def main():
         records.append(dict(frame=index, seconds=duration, room_count=int(len(np.unique(labels[labels > 0]))),
                             current_room_node=topo.current_node_id,
                             topology_nodes=topo.g.vcount(), detected_doors=len(detected), door_trigger=bool(mask.any())))
-        if index + 1 in [100, 250, 500] or index == len(frames) - 1:
+        if index + 1 in [100, 250, 500] or last_frame:
             np.savez_compressed(output / f'checkpoint_{index + 1:04d}.npz', labels=labels.T,
                                 occupied=occupied, explored=explored, pose=pose)
+        if args.stream:
+            temporary = output / 'latest.tmp.npz'
+            np.savez_compressed(temporary, labels=labels.T, occupied=occupied, explored=explored, pose=pose)
+            temporary.replace(output / 'latest.npz')
+            acknowledge(output, index, records[-1])
         if index % 20 == 0:
             print('ACTIVE', index, records[-1], flush=True)
     summary = dict(upstream_commit=pin, detr_commit=detr_pin, door_weights_sha256=weight_sha,
-                   source=source, frames=len(frames), door_trigger_frames=trigger_frames,
+                   source=source, frames=len(records), door_trigger_frames=trigger_frames,
                    final_room_count=records[-1]['room_count'], final_detected_doors=len(detected),
                    accuracy=None, accuracy_reason='No verified room footprint GT',
-                   adapter=dict(update_every=args.update_every, detector_resize=[256,256], pose_source='simulator',
+                   adapter=dict(online_stream=args.stream, update_every=args.update_every, detector_resize=[256,256], pose_source='simulator',
                                 source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                                 grid_resolution_m=.05, map_size_m=48, native_x='24-(world_z-start_z)',
                                 native_y='24-(world_x-start_x)', labels_index_order='native_y,native_x',

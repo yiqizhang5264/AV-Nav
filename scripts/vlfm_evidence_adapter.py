@@ -7,7 +7,7 @@ import shutil
 import tempfile
 
 
-def create_vlfm_evidence_overlay(vlfm_root: pathlib.Path) -> tempfile.TemporaryDirectory[str]:
+def create_vlfm_evidence_overlay(vlfm_root: pathlib.Path, room_online: bool = False) -> tempfile.TemporaryDirectory[str]:
     overlay = tempfile.TemporaryDirectory(prefix="av-nav-vlfm-evidence-")
     package_dst = pathlib.Path(overlay.name) / "vlfm"
     shutil.copytree(vlfm_root / "vlfm", package_dst)
@@ -29,5 +29,18 @@ def create_vlfm_evidence_overlay(vlfm_root: pathlib.Path) -> tempfile.TemporaryD
     finish_patch = "                    except Exception:\n                        failure_cause = \"Unknown\"\n\n                    evidence_recorder.finish_episode(episode_stats, failure_cause)\n\n                    if len(self.config.habitat_baselines.eval.video_option) > 0:"
     if source.count(finish_anchor) != 1:
         raise RuntimeError("pinned VLFM episode finish site changed")
-    trainer_path.write_text(source.replace(finish_anchor, finish_patch, 1), encoding="utf-8")
+    source = source.replace(finish_anchor, finish_patch, 1)
+    if room_online:
+        source = source.replace(import_anchor, import_anchor + 'from room_online_observer import get_online_rooms\n', 1)
+        action_anchor = '            outputs = self.envs.step(step_data)\n'
+        if source.count(action_anchor) != 1:
+            raise RuntimeError('Pinned VLFM step site changed')
+        source = source.replace(action_anchor,
+                                '            if self.envs.num_envs != 1:\n'
+                                '                raise ValueError("Online room comparison requires one environment")\n'
+                                '            get_online_rooms(self.config).observe(self.envs, current_episodes_info[0], observations[0], step_data[0])\n'
+                                + action_anchor, 1)
+        anchor = '                    evidence_recorder.finish_episode(episode_stats, failure_cause)\n'
+        source = source.replace(anchor, anchor + '                    get_online_rooms(self.config).finish(episode_stats, failure_cause)\n', 1)
+    trainer_path.write_text(source, encoding="utf-8")
     return overlay

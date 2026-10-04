@@ -18,7 +18,11 @@ def main() -> None:
     parser.add_argument("--vlfm-root", required=True)
     args, hydra_args = parser.parse_known_args()
     root = pathlib.Path(args.vlfm_root).resolve()
-    overlay = create_vlfm_evidence_overlay(root)
+    room_online = 'AVNAV_ROOM_ONLINE_SETTINGS' in os.environ
+    if room_online:
+        from room_online_env import install_online_env
+        install_online_env()
+    overlay = create_vlfm_evidence_overlay(root, room_online=room_online)
     sys.path.insert(0, overlay.name)
     sys.path.insert(1, str(root))
 
