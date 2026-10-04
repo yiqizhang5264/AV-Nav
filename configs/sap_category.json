@@ -10,7 +10,7 @@
   "vlm": {
     "base_url": "http://127.0.0.1:8000/v1",
     "model": "Qwen/Qwen3.5-9B",
-    "max_tokens": 1024,
-    "disable_thinking": true
+    "max_tokens": 8192,
+    "disable_thinking": false
   }
 }

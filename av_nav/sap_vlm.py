@@ -50,12 +50,13 @@ class Verifier:
             content.append({'type': 'image_url', 'image_url': {'url': 'data:image/png;base64,'+encoded}})
         payload = dict(model=self.config['model'], messages=[dict(role='user', content=content)],
                        temperature=0, max_tokens=self.config['max_tokens'])
-        if self.config.get('disable_thinking'):
-            payload['chat_template_kwargs'] = {'enable_thinking': False}
+        payload['chat_template_kwargs'] = {'enable_thinking': not self.config.get('disable_thinking', False)}
         request = urllib.request.Request(self.config['base_url'].rstrip('/')+'/chat/completions',
             data=json.dumps(payload).encode(), headers={'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+os.environ.get('SAP_VLM_API_KEY', 'local')})
         with urllib.request.urlopen(request, timeout=180) as response:
             raw = json.load(response)
         reply = raw['choices'][0]['message']['content']
-        return parse_reply(reply, kind), dict(prompt=prompt, response=reply, usage=raw.get('usage'))
+        return parse_reply(reply, kind), dict(prompt=prompt, response=reply, usage=raw.get('usage'),
+            reasoning=raw['choices'][0]['message'].get('reasoning_content',
+                       raw['choices'][0]['message'].get('reasoning')))

@@ -74,6 +74,10 @@ class SAPTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location('sap_eval', path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+        scene_root = Path(tempfile.gettempdir()).resolve()
+        self.assertEqual(module.episode_keys([{'scene_id':str(scene_root/'hm3d/s.glb'),
+                                               'episode_id':'0057'}], scene_root),
+                         [('hm3d/s.glb','0057')])
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             (root/'val/content').mkdir(parents=True)

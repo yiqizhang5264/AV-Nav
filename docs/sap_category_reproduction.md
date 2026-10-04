@@ -35,9 +35,11 @@ blacklisted for the episode. Only verified candidates may issue a target STOP.
   hierarchical SAP-Nav system.
 - Existing VLFM YOLOv7/GroundingDINO and MobileSAM are retained. The exact
   detector/segmenter versions used by the authors are not available as code.
-- Configured VLM is local Qwen3.5-9B with thinking disabled; paper HM3D-OVON
-  results use GPT-4o and paper Qwen3.5 experiments enable thinking. Model choice
-  and prompting therefore differ and must accompany every result.
+- Per user instruction, configured VLM is local Qwen3.5-9B with thinking enabled
+  and an 8192-token completion budget. Paper HM3D-OVON results use GPT-4o.
+  Model choice and reconstructed prompting must accompany every result.
+  Qwen uses the existing isolated `strive-qwen` server environment; Habitat and
+  VLFM use `/home/zyq/miniconda3/envs/vlfm/bin/python`.
 - Exact prompts and sufficiency threshold are not supplied in the paper text.
   Reconstructed prompts are versioned in `sap_vlm.py`; threshold 7 is an explicit
   uncalibrated initial choice, not a published paper parameter.

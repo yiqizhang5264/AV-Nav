@@ -16,14 +16,31 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def read_dataset(root, split, limit=None):
+def episode_keys(rows, scenes_dir=None):
+    """Canonical source identity; Habitat expands scene paths to absolute paths."""
+    result = []
+    for row in rows:
+        scene = Path(row['scene_id'])
+        if scene.is_absolute():
+            if scenes_dir is None:
+                raise ValueError('Absolute scene requires the configured scene root')
+            scene = scene.relative_to(Path(scenes_dir).resolve())
+        result.append((scene.as_posix(), str(row['episode_id'])))
+    return result
+
+
+def read_dataset(root, split, limit=None, scene=None):
     main = root/split/(split+'.json.gz')
     with gzip.open(main, 'rt') as stream:
         merged = json.load(stream)
     sources = [main]
     episodes = list(merged.get('episodes', []))
+    if scene:
+        episodes = [e for e in episodes if scene in Path(e['scene_id']).parts[-1]]
     goals = dict(merged.get('goals_by_category', {}))
     for path in sorted((root/split/'content').glob('*.json.gz')):
+        if scene and path.name != scene+'.json.gz':
+            continue
         if limit and len(episodes) >= limit:
             break
         with gzip.open(path, 'rt') as stream:
@@ -49,6 +66,7 @@ def main():
     parser.add_argument('--output', required=True)
     parser.add_argument('--split', choices=['train', 'val'], default='val')
     parser.add_argument('--limit', type=int)
+    parser.add_argument('--scene', help='Exact content-file stem, for scene sharding')
     parser.add_argument('--max-steps', type=int, default=500)
     parser.add_argument('--gpu', default='1')
     parser.add_argument('--variant', choices=['baseline', 'sap'], default='sap')
@@ -61,7 +79,7 @@ def main():
     if root.name != 'v1' or root.parent.name != 'hm3d':
         parser.error('Expected the HM3Dv1 ObjectNav dataset root .../hm3d/v1')
     config = json.loads(Path(args.config).read_text())
-    data, hashes = read_dataset(root, args.split, args.limit)
+    data, hashes = read_dataset(root, args.split, args.limit, args.scene)
     categories = set(e['object_category'] for e in data['episodes'])
     allowed = {'chair', 'bed', 'plant', 'toilet', 'tv_monitor', 'sofa'}
     if not categories <= allowed:
@@ -90,7 +108,7 @@ def main():
     if args.variant == 'sap':
         command.append('habitat_baselines.rl.policy.name=SAPCategoryPolicy')
     manifest = dict(started=datetime.now(timezone.utc).isoformat(), benchmark='HM3Dv1 ObjectNav',
-        split=args.split, variant=args.variant, expected_episodes=len(data['episodes']),
+        split=args.split, scene=args.scene, variant=args.variant, expected_episodes=len(data['episodes']),
         diagnostic=args.split != 'val' or args.limit is not None or args.max_steps != 500,
         config=config, source_sha256=hashes, dataset_sha256=digest(dataset), command=command,
         commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
@@ -106,8 +124,8 @@ def main():
     rows = []
     if (run/'episodes.jsonl').exists():
         rows = [json.loads(line) for line in (run/'episodes.jsonl').read_text().splitlines() if line]
-    expected = {(e['scene_id'], str(e['episode_id'])) for e in data['episodes']}
-    actual = {(r['scene_id'], r['episode_id']) for r in rows}
+    expected = set(episode_keys(data['episodes'], args.scenes_dir))
+    actual = set(episode_keys(rows, args.scenes_dir))
     complete = result.returncode == 0 and actual == expected and len(rows) == len(expected)
     summary = dict(complete=complete, returncode=result.returncode, expected=len(expected),
                    completed=len(rows), diagnostic=manifest['diagnostic'])
