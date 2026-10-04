@@ -1,5 +1,5 @@
 {
-  "status": "preparation_only_not_executed",
+  "status": "input_capture_complete_segmentation_integration_in_progress",
   "dataset": "hm3d/v1/train",
   "partition": "calibration",
   "scene_count": 5,
@@ -7,7 +7,7 @@
   "sample_seed": 20261004,
   "comparison": "shared_rgbd_pose_sequence_native_mapping",
   "trajectory_source": "frozen_vlfm_baseline_actions_for_selected_episodes",
-  "trajectory_status": "must_collect_or_verify_exact_episode_matches",
+  "trajectory_status": "5 selected episodes captured and replayed; 880 RGB and normalized depth frames match exactly",
   "checkpoints_steps": [100, 250, 500],
   "max_actions": 500,
   "stop_policy": "stop_at_recorded_stop_or_budget_no_padding",
@@ -15,7 +15,7 @@
     "occusg": {
       "repository": "https://github.com/crcz25/OccuSG.git",
       "commit": "2bca2fa06af87fd9dd0542957039be8f580f0dca",
-      "adapter_status": "not_implemented",
+      "adapter_status": "implemented_server_smoke_in_progress",
       "requires": "ROS2 Humble, recursive pinned submodules, C++ build, OctoMap and mapconversion",
       "room_output": "incremental DuDe stable region polygons and IDs",
       "decomp_threshold_upstream": 1.5
@@ -23,7 +23,7 @@
     "active_room_segmentation": {
       "repository": "https://github.com/FreeformRobotics/Active_room_segmentation.git",
       "commit": "a941e3a5a1c8e16920a158fa0a9198c95be9c978",
-      "adapter_status": "not_implemented",
+      "adapter_status": "implemented_server_smoke_in_progress",
       "requires": "DETR door weights with hash, Habitat 0.2.4 replay adapter, compatible existing dependencies",
       "room_output": "Topomap_construction graph vertices room_exp cells",
       "mapping_input": "depth and simulator pose; gt_map/gt_exp variable names are not room truth"
@@ -31,5 +31,5 @@
   },
   "ground_truth_status": "unverified_do_not_report_accuracy_until_verified",
   "server_python": "/home/zyq/miniconda3/envs/vlfm/bin/python",
-  "server_connection_status": "2026-10-04 SSH closed before key exchange on configured endpoint"
+  "server_connection_status": "2026-10-04 connected with existing SSH key; supplied password was not used or stored"
 }
