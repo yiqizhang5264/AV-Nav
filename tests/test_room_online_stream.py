@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 import tempfile
 import threading
@@ -38,7 +39,7 @@ class OnlineRoomStreamTests(unittest.TestCase):
                 wait_file(root / 'absent', timeout=.01)
 
     def test_online_hook_precedes_step_and_default_baseline_has_no_hook(self):
-        root = Path(__file__).resolve().parents[1] / 'external/vlfm'
+        root = Path(os.environ.get('AVNAV_TEST_VLFM_ROOT', str(Path(__file__).resolve().parents[1] / 'external/vlfm')))
         for enabled in [False, True]:
             overlay = create_vlfm_evidence_overlay(root, room_online=enabled)
             self.addCleanup(overlay.cleanup)
