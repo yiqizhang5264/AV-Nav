@@ -38,9 +38,12 @@ def main():
                 maps.append(None)
                 continue
             summary = json.loads(summary_file.read_text())
+            if json.loads((folder/'exit.json').read_text())['returncode'] != 0:
+                raise ValueError(f'Nonzero method exit in {folder}')
             if summary['source']['selection'] != case['selection'] or summary['frames'] != case['frames']:
                 raise ValueError(f'Paired episode/frame mismatch in {folder}')
-            checkpoint = np.load(sorted(folder.glob('checkpoint_*.npz'))[-1])
+            checkpoint_file = folder/f'checkpoint_{case["frames"]:04d}.npz'
+            checkpoint = np.load(checkpoint_file)
             labels = checkpoint['labels']
             if name == 'Active':
                 occupied, explored = checkpoint['occupied'], checkpoint['explored']
