@@ -4,7 +4,12 @@ import pathlib
 import tempfile
 import unittest
 
-from scripts.run_vlfm_evidence_suite import completed_episode_identities, episode_identity, prepare_remaining_dataset
+from scripts.run_vlfm_evidence_suite import (
+    completed_episode_metadata,
+    episode_identity,
+    prepare_remaining_dataset,
+    resolve_completed_identities,
+)
 
 
 class VLFMEvidenceSuiteTests(unittest.TestCase):
@@ -28,7 +33,7 @@ class VLFMEvidenceSuiteTests(unittest.TestCase):
                 json.dump(data, stream)
 
             destination, original_count, remaining_count = prepare_remaining_dataset(
-                source, "scene", {episode_identity(data["episodes"][1]), episode_identity(data["episodes"][3])}, root / "derived"
+                source, "scene", [data["episodes"][1], data["episodes"][3]], root / "derived"
             )
             with gzip.open(destination / "val" / "content" / "scene.json.gz", "rt", encoding="utf-8") as stream:
                 derived = json.load(stream)
@@ -49,8 +54,18 @@ class VLFMEvidenceSuiteTests(unittest.TestCase):
                     "start_position": position, "start_rotation": [0, 0, 0, 1],
                 }))
                 (episode / "result.json").write_text("{}")
-            completed = completed_episode_identities(shard)
+            completed = completed_episode_metadata(shard)
             self.assertEqual(len(completed), 2)
+
+    def test_incomplete_metadata_cannot_guess_between_repeated_ids(self):
+        episodes = [
+            {"episode_id": "7", "scene_id": "scene", "object_category": "bed",
+             "start_position": [0, 0, 0], "start_rotation": [0, 0, 0, 1]},
+            {"episode_id": "7", "scene_id": "scene", "object_category": "bed",
+             "start_position": [1, 0, 0], "start_rotation": [0, 0, 0, 1]},
+        ]
+        with self.assertRaisesRegex(RuntimeError, "cannot uniquely resume"):
+            resolve_completed_identities(episodes, [{"episode_id": "7"}])
 
 
 if __name__ == "__main__":

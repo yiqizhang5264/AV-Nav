@@ -34,19 +34,40 @@ def episode_identity(episode: dict) -> str:
     return json.dumps(fields, sort_keys=True, separators=(",", ":"))
 
 
-def completed_episode_identities(shard: pathlib.Path) -> set[str]:
-    completed = set()
+def completed_episode_metadata(shard: pathlib.Path) -> list[dict]:
+    completed = {}
     for result in shard.glob("attempts/*/evidence/episodes/*/result.json"):
         metadata = result.parent / "episode.json"
         if metadata.exists():
-            completed.add(episode_identity(json.loads(metadata.read_text(encoding="utf-8"))))
-    return completed
+            record = json.loads(metadata.read_text(encoding="utf-8"))
+            completed[episode_identity(record)] = record
+    return list(completed.values())
+
+
+def resolve_completed_identities(episodes: list[dict], completed_metadata: list[dict]) -> set[str]:
+    """Resolve recorder metadata to source rows without guessing repeated IDs."""
+    resolved = set()
+    for record in completed_metadata:
+        candidates = [episode for episode in episodes if str(episode.get("episode_id")) == str(record.get("episode_id"))]
+        has_full_identity = (
+            record.get("start_position") is not None
+            and record.get("start_rotation") is not None
+            and record.get("object_category") not in (None, "unknown")
+        )
+        if has_full_identity:
+            candidates = [episode for episode in candidates if episode_identity(episode) == episode_identity(record)]
+        if len(candidates) != 1:
+            raise RuntimeError(
+                f"cannot uniquely resume episode_id={record.get('episode_id')!r}: {len(candidates)} source rows match"
+            )
+        resolved.add(episode_identity(candidates[0]))
+    return resolved
 
 
 def prepare_remaining_dataset(
     dataset_root: pathlib.Path,
     scene: str,
-    completed: set[str],
+    completed_metadata: list[dict],
     destination: pathlib.Path,
 ) -> tuple[pathlib.Path, int, int]:
     """Create an attempt-local val split containing only unfinished episodes."""
@@ -54,6 +75,7 @@ def prepare_remaining_dataset(
     with gzip.open(source_content, "rt", encoding="utf-8") as stream:
         data = json.load(stream)
     original_count = len(data["episodes"])
+    completed = resolve_completed_identities(data["episodes"], completed_metadata)
     data["episodes"] = [episode for episode in data["episodes"] if episode_identity(episode) not in completed]
     remaining_count = len(data["episodes"])
     content_dir = destination / "val" / "content"
@@ -142,7 +164,7 @@ def main() -> None:
         if done.exists():
             continue
         shard.mkdir(parents=True, exist_ok=True)
-        completed = completed_episode_identities(shard)
+        completed = completed_episode_metadata(shard)
         for attempt_index in range(1, args.max_attempts + 1):
             attempt = shard / "attempts" / f"{attempt_index:03d}"
             if attempt.exists():
@@ -181,7 +203,7 @@ def main() -> None:
             if result.returncode == 0 and attempt_done.exists():
                 done.write_text(f"attempts/{attempt_index:03d}\n", encoding="utf-8")
                 break
-            completed = completed_episode_identities(shard)
+            completed = completed_episode_metadata(shard)
         if not done.exists():
             raise SystemExit(f"scene {scene} failed after {args.max_attempts} independent attempts")
 
