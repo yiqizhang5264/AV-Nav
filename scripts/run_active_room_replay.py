@@ -124,13 +124,14 @@ def main():
         _, occupied, _, explored, pano, pano_exp = mapper.update_map(depth_cm.copy(), native_pose)
         door_map, _ = mapper.get_door_map(depth_cm * mask, native_pose)
         door_full, _ = mapper.get_door_map_full(depth_cm * full, native_pose)
-        last_bot.append((pose[:2] * 20).tolist())
+        pixel_pose = np.rint(pose[:2] * 20).astype(int).tolist()
+        last_bot.append(pixel_pose)
         if (index + 1) % args.update_every == 0 or index == len(frames) - 1:
             # Follow official entry point's transpose/coordinate conventions.
             obs, exp = occupied.T.copy(), explored.T.copy()
             points, lasers = convert_2_laser(pano.T.copy(), pano_exp.T.copy(), pose)
             candidates = [pt for pt in points if door_map.T[pt[1]-2:pt[1]+3, pt[0]-2:pt[0]+3].sum() > 0]
-            new, _ = detector.door_filter(door_full.T, obs, exp, (pose[:2] * 20).tolist(), last_bot,
+            new, _ = detector.door_filter(door_full.T, obs, exp, pixel_pose, last_bot,
                                          detected, use_12point=False, external_door_point=candidates)
             last_bot = []
             detected.extend(new)

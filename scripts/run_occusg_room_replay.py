@@ -1,5 +1,6 @@
 """ROS2 shared-input bridge for official OccuSG occupancy and DuDe nodes."""
 import argparse
+import copy
 import json
 import os
 from pathlib import Path
@@ -134,7 +135,13 @@ def main():
             transform.transform.translation.x, transform.transform.translation.y, transform.transform.translation.z = map(float, position)
             q = Rotation.from_matrix(rotation).as_quat()
             transform.transform.rotation.x, transform.transform.rotation.y, transform.transform.rotation.z, transform.transform.rotation.w = map(float, q)
-            tf_pub.sendTransform(transform)
+            # OctoMap's TF filter requires transform coverage after the cloud
+            # timestamp. Hold this recorded pose for the message tolerance;
+            # geometry is still evaluated at the exact input-frame timestamp.
+            future = copy.deepcopy(transform)
+            future_time = stamp(now) + 100000000
+            future.header.stamp.sec, future.header.stamp.nanosec = divmod(future_time, 1000000000)
+            tf_pub.sendTransform([transform, future])
             depth = np.ascontiguousarray(data['depth'], dtype=np.float32)
             h, w = depth.shape
             info = CameraInfo()
@@ -152,6 +159,8 @@ def main():
             depth_pub.publish(image)
             spin_until(lambda: received['pc_stamp'] == stamp(now) and received['map_generation'] > previous_map
                        and received['region_generation'] > previous_region, args.frame_timeout)
+            while time.perf_counter() - started < .12:
+                rclpy.spin_once(node, timeout_sec=.01)
             records.append(dict(frame=index, seconds=time.perf_counter()-started,
                                 region_count=len(received['regions'].regions), map_updates=received['map_generation']))
             if index + 1 in [100,250,500] or index == len(frames)-1:
