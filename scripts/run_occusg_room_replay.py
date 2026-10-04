@@ -1,6 +1,6 @@
 """ROS2 shared-input bridge for official OccuSG occupancy and DuDe nodes."""
 import argparse
-import copy
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -138,13 +138,7 @@ def main():
             transform.transform.translation.x, transform.transform.translation.y, transform.transform.translation.z = map(float, position)
             q = Rotation.from_matrix(rotation).as_quat()
             transform.transform.rotation.x, transform.transform.rotation.y, transform.transform.rotation.z, transform.transform.rotation.w = map(float, q)
-            # OctoMap's TF filter requires transform coverage after the cloud
-            # timestamp. Hold this recorded pose for the message tolerance;
-            # geometry is still evaluated at the exact input-frame timestamp.
-            future = copy.deepcopy(transform)
-            future_time = stamp(now) + 100000000
-            future.header.stamp.sec, future.header.stamp.nanosec = divmod(future_time, 1000000000)
-            tf_pub.sendTransform([transform, future])
+            tf_pub.sendTransform(transform)
             depth = np.ascontiguousarray(data['depth'], dtype=np.float32)
             h, w = depth.shape
             info = CameraInfo()
@@ -173,6 +167,9 @@ def main():
         summary = dict(source=source, records=records, final_room_count=len(received['regions'].regions),
                        frames=len(frames), accuracy=None, accuracy_reason='No verified room footprint GT',
                        adapter=dict(ros_frame='x=world_x,y=-world_z,z=world_y-start_y', pose_source='simulator',
+                                    source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                                    rmw_implementation=os.environ.get('RMW_IMPLEMENTATION', 'default'),
+                                    ros_domain_id=os.environ.get('ROS_DOMAIN_ID'),
                                     native_nodes=True, object_graph_disabled=True, floor_policy='reject transitions >0.3m'))
         (output / 'summary.json').write_text(json.dumps(summary, indent=2))
         (output / 'exit.json').write_text(json.dumps(dict(returncode=0)))
