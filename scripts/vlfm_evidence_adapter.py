@@ -40,6 +40,7 @@ def create_vlfm_evidence_overlay(vlfm_root: pathlib.Path, room_online: bool = Fa
                                 '                raise ValueError("Online room comparison requires one environment")\n'
                                 '            get_online_rooms(self.config).observe(self.envs, current_episodes_info[0], observations[0], step_data[0])\n'
                                 + action_anchor, 1)
+        source = source.replace(action_anchor, action_anchor + '            get_online_rooms(self.config).transition(outputs[0][2])\n', 1)
         anchor = '                    evidence_recorder.finish_episode(episode_stats, failure_cause)\n'
         source = source.replace(anchor, anchor + '                    get_online_rooms(self.config).finish(episode_stats, failure_cause)\n', 1)
     trainer_path.write_text(source, encoding="utf-8")

@@ -52,7 +52,7 @@ class OnlineRooms:
                   '--case-dir', str(self.case), '--output-dir', str(self.root / 'active' / f'{self.current:02d}'), '--stream']
         relative = self.root.relative_to(repo)
         container_root = Path('/online') / relative
-        occ = ['docker', 'exec', '-e', f'ROS_DOMAIN_ID={230+self.current}', '-e', 'RMW_IMPLEMENTATION=rmw_cyclonedds_cpp',
+        occ = ['docker', 'exec', '-e', f'ROS_DOMAIN_ID={s.get("domain_base",170)+self.current}', '-e', 'RMW_IMPLEMENTATION=rmw_cyclonedds_cpp',
                s['container'], 'bash', '-lc',
                'source /opt/ros/humble/setup.bash; source /task/runs/occusg_build_v2/install/setup.bash; '
                'source /task/runs/occusg_build_v3/install/local_setup.bash; '
@@ -138,6 +138,10 @@ class OnlineRooms:
         for log in self.logs:
             log.close()
         self.current = None
+
+    def transition(self, done):
+        atomic_json(self.case / f'transition_{len(self.records)-1:04d}.json',
+                    dict(frame=len(self.records)-1, env_step_finished_ns=time.time_ns(), done=bool(done)))
 
 
 _observer = None
