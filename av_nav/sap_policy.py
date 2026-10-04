@@ -158,6 +158,10 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
             return super()._pointnav(goal, stop=False)
         robot = self._observations_cache['robot_xy']
         if self._sap_active is None:
+            if (self.sap.get('diagnostic') and
+                    np.linalg.norm(robot-goal) > self.sap.get('diagnostic_review_distance', math.inf)):
+                action = super()._pointnav(goal, stop=False)
+                return TorchActionIDs.TURN_LEFT if int(action.item()) == 0 else action
             obs = self._matching(goal)
             if any(accepted and np.linalg.norm(goal-center) < self.sap['association_radius']
                    for center, accepted in self._sap_decisions):
