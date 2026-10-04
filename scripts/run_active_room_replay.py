@@ -167,6 +167,7 @@ def main():
                    final_room_count=records[-1]['room_count'], final_detected_doors=len(detected),
                    accuracy=None, accuracy_reason='No verified room footprint GT',
                    adapter=dict(update_every=args.update_every, detector_resize=[256,256], pose_source='simulator',
+                                source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                                 grid_resolution_m=.05, map_size_m=48, native_x='24-(world_z-start_z)',
                                 native_y='24-(world_x-start_x)', labels_index_order='native_y,native_x',
                                 door_filter_bot_xy='[native_y,native_x] on transposed occupancy',
