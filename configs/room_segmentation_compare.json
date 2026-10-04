@@ -1,5 +1,5 @@
 {
-  "status": "input_capture_complete_segmentation_integration_in_progress",
+  "status": "complete_5_paired_episodes_880_shared_frames_qualitative_only",
   "dataset": "hm3d/v1/train",
   "partition": "calibration",
   "scene_count": 5,
@@ -15,7 +15,7 @@
     "occusg": {
       "repository": "https://github.com/crcz25/OccuSG.git",
       "commit": "2bca2fa06af87fd9dd0542957039be8f580f0dca",
-      "adapter_status": "implemented_server_smoke_in_progress",
+      "adapter_status": "complete_5_full_episodes_at_8b9b44d_reliable_transport",
       "requires": "ROS2 Humble, recursive pinned submodules, C++ build, OctoMap and mapconversion",
       "room_output": "incremental DuDe stable region polygons and IDs",
       "decomp_threshold_upstream": 1.5
@@ -23,13 +23,16 @@
     "active_room_segmentation": {
       "repository": "https://github.com/FreeformRobotics/Active_room_segmentation.git",
       "commit": "a941e3a5a1c8e16920a158fa0a9198c95be9c978",
-      "adapter_status": "implemented_server_smoke_in_progress",
+      "adapter_status": "complete_5_full_episodes_at_9cc7c1c_passive_room_state_adapter",
       "requires": "DETR door weights with hash, Habitat 0.2.4 replay adapter, compatible existing dependencies",
       "room_output": "Topomap_construction graph vertices room_exp cells",
       "mapping_input": "depth and simulator pose; gt_map/gt_exp variable names are not room truth"
     }
   },
-  "ground_truth_status": "unverified_do_not_report_accuracy_until_verified",
+  "ground_truth_status": "no_verified_room_footprint_gt_accuracy_unavailable",
+  "result_summary": "docs/results/room_segmentation_20261004/summary.json",
+  "result_metrics": "docs/results/room_segmentation_20261004/episodes.csv",
+  "figure_local": "runs/room_compare_20261004_review/final_comparison.png",
   "server_python": "/home/zyq/miniconda3/envs/vlfm/bin/python",
   "server_connection_status": "2026-10-04 connected with existing SSH key; supplied password was not used or stored"
 }

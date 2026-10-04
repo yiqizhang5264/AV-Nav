@@ -6,7 +6,10 @@
 服务器 `106.3.202.138:50001` 已重新连接成功，使用既有 SSH 密钥，没有使用或保存用户提供的密码。
 5 场景抽样、Habitat 资源核查、固定 VLFM 轨迹录制和 880 帧完整回放已完成。
 RGB 回放 MAE 和按原始传感器归一化后的 depth 最大绝对误差均为 0。
-两套适配器已实现，正在完成服务器全轨迹分割；目前不能报告两种方法的效果优劣。
+两种方法均完成全部 5 条完整轨迹，10 个方法回合均以 returncode=0 结束。
+并排图已检查坐标对齐，逐回合指标和完整小型 provenance 已通过 origin 归档于
+`docs/results/room_segmentation_20261004/`；原始图、数组、视频、数据和权重保留在未跟踪的 runs 中。
+这是共享观测下的原生建图与分割适配比较，没有可靠房间边界 GT，不报告准确率或 mIoU。
 既有 VLFM 全量评测继续使用 GPU 0/1，本次 Habitat 录制/回放使用 GPU 3，原评测目录未更新。
 本地上游源码仅在被忽略的 `tmp/room_upstream/` 中用于阅读，没有修改 VLFM 或主导航流程。
 
@@ -112,7 +115,7 @@ Habitat 加载选中数据后将 runtime ID 重编号为 0..4，不能与原始 
 传感器配置、参数、pip freeze、ROS/编译版本、每 episode 指标、检查点、退出码。
 在适配器单例 smoke 成功前不启动批量比较；缩短 smoke 不能作为最终分割结果。
 
-## 下一步所需条件
+## 已完成的适配与结果
 
 已获取官方 Active description=4 门检测权重，模型文件 SHA256：
 `d971e3b760421eb29665c1ca986854ce8ec57ddcc50209fcc77125c5e3cef7ec`。
@@ -141,4 +144,29 @@ Active 门过滤的机器人坐标须与上游相同，使用转置地图的 `[c
 因此已知面积差异包含原生建图差异，不能直接作为分割质量排名。
 
 失败的 smoke 和导出错误保留在各自新 run 目录。短 smoke 均不纳入正式结果。
-后续仍须完成两种方法在全部 5 条完整轨迹上的分割、并排制图和结果归档。
+早期失败和排除的运行见 [诊断记录](room_segmentation_failed_attempts.json)，没有覆盖或混入正式结果。
+
+| 场景 | Active 输出区域 | OccuSG 输出区域 | Active 自身自由区标注比例 | OccuSG 自身自由区标注比例 |
+| --- | ---: | ---: | ---: | ---: |
+| 3XYAD64HpDr | 2 | 5 | 37.3% | 68.2% |
+| E1NrAhMoqvB | 3 | 8 | 57.9% | 78.5% |
+| LcAd9dhvVwh | 2 | 3 | 87.7% | 6.9% |
+| TSJmdttd2GV | 2 | 10 | 68.4% | 77.9% |
+| j6fHrce9pHR | 0 | 13 | 0.0% | 85.6% |
+
+区域数是方法自身输出，不是真实房间数。标注比例的分母是各自原生地图的已知自由像素，
+两种方法的分母不同，不能作为共同 GT 准确率或直接排名依据。
+OccuSG 划分更多几何区域，在 LcAd9dhvVwh 中留下较多未分配自由区；Active 的区域更少，
+在 j6fHrce9pHR 中执行完整但没有输出有效房间区域。
+完整 Active 门掩码触发帧数为 15、48、95、24、101，最终保留门数为 4、2、1、3、0；
+最后一个场景的零区域不能误写为门模型零触发。输入始终使用最初抽样的 5 个 episode，没有替换回合。
+
+正式原始结果目录：
+
+- Active：`/home/zyq/AV-Nav-worktrees/room-active-passive-final/runs/active_full5_v4`。
+- OccuSG：`/home/zyq/AV-Nav-worktrees/room-ccbb1c1/runs/occusg_final5`，00..03 来自 full5_v2，04 来自同参数单独重试的 case4_v3。
+- 制图及原始归档：`/home/zyq/AV-Nav-worktrees/room-c152fb0/runs/room_comparison_final_v4_20261004`。
+- 本地并排图：[打开 PNG](../runs/room_compare_20261004_review/final_comparison.png)。
+
+服务器 46 项单元测试通过；本地 45 项通过、1 项因缺少 OpenCV 跳过，相关测试已在服务器通过。
+输入、场景资产、模型权重、构建适配与节点二进制的 SHA256，以及提交、参数、环境和逐回合指标均已归档。
