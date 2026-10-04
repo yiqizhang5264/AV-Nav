@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "complete_5_paired_episodes_1491_shared_frames_qualitative_only",
   "dataset": "hm3d/v1/val",
   "partition": "validation",
   "scene_count": 5,
@@ -11,7 +11,8 @@
   "stop_policy": "stop_at_recorded_stop_or_budget_no_padding",
   "vlfm_commit": "584ed56008754fde7997d904983607def8328322",
   "sampling_capture_commit": "7b876c485afbb8c274c7f594812364c41db8c2a8",
-  "replay_method_commit": "0029f40",
+  "replay_method_commit": "0029f40735f4e6824f18337d9b1acdebf629be3d",
+  "collector_commit": "427d9a4059a77c1680cfc939c6b7420b3dcc04cb",
   "occusg_upstream_commit": "2bca2fa06af87fd9dd0542957039be8f580f0dca",
   "active_upstream_commit": "a941e3a5a1c8e16920a158fa0a9198c95be9c978",
   "parameter_policy": "reuse frozen training comparison settings; no validation tuning",
@@ -19,5 +20,16 @@
   "selected_scenes": ["5cdEh9F2hJL", "Nfvxx8J5NCo", "XB4GS9ShBRE", "bxsVRursffK", "mv2HUxq3B53"],
   "ground_truth_status": "no_verified_room_footprint_gt_accuracy_unavailable",
   "server_capture_root": "/home/zyq/AV-Nav-worktrees/room-val-7b876c4/runs",
-  "server_replay_method_root": "/home/zyq/AV-Nav-worktrees/room-val-0029f40/runs"
+  "server_replay_method_root": "/home/zyq/AV-Nav-worktrees/room-val-0029f40/runs",
+  "result_summary": "docs/results/room_segmentation_val_20261004/summary.json",
+  "result_metrics": "docs/results/room_segmentation_val_20261004/episodes.csv",
+  "figure_local": "runs/room_val_20261004_review/final_comparison.png",
+  "server_report": "/home/zyq/AV-Nav-worktrees/room-val-report-427d9a4/runs/val_comparison5_final",
+  "shared_frames": 1491,
+  "rgb_mae_max": 0.0,
+  "normalized_depth_max_abs_error": 0.0,
+  "paired_complete": 5,
+  "baseline_navigation_successes": 2,
+  "baseline_navigation_failures": 3,
+  "scene_asset_version": "hm3d-0.2"
 }
