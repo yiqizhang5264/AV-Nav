@@ -1,0 +1,12 @@
+{
+  "python": "/home/zyq/miniconda3/envs/vlfm/bin/python",
+  "active_upstream": "/home/zyq/AV-Nav-worktrees/room-6cdffd1/runs/resources/active_proxy",
+  "detr_source": "/home/zyq/AV-Nav-worktrees/room-6cdffd1/runs/resources/detr",
+  "weights": "/home/zyq/AV-Nav-worktrees/room-6cdffd1/runs/resources/door_model.pth",
+  "extra_python_path": "/home/zyq/AV-Nav-worktrees/room-6cdffd1/runs/python_deps",
+  "container": "avnav_room_online_full_20261004",
+  "output_dir": "/home/zyq/AV-Nav-worktrees/room-online-9301f80/runs/online_full5/case_01",
+  "sample_dir": "/home/zyq/AV-Nav-worktrees/room-online-9301f80/runs/fixed_online_cases/01",
+  "domain_base": 161,
+  "diagnostic": false
+}

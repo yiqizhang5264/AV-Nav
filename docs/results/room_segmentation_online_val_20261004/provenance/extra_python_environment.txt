@@ -1,0 +1,4 @@
+gdown==5.2.2
+igraph==1.0.0
+texttable==1.7.0
+treelib==1.8.0

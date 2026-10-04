@@ -1,0 +1,31 @@
+{
+  "collector_commit": "737aff02f565f21c8239db667785aef0bb366217",
+  "evaluation_commits": [
+    "9301f809f8a89ceb5f824831b3f8c0aca71de937",
+    "9301f809f8a89ceb5f824831b3f8c0aca71de937",
+    "9301f809f8a89ceb5f824831b3f8c0aca71de937",
+    "9301f809f8a89ceb5f824831b3f8c0aca71de937",
+    "9301f809f8a89ceb5f824831b3f8c0aca71de937"
+  ],
+  "runtime_scripts_sha256": {
+    "replay_room_capture.py": "4599f4b15380d76375bdccc1c9930f933cd41b12378364c4d6e5d6deb3262ccd",
+    "archive_room_provenance.py": "15af17ca408780457b67429d7c4f0d2e606be132ecd1435d2aebf4bbac4cbdc6",
+    "collect_online_room_comparison.py": "449a80fab2f20d13225643e66d8f3e4d49b5a7a33716491f0d69fd48290db279",
+    "audit_room_resources.py": "4ed32d44ede598783a02f1f23169b8d85270f574e92f8d4b3218d190df01db67",
+    "run_room_capture.py": "427e564fc856d2473feb0917d8535d235d15846127fafd39009c580a58f77d5e",
+    "room_online_env.py": "57059852889fbdb80ce57847d7b5bdced1ce6ca0c7929a9cdda229818131ee6d",
+    "make_room_online_cases.py": "2c4df9862c16cea776170eb6c16d14bfd727d3ece72dbd19f17e15750f223b98",
+    "run_active_room_replay.py": "ef6d5ae7ad79ab8e343609d3e18b458433a2cc7af2b3da048a3e742a2339f839",
+    "collect_room_comparison.py": "7fa57c31b14d428e20cdad39e485744a7f4eb7fe242bd3edd5e4e5b5257079d5",
+    "room_online_visualization.py": "c9ef3f78668ec73675c8f2a4311c55513de1d0bc55c17d153a1660d2c964853a",
+    "make_room_split.py": "41872a34c85192b9df150b0e11359b554c5a2cf4fe25ec80edce709fb19d075e",
+    "room_online_observer.py": "16aa2ea22f10d6a7b3dcae9d06fa2912053d2cdd79907179ec28b2bbcd76ec26",
+    "run_occusg_room_replay.py": "446924ef05a327ace5c5deafa189aacb3730501cbdb90ea90604fc5229d60da1",
+    "room_frame_stream.py": "c8f0e5e168866660042368a31f6b08dee97b333fb5bafa6410570e37bf4b8b35",
+    "verify_room_replay.py": "0bfa02041e41673662e3f39a99b901a378f62accba04d505eba2f4ce91686428"
+  },
+  "scope": "Online incremental segmentation during VLFM evaluation; no segmentation action feedback; five independently seeded processes",
+  "run_root": "/home/zyq/AV-Nav-worktrees/room-online-9301f80/runs",
+  "shared_frames": 1491,
+  "scene_assets": "HM3D-0.2 val; ObjectNav episode split HM3D v1 val"
+}

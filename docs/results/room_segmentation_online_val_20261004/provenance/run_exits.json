@@ -1,0 +1,102 @@
+[
+  {
+    "case": 0,
+    "capture": {
+      "returncode": 0
+    },
+    "methods": [
+      {
+        "method": "active",
+        "exit": {
+          "returncode": 0
+        }
+      },
+      {
+        "method": "occusg",
+        "exit": {
+          "returncode": 0
+        }
+      }
+    ]
+  },
+  {
+    "case": 1,
+    "capture": {
+      "returncode": 0
+    },
+    "methods": [
+      {
+        "method": "active",
+        "exit": {
+          "returncode": 0
+        }
+      },
+      {
+        "method": "occusg",
+        "exit": {
+          "returncode": 0
+        }
+      }
+    ]
+  },
+  {
+    "case": 2,
+    "capture": {
+      "returncode": 0
+    },
+    "methods": [
+      {
+        "method": "active",
+        "exit": {
+          "returncode": 0
+        }
+      },
+      {
+        "method": "occusg",
+        "exit": {
+          "returncode": 0
+        }
+      }
+    ]
+  },
+  {
+    "case": 3,
+    "capture": {
+      "returncode": 0
+    },
+    "methods": [
+      {
+        "method": "active",
+        "exit": {
+          "returncode": 0
+        }
+      },
+      {
+        "method": "occusg",
+        "exit": {
+          "returncode": 0
+        }
+      }
+    ]
+  },
+  {
+    "case": 4,
+    "capture": {
+      "returncode": 0
+    },
+    "methods": [
+      {
+        "method": "active",
+        "exit": {
+          "returncode": 0
+        }
+      },
+      {
+        "method": "occusg",
+        "exit": {
+          "returncode": 0
+        }
+      }
+    ]
+  }
+]

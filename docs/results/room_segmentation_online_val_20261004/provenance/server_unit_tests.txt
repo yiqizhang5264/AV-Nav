@@ -1,0 +1,56 @@
+test_unknown_key_fails (test_core.ConfigTests) ... ok
+test_angle_wrap (test_core.GeometryTests) ... ok
+test_invalid_depth_rejected (test_core.GeometryTests) ... ok
+test_metric_depth_and_axis (test_core.GeometryTests) ... ok
+test_surface_distance_clamp_and_truncation (test_core.GeometryTests) ... ok
+test_budget_uses_path_not_euclidean (test_core.PlannerTests) ... ok
+test_corner_cutting_forbidden (test_core.PlannerTests) ... ok
+test_no_candidate_is_safe (test_core.PlannerTests) ... ok
+test_seeded_view_path_and_budget (test_core.PlannerTests) ... ok
+test_wall_cannot_be_crossed (test_core.PlannerTests) ... ok
+test_camera_axes (test_diagnostic.DiagnosticTests) ... ok
+test_identity_and_sequence (test_diagnostic.DiagnosticTests) ... ok
+test_active_motion_heading_and_map_center (test_room_geometry.RoomGeometryTests) ... ok
+test_optical_forward_and_vertical_are_consistent (test_room_geometry.RoomGeometryTests) ... ok
+test_blocks_until_current_frame_and_stops_at_terminal (test_room_online_stream.OnlineRoomStreamTests) ... ok
+test_online_hook_precedes_step_and_default_baseline_has_no_hook (test_room_online_stream.OnlineRoomStreamTests) ... ok
+test_rejects_wrong_identity_or_incomplete_payload_and_times_out (test_room_online_stream.OnlineRoomStreamTests) ... ok
+test_cli_deterministic_gzip_and_no_overwrite (test_room_split.RoomSplitTests) ... ok
+test_online_jobs_preserve_fixed_sample_without_resampling (test_room_split.RoomSplitTests) ... ok
+test_repeated_train_ids_preserve_source_row_identity (test_room_split.RoomSplitTests) ... ok
+test_training_partitions_disjoint_and_insufficient_scene_count_rejected (test_room_split.RoomSplitTests) ... ok
+test_unique_scenes_reproducible_preserved_identity_and_goals (test_room_split.RoomSplitTests) ... ok
+test_validation_uses_all_val_scenes_and_preserves_rows (test_room_split.RoomSplitTests) ... ok
+test_attempt_requires_zero_exit_and_exact_episode_ids (test_strive_full_eval.StriveFullEvalTests) ... ok
+test_failed_shard_is_retried_until_complete (test_strive_full_eval.StriveFullEvalTests) ... ok
+test_only_complete_open3d_destructor_abort_is_accepted (test_strive_full_eval.StriveFullEvalTests) ... ok
+test_shard_ranges_cover_interval_once (test_strive_full_eval.StriveFullEvalTests) ... ok
+test_large_interpolation_endpoints_are_voxel_deduplicated (test_strive_upstream_adapter.StriveUpstreamAdapterTests) ... ok
+test_missing_waypoint_ends_fully_explored_episode (test_strive_upstream_adapter.StriveUpstreamAdapterTests) ... ok
+test_post_limit_step_ends_cleanly (test_strive_upstream_adapter.StriveUpstreamAdapterTests) ... ok
+test_runtime_overlay_removes_only_redundant_gpu_downsample (test_strive_upstream_adapter.StriveUpstreamAdapterTests) ... ok
+test_valid_steps_are_unchanged (test_strive_upstream_adapter.StriveUpstreamAdapterTests) ... ok
+test_voxel_reduce_removes_nonfinite_and_duplicate_cells (test_strive_upstream_adapter.StriveUpstreamAdapterTests) ... ok
+test_call_telemetry_records_hash_not_prompt_or_key (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_client_overrides_endpoint_key_and_every_model_argument (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_completion_limit_is_injected (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_context_limit_retries_with_smaller_final_only_request (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_disable_thinking_is_injected_without_losing_extra_body (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_final_only_retry_schema_removes_steps (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_invalid_json_retries_with_final_only_request (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_length_failure_retries_with_concise_instruction (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_length_retry_merges_existing_system_message (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_local_defaults_do_not_require_gemini_key (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_non_reasoning_list_uses_general_bound (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_public_config_never_contains_key_value (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_reasoning_steps_schema_is_bounded (test_strive_vlm_runtime.StriveVLMRuntimeTests) ... ok
+test_capture_does_not_advance_numpy_rng (test_vlfm_evidence_adapter.VLFMEvidenceAdapterTests) ... ok
+test_overlay_injects_capture_hooks (test_vlfm_evidence_adapter.VLFMEvidenceAdapterTests) ... ok
+test_mismatched_episode_sets_rejected (test_workflow.MetricsTests) ... ok
+test_paired_recovery_and_regression (test_workflow.MetricsTests) ... ok
+test_disjoint_scenes_deterministic_ids_and_goals (test_workflow.SplitTests) ... ok
+
+----------------------------------------------------------------------
+Ran 51 tests in 1.202s
+
+OK

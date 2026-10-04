@@ -1,0 +1,53 @@
+{
+  "command": [
+    "/home/zyq/miniconda3/envs/vlfm/bin/python",
+    "-u",
+    "/home/zyq/AV-Nav-worktrees/room-online-9301f80/scripts/run_vlfm_evidence.py",
+    "--vlfm-root",
+    "/home/zyq/AV-Nav-worktrees/vlfm-original-1224d7e/external/vlfm",
+    "habitat_baselines.evaluate=true",
+    "habitat_baselines.eval.video_option=[]",
+    "habitat_baselines.test_episode_count=1",
+    "habitat_baselines.num_environments=1",
+    "habitat_baselines.torch_gpu_id=0",
+    "habitat_baselines.eval.split=val",
+    "habitat.dataset.split=val",
+    "habitat.environment.iterator_options.shuffle=False",
+    "habitat.environment.max_episode_steps=500",
+    "habitat.dataset.data_path=/home/zyq/AV-Nav-worktrees/room-online-9301f80/runs/online_capture_03/hm3dv1_selected_episodes.json.gz",
+    "habitat.dataset.scenes_dir=/home/zyq/vlfm/data/scene_datasets",
+    "habitat_baselines.tensorboard_dir=/home/zyq/AV-Nav-worktrees/room-online-9301f80/runs/online_capture_03/tb",
+    "hydra.run.dir=/home/zyq/AV-Nav-worktrees/room-online-9301f80/runs/online_capture_03/hydra"
+  ],
+  "av_nav_commit": "9301f809f8a89ceb5f824831b3f8c0aca71de937",
+  "vlfm_commit": "584ed56008754fde7997d904983607def8328322",
+  "selection": {
+    "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/val",
+    "seed": 20261004,
+    "partition": "validation",
+    "count": 1,
+    "selection_algorithm": "uniform-scene-shards-then-uniform-source-row-v2",
+    "dataset_version_claim": "HM3D v1 episode data; scene asset version must be verified separately",
+    "cases": [
+      {
+        "scene_id": "hm3d/val/00873-bxsVRursffK/bxsVRursffK.basis.glb",
+        "episode_id": "0",
+        "object_category": "chair",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/val/content/bxsVRursffK.json.gz",
+        "source_index": 90,
+        "episode_sha256": "ee19f560201655baaf11f152c8841a63c5fcd93c41153f23478c928b87c3fbf7",
+        "source_sha256": "074cbf3fdbcb84b9fddd17ef242b77e26616733f6b3e091210fc4d4d6f720dd5"
+      }
+    ],
+    "sha256": "ea51e374c38f6a499b5fa90ffbd36804d1cc5d77c7623617e4e6f148fd006c1b",
+    "parent_selection_sha256": "fb89209efe8f42d853220c1826eb16d8dca8f6656ad9700ae757931e153313c8",
+    "parent_case_index": 3,
+    "execution_note": "One independently seeded VLFM evaluation process; Habitat runtime ID is 0; no resampling"
+  },
+  "gpu": "3",
+  "max_steps": 500,
+  "online_settings": "runs/settings_03.json",
+  "diagnostic": false,
+  "purpose": "Shared trajectory input for room segmentation; not autonomous exploration comparison",
+  "runtime_id_note": "Habitat renumbers loaded episodes; match scene/start pose/category and source row, not runtime ID."
+}

@@ -1,0 +1,30 @@
+{
+  "active": [
+    "/home/zyq/miniconda3/envs/vlfm/bin/python",
+    "-u",
+    "/home/zyq/AV-Nav-worktrees/room-online-9301f80/scripts/run_active_room_replay.py",
+    "--upstream",
+    "/home/zyq/AV-Nav-worktrees/room-6cdffd1/runs/resources/active_proxy",
+    "--detr-source",
+    "/home/zyq/AV-Nav-worktrees/room-6cdffd1/runs/resources/detr",
+    "--weights",
+    "/home/zyq/AV-Nav-worktrees/room-6cdffd1/runs/resources/door_model.pth",
+    "--case-dir",
+    "/home/zyq/AV-Nav-worktrees/room-online-9301f80/runs/online_full5/case_02/inputs/00",
+    "--output-dir",
+    "/home/zyq/AV-Nav-worktrees/room-online-9301f80/runs/online_full5/case_02/active/00",
+    "--stream"
+  ],
+  "occusg": [
+    "docker",
+    "exec",
+    "-e",
+    "ROS_DOMAIN_ID=162",
+    "-e",
+    "RMW_IMPLEMENTATION=rmw_cyclonedds_cpp",
+    "avnav_room_online_full_20261004",
+    "bash",
+    "-lc",
+    "source /opt/ros/humble/setup.bash; source /task/runs/occusg_build_v2/install/setup.bash; source /task/runs/occusg_build_v3/install/local_setup.bash; export PYTHONPATH=/usr/lib/python3/dist-packages:/online:$PYTHONPATH; python3 -u /online/scripts/run_occusg_room_replay.py --upstream /task/runs/occusg_build_v3 --case-dir /online/runs/online_full5/case_02/inputs/00 --output-dir /online/runs/online_full5/case_02/occusg/00 --stream --frame-timeout 120 --debug"
+  ]
+}
