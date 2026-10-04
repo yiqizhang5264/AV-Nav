@@ -48,10 +48,12 @@ def main():
     dude_file = output / 'dude_params.yaml'
     dude_file.write_text(yaml.safe_dump(dude))
     commands = [
-        ['ros2', 'run', 'point_cloud_generator', 'depth_to_pointcloud', '--ros-args', '--params-file', str(parameter_file)],
+        ['ros2', 'run', 'point_cloud_generator', 'depth_to_pointcloud', '--ros-args',
+         '-r', '__node:=point_cloud_generator_node', '--params-file', str(parameter_file)],
         ['ros2', 'run', 'octomap_server', 'octomap_server_node', '--ros-args', '--params-file', str(parameter_file),
          '-r', 'cloud_in:=/pointcloud', '-r', 'octomap_full:=/octomap'],
-        ['ros2', 'run', 'mapconversion', 'map_conversion_oct_node', '--ros-args', '--params-file', str(parameter_file)],
+        ['ros2', 'run', 'mapconversion', 'map_conversion_oct_node', '--ros-args',
+         '-r', '__node:=map_conversion_node', '--params-file', str(parameter_file)],
         ['ros2', 'run', 'incremental_dude_ros2', 'inc_dude', '--ros-args', '--params-file', str(dude_file)]]
     (output / 'commands.json').write_text(json.dumps(commands, indent=2))
     processes, logs = [], []
