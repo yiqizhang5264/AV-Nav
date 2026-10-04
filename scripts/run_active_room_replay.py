@@ -124,7 +124,9 @@ def main():
         _, occupied, _, explored, pano, pano_exp = mapper.update_map(depth_cm.copy(), native_pose)
         door_map, _ = mapper.get_door_map(depth_cm * mask, native_pose)
         door_full, _ = mapper.get_door_map_full(depth_cm * full, native_pose)
-        pixel_pose = np.rint(pose[:2] * 20).astype(int).tolist()
+        # Door filtering indexes the transposed map as (column, row), as in
+        # upstream global_loc_xy_pix=[absolute_locs[1], absolute_locs[0]].
+        pixel_pose = np.rint(pose[:2][::-1] * 20).astype(int).tolist()
         last_bot.append(pixel_pose)
         if (index + 1) % args.update_every == 0 or index == len(frames) - 1:
             # Follow official entry point's transpose/coordinate conventions.
@@ -167,6 +169,7 @@ def main():
                    adapter=dict(update_every=args.update_every, detector_resize=[256,256], pose_source='simulator',
                                 grid_resolution_m=.05, map_size_m=48, native_x='24-(world_z-start_z)',
                                 native_y='24-(world_x-start_x)', labels_index_order='native_y,native_x',
+                                door_filter_bot_xy='[native_y,native_x] on transposed occupancy',
                                 exploration_policy='disabled shared trajectory', upstream_visualization_disabled=True,
                                 floor_policy='reject transitions >0.3m'),
                    records=records)
