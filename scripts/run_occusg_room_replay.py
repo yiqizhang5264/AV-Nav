@@ -16,6 +16,7 @@ def main():
     p.add_argument('--case-dir', required=True)
     p.add_argument('--output-dir', required=True)
     p.add_argument('--frame-timeout', type=float, default=20)
+    p.add_argument('--debug', action='store_true')
     args = p.parse_args()
     import cv2
     import numpy as np
@@ -56,6 +57,8 @@ def main():
         ['ros2', 'run', 'mapconversion', 'map_conversion_oct_node', '--ros-args',
          '-r', '__node:=map_conversion_node', '--params-file', str(parameter_file)],
         ['ros2', 'run', 'incremental_dude_ros2', 'inc_dude', '--ros-args', '--params-file', str(dude_file)]]
+    if args.debug:
+        commands[1] += ['--log-level', 'debug']
     (output / 'commands.json').write_text(json.dumps(commands, indent=2))
     processes, logs = [], []
     rclpy.init()
