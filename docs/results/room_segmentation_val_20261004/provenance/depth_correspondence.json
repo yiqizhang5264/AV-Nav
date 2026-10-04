@@ -1,0 +1,32 @@
+[
+  {
+    "scene_id": "hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.glb",
+    "frames": 177,
+    "depth_max_abs_error": 0.0,
+    "max_floor_displacement_m": 0.20000344369411469
+  },
+  {
+    "scene_id": "hm3d/val/00880-Nfvxx8J5NCo/Nfvxx8J5NCo.basis.glb",
+    "frames": 300,
+    "depth_max_abs_error": 0.0,
+    "max_floor_displacement_m": 2.922759056084301e-06
+  },
+  {
+    "scene_id": "hm3d/val/00878-XB4GS9ShBRE/XB4GS9ShBRE.basis.glb",
+    "frames": 186,
+    "depth_max_abs_error": 0.0,
+    "max_floor_displacement_m": 0.20000101173400878
+  },
+  {
+    "scene_id": "hm3d/val/00873-bxsVRursffK/bxsVRursffK.basis.glb",
+    "frames": 328,
+    "depth_max_abs_error": 0.0,
+    "max_floor_displacement_m": 0.20207601599693298
+  },
+  {
+    "scene_id": "hm3d/val/00876-mv2HUxq3B53/mv2HUxq3B53.basis.glb",
+    "frames": 500,
+    "depth_max_abs_error": 0.0,
+    "max_floor_displacement_m": 4.525446891785745e-06
+  }
+]
