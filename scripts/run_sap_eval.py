@@ -109,7 +109,7 @@ def main():
         command.append('habitat_baselines.rl.policy.name=SAPCategoryPolicy')
     manifest = dict(started=datetime.now(timezone.utc).isoformat(), benchmark='HM3Dv1 ObjectNav',
         split=args.split, scene=args.scene, variant=args.variant, expected_episodes=len(data['episodes']),
-        diagnostic=args.split != 'val' or args.limit is not None or args.max_steps != 500,
+        diagnostic=bool(config.get('diagnostic')) or args.split != 'val' or args.limit is not None or args.max_steps != 500,
         config=config, source_sha256=hashes, dataset_sha256=digest(dataset), command=command,
         commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         upstream_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=upstream, text=True).strip(),

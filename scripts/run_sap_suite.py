@@ -16,6 +16,8 @@ def main():
     p.add_argument('--gpu', default='1')
     p.add_argument('--variant', choices=['baseline','sap'], default='sap')
     args = p.parse_args()
+    if json.loads(Path(args.config).read_text()).get('diagnostic'):
+        p.error('Diagnostic configurations cannot run as full efficacy suites')
     data, hashes = read_dataset(Path(args.dataset_root), 'val')
     expected = set(episode_keys(data['episodes'], args.scenes_dir))
     scenes = sorted(p.name[:-8] for p in (Path(args.dataset_root)/'val/content').glob('*.json.gz'))
