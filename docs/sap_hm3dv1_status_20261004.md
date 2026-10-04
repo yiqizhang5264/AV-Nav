@@ -66,11 +66,15 @@ hashes. This prevents accidental deduplication and supports exact paired compari
 
 ## Full evaluation
 
-Baseline suite started in tmux `sap_hm3dv1_baseline`, GPU 3, output:
-`/home/zyq/AV-Nav/runs/sap_hm3dv1_val_baseline_b23ab56`.
 SAP suite started in tmux `sap_hm3dv1_thinking`, GPU 1, output:
 `/home/zyq/AV-Nav/runs/sap_hm3dv1_val_thinking_5cf1d2f`.
-Both use the normal `configs/sap_category.json`, not the forced diagnostic config.
+The full VLFM baseline launched during this work duplicated a user-managed run.
+It was stopped after two partially evaluated scene shards. The partial directory
+`/home/zyq/AV-Nav/runs/sap_hm3dv1_val_baseline_b23ab56` is not a complete result.
+At shutdown, no other active HM3Dv1 VLFM evaluator process was visible. The
+archived original VLFM run currently contains 10/20 completed HM3Dv1 scene shards
+and no active process, so it cannot yet provide a complete val comparison.
+SAP uses the normal `configs/sap_category.json`, not the forced diagnostic config.
 Each scene runs all its episodes at 500 steps. Three separate attempts maximum
 per scene; failed attempts are preserved. A full aggregate is emitted only after
 all 2000 unique source rows complete with successful process exits.
