@@ -36,12 +36,18 @@ class VLFMEvidenceAdapterTests(unittest.TestCase):
             root = pathlib.Path(directory)
             (root / "vlfm" / "utils").mkdir(parents=True)
             (root / "vlfm" / "utils" / "vlfm_trainer.py").write_text(source)
+            (root / "vlfm" / "utils" / "habitat_visualizer.py").write_text(
+                '    new_map = infos[0]["top_down_map"]["map"].copy()\n'
+                '    new_map[grid_xy[:, 0], grid_xy[:, 1]] = MAP_TARGET_POINT_INDICATOR\n'
+            )
             overlay = create_vlfm_evidence_overlay(root)
             patched = (pathlib.Path(overlay.name) / "vlfm" / "utils" / "vlfm_trainer.py").read_text()
+            visualizer = (pathlib.Path(overlay.name) / "vlfm" / "utils" / "habitat_visualizer.py").read_text()
             overlay.cleanup()
         self.assertIn("record_observation", patched)
         self.assertIn("record_transition", patched)
         self.assertIn("finish_episode", patched)
+        self.assertIn("valid_grid_xy", visualizer)
 
     @unittest.skipIf(EvidenceRecorder is None, "OpenCV is installed in the server VLFM environment")
     def test_capture_does_not_advance_numpy_rng(self):

@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import pathlib
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -22,6 +23,57 @@ def sha256(path: pathlib.Path) -> str:
     return digest.hexdigest()
 
 
+def episode_identity(episode: dict) -> str:
+    fields = {
+        "scene_id": str(episode.get("scene_id", "unknown")),
+        "episode_id": str(episode.get("episode_id", "unknown")),
+        "object_category": str(episode.get("object_category", "unknown")),
+        "start_position": episode.get("start_position"),
+        "start_rotation": episode.get("start_rotation"),
+    }
+    return json.dumps(fields, sort_keys=True, separators=(",", ":"))
+
+
+def completed_episode_identities(shard: pathlib.Path) -> set[str]:
+    completed = set()
+    for result in shard.glob("attempts/*/evidence/episodes/*/result.json"):
+        metadata = result.parent / "episode.json"
+        if metadata.exists():
+            completed.add(episode_identity(json.loads(metadata.read_text(encoding="utf-8"))))
+    return completed
+
+
+def prepare_remaining_dataset(
+    dataset_root: pathlib.Path,
+    scene: str,
+    completed: set[str],
+    destination: pathlib.Path,
+) -> tuple[pathlib.Path, int, int]:
+    """Create an attempt-local val split containing only unfinished episodes."""
+    source_content = dataset_root / "val" / "content" / f"{scene}.json.gz"
+    with gzip.open(source_content, "rt", encoding="utf-8") as stream:
+        data = json.load(stream)
+    original_count = len(data["episodes"])
+    data["episodes"] = [episode for episode in data["episodes"] if episode_identity(episode) not in completed]
+    remaining_count = len(data["episodes"])
+    content_dir = destination / "val" / "content"
+    content_dir.mkdir(parents=True)
+    shutil.copy2(dataset_root / "val" / "val.json.gz", destination / "val" / "val.json.gz")
+    content_path = content_dir / f"{scene}.json.gz"
+    with content_path.open("wb") as raw_stream:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw_stream, mtime=0) as stream:
+            stream.write(json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+    derivation = {
+        "source_content": str(source_content),
+        "source_sha256": sha256(source_content),
+        "completed_episode_identities": sorted(completed),
+        "original_count": original_count,
+        "remaining_count": remaining_count,
+    }
+    (destination / "derivation.json").write_text(json.dumps(derivation, ensure_ascii=False, indent=2), encoding="utf-8")
+    return destination, original_count, remaining_count
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", required=True, choices=("hm3dv1", "hm3dv2", "mp3d"))
@@ -32,6 +84,7 @@ def main() -> None:
     parser.add_argument("--limit-scenes", type=int)
     parser.add_argument("--episodes-per-scene", type=int, default=-1)
     parser.add_argument("--max-attempts", type=int, default=3)
+    parser.add_argument("--resume-note")
     args = parser.parse_args()
 
     repo = pathlib.Path(__file__).resolve().parents[1]
@@ -60,9 +113,21 @@ def main() -> None:
     manifest_path = output_root / "manifest.json"
     if manifest_path.exists():
         existing = json.loads(manifest_path.read_text(encoding="utf-8"))
-        comparable = ("dataset", "av_nav_commit", "vlfm_commit", "dataset_root", "scenes_dir", "manifest_sha256", "content")
+        comparable = ("dataset", "vlfm_commit", "dataset_root", "scenes_dir", "manifest_sha256", "content")
         if any(existing.get(key) != manifest.get(key) for key in comparable):
             raise SystemExit(f"existing run manifest does not match requested evaluation: {manifest_path}")
+        if existing.get("av_nav_commit") != manifest.get("av_nav_commit"):
+            if not args.resume_note:
+                raise SystemExit("adapter commit changed; --resume-note is required")
+            event = {
+                "resumed_at": datetime.now(timezone.utc).isoformat(),
+                "previous_av_nav_commit": existing.get("av_nav_commit"),
+                "new_av_nav_commit": manifest.get("av_nav_commit"),
+                "vlfm_commit": manifest.get("vlfm_commit"),
+                "note": args.resume_note,
+            }
+            with (output_root / "resume_events.jsonl").open("a", encoding="utf-8") as stream:
+                stream.write(json.dumps(event, ensure_ascii=False) + "\n")
         manifest = existing
     else:
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -77,11 +142,20 @@ def main() -> None:
         if done.exists():
             continue
         shard.mkdir(parents=True, exist_ok=True)
+        completed = completed_episode_identities(shard)
         for attempt_index in range(1, args.max_attempts + 1):
             attempt = shard / "attempts" / f"{attempt_index:03d}"
             if attempt.exists():
                 continue
             attempt.mkdir(parents=True)
+            attempt_dataset = dataset_root
+            if completed:
+                attempt_dataset, original_count, remaining_count = prepare_remaining_dataset(
+                    dataset_root, scene, completed, attempt / "remaining_dataset"
+                )
+                if remaining_count == 0:
+                    done.write_text(f"all {original_count} episodes completed across prior attempts\n", encoding="utf-8")
+                    break
             evidence = attempt / "evidence"
             logs = attempt / "episode_logs"
             hydra_dir = attempt / "hydra"
@@ -96,7 +170,7 @@ def main() -> None:
                 f"habitat_baselines.tensorboard_dir={attempt / 'tb'}",
                 f"habitat_baselines.test_episode_count={args.episodes_per_scene}",
                 "habitat_baselines.num_environments=1", "habitat_baselines.torch_gpu_id=0",
-                f"habitat.dataset.data_path='{dataset_root}/{{split}}/{{split}}.json.gz'",
+                f"habitat.dataset.data_path='{attempt_dataset}/{{split}}/{{split}}.json.gz'",
                 f"habitat.dataset.scenes_dir={pathlib.Path(args.scenes_dir).resolve()}",
                 f"habitat.dataset.content_scenes=[{scene}]", f"hydra.run.dir={hydra_dir}",
             ]
@@ -107,6 +181,7 @@ def main() -> None:
             if result.returncode == 0 and attempt_done.exists():
                 done.write_text(f"attempts/{attempt_index:03d}\n", encoding="utf-8")
                 break
+            completed = completed_episode_identities(shard)
         if not done.exists():
             raise SystemExit(f"scene {scene} failed after {args.max_attempts} independent attempts")
 

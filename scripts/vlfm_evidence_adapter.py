@@ -44,4 +44,25 @@ def create_vlfm_evidence_overlay(vlfm_root: pathlib.Path, room_online: bool = Fa
         anchor = '                    evidence_recorder.finish_episode(episode_stats, failure_cause)\n'
         source = source.replace(anchor, anchor + '                    get_online_rooms(self.config).finish(episode_stats, failure_cause)\n', 1)
     trainer_path.write_text(source, encoding="utf-8")
+
+    # The upstream video renderer can round an edge point to exactly the map
+    # size. Guard only this display operation; policy state and actions are
+    # already computed before the renderer is called.
+    visualizer_path = package_dst / "utils" / "habitat_visualizer.py"
+    visualizer = visualizer_path.read_text(encoding="utf-8")
+    bounds_anchor = '''    new_map = infos[0]["top_down_map"]["map"].copy()
+    new_map[grid_xy[:, 0], grid_xy[:, 1]] = MAP_TARGET_POINT_INDICATOR
+'''
+    bounds_patch = '''    new_map = infos[0]["top_down_map"]["map"].copy()
+    valid_grid_xy = grid_xy[
+        (grid_xy[:, 0] >= 0)
+        & (grid_xy[:, 0] < new_map.shape[0])
+        & (grid_xy[:, 1] >= 0)
+        & (grid_xy[:, 1] < new_map.shape[1])
+    ]
+    new_map[valid_grid_xy[:, 0], valid_grid_xy[:, 1]] = MAP_TARGET_POINT_INDICATOR
+'''
+    if visualizer.count(bounds_anchor) != 1:
+        raise RuntimeError("pinned VLFM point-cloud visualization site changed")
+    visualizer_path.write_text(visualizer.replace(bounds_anchor, bounds_patch, 1), encoding="utf-8")
     return overlay
