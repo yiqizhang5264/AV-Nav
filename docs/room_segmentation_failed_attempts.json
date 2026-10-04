@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-04",
+  "scope": "Diagnostic integration attempts excluded from final segmentation comparison",
+  "exit_code_note": "Early background exceptions did not save shell exit codes; null means unrecorded, not success. Final accepted method cases each save returncode=0.",
+  "attempts": [
+    {
+      "method": "Active",
+      "path": "/home/zyq/AV-Nav-worktrees/room-cfc0519/runs/active_smoke_v1",
+      "status": "failed",
+      "reason": "DETR hub constructor did not accept pretrained_backbone argument",
+      "exit_code": null
+    },
+    {
+      "method": "Active",
+      "path": "/home/zyq/AV-Nav-worktrees/room-4bfae62/runs/active_full5_v1",
+      "status": "excluded",
+      "reason": "Export failed on room_exp=None for unexplored nodes in cases 00, 01 and 03; other outputs also precede final coordinate/state adapter",
+      "exit_code": null
+    },
+    {
+      "method": "Active",
+      "path": "/home/zyq/AV-Nav-worktrees/room-2b92429/runs/active_case0_v2",
+      "status": "failed",
+      "reason": "cv2.line received floating-point robot pixel coordinates",
+      "exit_code": null
+    },
+    {
+      "method": "Active",
+      "path": "/home/zyq/AV-Nav-worktrees/room-69edf6c/runs/active_full5_v2",
+      "status": "excluded",
+      "reason": "Robot column/row order did not match transposed door-filter map",
+      "exit_code": null
+    },
+    {
+      "method": "Active",
+      "path": "/home/zyq/AV-Nav-worktrees/room-active-final/runs/active_full5_v3",
+      "status": "excluded",
+      "reason": "Autonomous choose_door disabled without replacing its current-room state transition; diagnostic maps cannot support method-quality conclusions",
+      "exit_code": null
+    },
+    {
+      "method": "OccuSG",
+      "path": "/home/zyq/AV-Nav-worktrees/room-ccbb1c1/runs/occusg_smoke_case0_v6",
+      "status": "failed",
+      "reason": "Point cloud received by bridge but OctoMap filter received no clouds; no 2D map or region acknowledgments",
+      "exit_code": null
+    },
+    {
+      "method": "OccuSG",
+      "path": "/home/zyq/AV-Nav-worktrees/room-ccbb1c1/runs/occusg_full5_v1",
+      "status": "excluded",
+      "reason": "Native best-effort cloud delivery interrupted complete replay; explicit reliable replay transport added for subsequent runs",
+      "exit_code": null
+    },
+    {
+      "method": "OccuSG",
+      "path": "/home/zyq/AV-Nav-worktrees/room-ccbb1c1/runs/occusg_full5_v2/04",
+      "status": "failed",
+      "reason": "Acknowledgment timeout: cloud and OctoMap timestamp matched, 80 maps and 79 region updates; exact same case retried separately without changing segmentation thresholds",
+      "exit_code": null
+    }
+  ],
+  "other_diagnostics": [
+    "Initial OccuSG build lacked pcl_ros; abandoned header compatibility experiment excluded from final build.",
+    "Container NumPy 2 / apt OpenCV ABI conflict fixed through isolated PYTHONPATH; host VLFM environment unchanged.",
+    "Replay metadata smoke initially failed original-versus-runtime episode ID matching; final correspondence uses scene, source row/hash and runtime index.",
+    "Five-frame Active smoke had zero door-mask triggers; it is not an efficacy result.",
+    "Short OccuSG and Active smoke outputs are not included in the 880-frame final comparison."
+  ]
+}
