@@ -35,9 +35,23 @@ class RoomSplitTests(unittest.TestCase):
         for episode, case in zip(a['episodes'], ma['cases']):
             original = json.loads(gzip.decompress(Path(case['source']).read_bytes()))
             self.assertIn(episode, original['episodes'])
+            self.assertEqual(episode, original['episodes'][case['source_index']])
             key = Path(episode['scene_id']).name + '_chair'
             self.assertEqual(a['goals_by_category'][key], original['goals_by_category'][key])
             self.assertEqual(len(case['source_sha256']), 64)
+
+    def test_repeated_train_ids_preserve_source_row_identity(self):
+        for path in (self.source / 'content').glob('*.json.gz'):
+            data = json.loads(gzip.decompress(path.read_bytes()))
+            for episode in data['episodes']:
+                episode['episode_id'] = '0'
+            path.write_bytes(gzip.compress(json.dumps(data).encode()))
+        data, manifest = select(self.source, 5, 17, 'calibration')
+        self.assertEqual(len(data['episodes']), 5)
+        for episode, case in zip(data['episodes'], manifest['cases']):
+            original = json.loads(gzip.decompress(Path(case['source']).read_bytes()))
+            self.assertEqual(episode, original['episodes'][case['source_index']])
+            self.assertEqual(episode['episode_id'], '0')
 
     def test_training_partitions_disjoint_and_insufficient_scene_count_rejected(self):
         a, _ = select(self.source, 5, 17, 'calibration')

@@ -13,9 +13,22 @@ def select(source, count, seed, partition):
         raise ValueError('Count must be positive')
     if source.name != 'train':
         raise ValueError('Initial room comparison must use the training split')
-    scenes = {}
-    metadata = None
+    # HM3Dv1 training IDs repeat even within a category. Identity therefore
+    # includes the immutable source hash and source row, not just episode_id.
+    paths = []
     for path in sorted((source / 'content').glob('*.json.gz')):
+        bucket = int(hashlib.sha256(('scene-v1|' + path.stem).encode()).hexdigest()[:8], 16) % 4
+        if (partition == 'calibration' and bucket != 0) or (partition == 'development' and bucket == 0):
+            paths.append(path)
+    if len(paths) < count:
+        raise ValueError(f'Only {len(paths)} distinct eligible scenes; requested {count}')
+    rng = random.Random(seed)
+    chosen, goals, cases = [], {}, []
+    scenes = set()
+    metadata = None
+    # One scene per Habitat content shard; validate that contract on sampled
+    # shards and keep only one full shard in memory at a time.
+    for path in sorted(rng.sample(paths, count)):
         raw = path.read_bytes()
         data = json.loads(gzip.decompress(raw))
         shared = {k: v for k, v in data.items()
@@ -24,42 +37,31 @@ def select(source, count, seed, partition):
             metadata = shared
         elif shared != metadata:
             raise ValueError(f'Inconsistent dataset metadata: {path}')
-        seen = set()
-        for episode in data.get('episodes', []):
-            scene = episode['scene_id']
-            # Match the existing make_split.py scene partition exactly.
-            bucket = int(hashlib.sha256(('scene-v1|' + path.stem).encode()).hexdigest()[:8], 16) % 4
-            if (partition == 'calibration' and bucket == 0) or (partition == 'development' and bucket != 0):
-                continue
-            key = (scene, str(episode['episode_id']))
-            if key in seen:
-                raise ValueError(f'Duplicate episode identity: {key}')
-            seen.add(key)
-            record = scenes.setdefault(scene, {'path': path, 'sha256': hashlib.sha256(raw).hexdigest(),
-                                               'data': data, 'episodes': []})
-            if record['path'] != path:
-                raise ValueError(f'Scene appears in multiple source files: {scene}')
-            record['episodes'].append(episode)
-    if len(scenes) < count:
-        raise ValueError(f'Only {len(scenes)} distinct eligible scenes; requested {count}')
-    rng = random.Random(seed)
-    chosen, goals, cases = [], {}, []
-    for scene in sorted(rng.sample(sorted(scenes), count)):
-        record = scenes[scene]
-        episode = rng.choice(sorted(record['episodes'], key=lambda e: str(e['episode_id'])))
+        episodes = data.get('episodes', [])
+        shard_scenes = {e['scene_id'] for e in episodes}
+        if len(shard_scenes) != 1:
+            raise ValueError(f'Expected one nonempty scene per content shard: {path}')
+        scene = next(iter(shard_scenes))
+        if scene in scenes:
+            raise ValueError(f'Scene appears in multiple source files: {scene}')
+        scenes.add(scene)
+        source_index = rng.randrange(len(episodes))
+        episode = episodes[source_index]
         goal_key = Path(scene).name + '_' + episode['object_category']
-        source_goals = record['data'].get('goals_by_category', {})
+        source_goals = data.get('goals_by_category', {})
         if not source_goals.get(goal_key):
             raise ValueError(f'Missing task goals: {goal_key}')
         chosen.append(episode)
         goals[goal_key] = source_goals[goal_key]
         cases.append({'scene_id': scene, 'episode_id': str(episode['episode_id']),
-                      'object_category': episode['object_category'], 'source': str(record['path']),
-                      'source_sha256': record['sha256']})
+                      'object_category': episode['object_category'], 'source': str(path),
+                      'source_index': source_index,
+                      'episode_sha256': hashlib.sha256(json.dumps(episode, sort_keys=True).encode()).hexdigest(),
+                      'source_sha256': hashlib.sha256(raw).hexdigest()})
     dataset = dict(metadata or {}, episodes=chosen, goals_by_category=goals,
                    content_scenes_path='{data_path}/__no_external_content__/{scene}.json.gz')
     manifest = {'source': str(source), 'seed': seed, 'partition': partition, 'count': count,
-                'selection_algorithm': 'uniform-distinct-scenes-then-uniform-episode-v1',
+                'selection_algorithm': 'uniform-scene-shards-then-uniform-source-row-v2',
                 'dataset_version_claim': 'HM3D v1 episode data; scene asset version must be verified separately',
                 'cases': cases}
     return dataset, manifest
