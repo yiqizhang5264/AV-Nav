@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import sys
+import subprocess
 
 
 def main():
@@ -33,7 +34,8 @@ def main():
     rgb, depth = cameras['rgb_sensor'], cameras['depth_sensor']
     sample = json.loads(gzip.decompress((capture / 'hm3dv1_selected_episodes.json.gz').read_bytes()))
     episodes = sample['episodes']
-    summary = dict(capture_manifest=manifest, simulator_config=hc, cases=[],
+    summary = dict(av_nav_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=Path(__file__).resolve().parents[1], text=True).strip(),
+                   capture_manifest=manifest, simulator_config=hc, cases=[],
                    frame_convention='Habitat world x-right,y-up,z-back; sensor quaternion stored wxyz',
                    diagnostic=args.limit_frames is not None)
     for case_index, episode in enumerate(episodes):

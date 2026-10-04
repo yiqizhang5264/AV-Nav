@@ -69,8 +69,9 @@ def main():
     script_hashes = {p.name:digest(p) for p in (code_root/'scripts').glob('*room*.py')}
     metadata = dict(collector_commit=commit, collector_scripts_sha256=script_hashes,
                     active_adapter_commit=subprocess.check_output(['git','-C',str(active),'rev-parse','HEAD'],text=True).strip(),
-                    occusg_adapter_commit='8b9b44d',
-                    capture_commit='cc961e7', replay_commit='0f28e75',
+                    occusg_adapter_commit=subprocess.check_output(['git','-C',str(occusg),'rev-parse','HEAD'],text=True).strip(),
+                    capture_commit=json.loads((capture/'manifest.json').read_text())['av_nav_commit'],
+                    replay_commit=json.loads((replay/'manifest.json').read_text()).get('av_nav_commit', '0f28e75'),
                     vlfm_commit='584ed56008754fde7997d904983607def8328322',
                     paths=dict(replay=str(replay),active=str(active),occusg=str(occusg),capture=str(capture),build=str(build)),
                     scope='HM3D v1 ObjectNav episodes / HM3D-0.2 scene assets; shared observations; qualitative only')
