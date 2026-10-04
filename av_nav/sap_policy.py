@@ -127,6 +127,11 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
                     obstacle._map, obstacle.pixels_per_meter, obstacle._xy_to_px, obstacle._px_to_xy)
         rgbd = self._observations_cache['object_map_rgbd'][0]
         vfov = 2*math.atan(rgbd[1].shape[0]/(2*rgbd[6]))
+        if self.sap.get('diagnostic'):
+            np.savez_compressed(Path(os.environ['AV_RUN_DIR'])/f'planning_ep{self._sap_episode}_step{self._num_steps}.npz',
+                free=grid.free, heights=self._sap_heights.values, points=state['best'].points,
+                robot=self._observations_cache['robot_xy'], camera_height=self._camera_height,
+                vfov=vfov, ppm=grid.ppm, origin=obstacle._episode_pixel_origin)
         best, candidates = select_view(state['best'].points, self._observations_cache['robot_xy'],
             grid, self._sap_heights, self._camera_height, vfov, state['visited'], self.sap['max_path_m'])
         self._event('view_selection', feasible=len(candidates), selected=best)
