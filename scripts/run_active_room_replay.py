@@ -139,6 +139,12 @@ def main():
             detected.extend(new)
             current = pose[:2] * 20
             _, _, _, room_exp, door_grid = frontier.frontier_detection(current.copy(), current, obs, exp, lmb, detected, lasers)
+            # Upstream choose_door changes the graph's current room when its
+            # exploration policy commits to a doorway. Shared replay supplies
+            # no such goals, so relocate from the actually observed component
+            # using the upstream entry-membership routine instead.
+            topo.update_topo(room_exp)
+            topo.g.vs[topo.current_node_id]['room_status'] = 'exploring'
             detected = topo.same_node_check(room_exp, detected)
             new, removed = topo.check_topomap(new, detected, room_exp, current, obs, exp, lmb, door_grid,
                                              0, Path(source['episode']['scene_id']).stem, lasers)
@@ -156,6 +162,7 @@ def main():
             mapper.map_door_copy_full.fill(0)
         duration = time.perf_counter() - began
         records.append(dict(frame=index, seconds=duration, room_count=int(len(np.unique(labels[labels > 0]))),
+                            current_room_node=topo.current_node_id,
                             topology_nodes=topo.g.vcount(), detected_doors=len(detected), door_trigger=bool(mask.any())))
         if index + 1 in [100, 250, 500] or index == len(frames) - 1:
             np.savez_compressed(output / f'checkpoint_{index + 1:04d}.npz', labels=labels.T,
@@ -172,6 +179,7 @@ def main():
                                 native_y='24-(world_x-start_x)', labels_index_order='native_y,native_x',
                                 door_filter_bot_xy='[native_y,native_x] on transposed occupancy',
                                 exploration_policy='disabled shared trajectory', upstream_visualization_disabled=True,
+                                room_transition='upstream update_topo on observed component; no autonomous goals',
                                 floor_policy='reject transitions >0.3m'),
                    records=records)
     (output / 'summary.json').write_text(json.dumps(summary, indent=2))
