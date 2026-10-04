@@ -25,6 +25,12 @@ def main():
     import numpy as np
     import quaternion
     import torch
+    import torchvision
+    import igraph
+    from matplotlib import pyplot as plt
+    plt.show = lambda *a, **k: None
+    plt.pause = lambda *a, **k: None
+    igraph.plot = lambda *a, **k: None
     torch.set_num_threads(4)
     repo = Path(__file__).resolve().parents[1]
     sys.path.insert(0, str(repo))
@@ -64,7 +70,15 @@ def main():
             raise ValueError('Unexpected torch.hub dependency')
         # Full official door state_dict replaces every model parameter. Avoid
         # downloading redundant generic COCO/ResNet pretrained parameters.
-        return original_hub_load(args.detr_source, model, source='local', pretrained=False, pretrained_backbone=False)
+        original_resnet = torchvision.models.resnet50
+        def no_redundant_weights(*a, **k):
+            k['pretrained'] = False
+            return original_resnet(*a, **k)
+        torchvision.models.resnet50 = no_redundant_weights
+        try:
+            return original_hub_load(args.detr_source, model, source='local', pretrained=False)
+        finally:
+            torchvision.models.resnet50 = original_resnet
     torch.hub.load = load_full_architecture
     from env.utils.map_builder import MapBuilder
     from env.habitat.hough_door_detection import convert_2_laser
@@ -98,7 +112,8 @@ def main():
         square = cv2.resize(data['rgb'], (256, 256)).astype(np.float32) / 255
         with torch.inference_mode():
             mask, _, full = run_detr(square)
-        trigger_frames += bool(np.any(full))
+        # The official full mask is a fixed top-image ROI, not a detection.
+        trigger_frames += bool(np.any(mask))
         mask = cv2.resize(mask, (w, h), interpolation=cv2.INTER_NEAREST)
         full = cv2.resize(full, (w, h), interpolation=cv2.INTER_NEAREST)
         depth_cm = data['depth'].copy() * 100
@@ -125,6 +140,7 @@ def main():
             new, removed = topo.check_topomap(new, detected, room_exp, current, obs, exp, lmb, door_grid,
                                              0, Path(source['episode']['scene_id']).stem, lasers)
             topo.add_room(new, [current[1], current[0]], obs, exp, lmb)
+            plt.close('all')
             for door in removed:
                 detected.remove(door)
             labels.fill(0)
@@ -137,7 +153,7 @@ def main():
             mapper.map_door_copy_full.fill(0)
         duration = time.perf_counter() - began
         records.append(dict(frame=index, seconds=duration, room_count=int(len(np.unique(labels[labels > 0]))),
-                            topology_nodes=topo.g.vcount(), detected_doors=len(detected), door_trigger=bool(full.any())))
+                            topology_nodes=topo.g.vcount(), detected_doors=len(detected), door_trigger=bool(mask.any())))
         if index + 1 in [100, 250, 500] or index == len(frames) - 1:
             np.savez_compressed(output / f'checkpoint_{index + 1:04d}.npz', labels=labels.T,
                                 occupied=occupied, explored=explored, pose=pose)
@@ -150,7 +166,8 @@ def main():
                    adapter=dict(update_every=args.update_every, detector_resize=[256,256], pose_source='simulator',
                                 grid_resolution_m=.05, map_size_m=48, native_x='24-(world_z-start_z)',
                                 native_y='24-(world_x-start_x)', labels_index_order='native_y,native_x',
-                                exploration_policy='disabled shared trajectory', floor_policy='reject transitions >0.3m'),
+                                exploration_policy='disabled shared trajectory', upstream_visualization_disabled=True,
+                                floor_policy='reject transitions >0.3m'),
                    records=records)
     (output / 'summary.json').write_text(json.dumps(summary, indent=2))
     (output / 'exit.json').write_text(json.dumps(dict(returncode=0)))
