@@ -68,6 +68,10 @@ hashes. This prevents accidental deduplication and supports exact paired compari
 
 SAP suite started in tmux `sap_hm3dv1_thinking`, GPU 1, output:
 `/home/zyq/AV-Nav/runs/sap_hm3dv1_val_thinking_5cf1d2f`.
+After discovering the user's resumed original VLFM evaluator on physical GPU 1,
+the SAP attempt using that same GPU was stopped and preserved as attempt 02.
+SAP resumed as attempt 03 on physical GPU 3; the user's VLFM process remains on
+GPU 1. The failed attempt 01 and interrupted attempt 02 remain archived.
 The full VLFM baseline launched during this work duplicated a user-managed run.
 It was stopped after two partially evaluated scene shards. The partial directory
 `/home/zyq/AV-Nav/runs/sap_hm3dv1_val_baseline_b23ab56` is not a complete result.
