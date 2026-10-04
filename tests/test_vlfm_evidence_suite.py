@@ -1,71 +1,62 @@
-import gzip
 import json
+import os
 import pathlib
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from scripts.run_vlfm_evidence_suite import (
-    completed_episode_metadata,
-    episode_identity,
-    prepare_remaining_dataset,
-    resolve_completed_identities,
-)
+from scripts.run_vlfm_evidence_suite import completed_episode_ids
+from scripts.vlfm_episode_resume import skip_completed_initial_episodes
+
+
+class Episode:
+    def __init__(self, episode_id):
+        self.episode_id = str(episode_id)
+
+
+class FakeEnvs:
+    num_envs = 1
+
+    def __init__(self, ids):
+        self.ids = list(map(str, ids))
+        self.index = 0
+
+    def current_episodes(self):
+        return [Episode(self.ids[self.index])]
+
+    def reset(self):
+        self.index += 1
+        return [{"episode": self.ids[self.index]}]
 
 
 class VLFMEvidenceSuiteTests(unittest.TestCase):
-    def test_retry_dataset_excludes_only_completed_episodes(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = pathlib.Path(directory)
-            source = root / "source"
-            content = source / "val" / "content"
-            content.mkdir(parents=True)
-            with gzip.open(source / "val" / "val.json.gz", "wt", encoding="utf-8") as stream:
-                json.dump({"episodes": []}, stream)
-            data = {
-                "episodes": [
-                    {"episode_id": str(i), "scene_id": "scene.glb", "object_category": "bed",
-                     "start_position": [i, 0, 0], "start_rotation": [0, 0, 0, 1]}
-                    for i in range(4)
-                ],
-                "goals_by_category": {"scene.bed": []},
-            }
-            with gzip.open(content / "scene.json.gz", "wt", encoding="utf-8") as stream:
-                json.dump(data, stream)
-
-            destination, original_count, remaining_count = prepare_remaining_dataset(
-                source, "scene", [data["episodes"][1], data["episodes"][3]], root / "derived"
-            )
-            with gzip.open(destination / "val" / "content" / "scene.json.gz", "rt", encoding="utf-8") as stream:
-                derived = json.load(stream)
-
-            self.assertEqual(original_count, 4)
-            self.assertEqual(remaining_count, 2)
-            self.assertEqual([episode["episode_id"] for episode in derived["episodes"]], ["0", "2"])
-            self.assertEqual(derived["goals_by_category"], data["goals_by_category"])
-
-    def test_completed_identities_preserve_repeated_episode_ids(self):
+    def test_completed_ids_are_deduplicated_across_attempts(self):
         with tempfile.TemporaryDirectory() as directory:
             shard = pathlib.Path(directory)
-            for attempt, position in (("001", [0, 0, 0]), ("002", [1, 0, 0])):
+            for attempt in ("001", "002"):
                 episode = shard / "attempts" / attempt / "evidence" / "episodes" / attempt
                 episode.mkdir(parents=True)
-                (episode / "episode.json").write_text(json.dumps({
-                    "episode_id": "7", "scene_id": "scene.glb", "object_category": "bed",
-                    "start_position": position, "start_rotation": [0, 0, 0, 1],
-                }))
+                (episode / "episode.json").write_text(json.dumps({"episode_id": "7"}))
                 (episode / "result.json").write_text("{}")
-            completed = completed_episode_metadata(shard)
-            self.assertEqual(len(completed), 2)
+            self.assertEqual(completed_episode_ids(shard), {"7"})
 
-    def test_incomplete_metadata_cannot_guess_between_repeated_ids(self):
-        episodes = [
-            {"episode_id": "7", "scene_id": "scene", "object_category": "bed",
-             "start_position": [0, 0, 0], "start_rotation": [0, 0, 0, 1]},
-            {"episode_id": "7", "scene_id": "scene", "object_category": "bed",
-             "start_position": [1, 0, 0], "start_rotation": [0, 0, 0, 1]},
-        ]
-        with self.assertRaisesRegex(RuntimeError, "cannot uniquely resume"):
-            resolve_completed_identities(episodes, [{"episode_id": "7"}])
+    def test_resume_skips_exact_deterministic_prefix(self):
+        with tempfile.TemporaryDirectory() as directory:
+            plan = pathlib.Path(directory) / "plan.json"
+            plan.write_text(json.dumps({"episode_ids": ["5", "2", "9"]}))
+            envs = FakeEnvs(["5", "2", "9", "4"])
+            with patch.dict(os.environ, {"VLFM_SKIP_EPISODES_FILE": str(plan)}):
+                observations = skip_completed_initial_episodes(envs, [{"episode": "5"}])
+            self.assertEqual(observations, [{"episode": "4"}])
+
+    def test_resume_rejects_non_prefix_completed_set(self):
+        with tempfile.TemporaryDirectory() as directory:
+            plan = pathlib.Path(directory) / "plan.json"
+            plan.write_text(json.dumps({"episode_ids": ["5", "9"]}))
+            envs = FakeEnvs(["5", "2", "9", "4"])
+            with patch.dict(os.environ, {"VLFM_SKIP_EPISODES_FILE": str(plan)}):
+                with self.assertRaisesRegex(RuntimeError, "not the deterministic initial prefix"):
+                    skip_completed_initial_episodes(envs, [{"episode": "5"}])
 
 
 if __name__ == "__main__":

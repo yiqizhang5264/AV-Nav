@@ -17,6 +17,8 @@ except ModuleNotFoundError as error:
 class VLFMEvidenceAdapterTests(unittest.TestCase):
     def test_overlay_injects_capture_hooks(self):
         source = '''from omegaconf import OmegaConf
+        observations = self.envs.reset()
+        batch = batch_obs(observations, device=self.device)
             current_episodes_info = self.envs.current_episodes()
 
             with inference_mode():
