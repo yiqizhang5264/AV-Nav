@@ -26,6 +26,7 @@ def main():
     from geometry_msgs.msg import TransformStamped
     from sensor_msgs.msg import CameraInfo, Image, PointCloud2
     from nav_msgs.msg import OccupancyGrid
+    from octomap_msgs.msg import Octomap
     from incremental_dude_msgs.msg import Region2DArray
     from tf2_ros import TransformBroadcaster
     from scipy.spatial.transform import Rotation
@@ -69,7 +70,7 @@ def main():
     depth_pub = node.create_publisher(Image, '/depth', qos)
     info_pub = node.create_publisher(CameraInfo, '/depth/camera_info', qos)
     tf_pub = TransformBroadcaster(node)
-    received = dict(pc_stamp=None, map=None, map_generation=0, regions=None, region_generation=0)
+    received = dict(pc_stamp=None, octomap_stamp=None, map=None, map_generation=0, regions=None, region_generation=0)
     def stamp(s):
         return s.sec * 1000000000 + s.nanosec
     def cloud_callback(msg):
@@ -80,7 +81,10 @@ def main():
     def region_callback(msg):
         received['regions'] = msg
         received['region_generation'] += 1
+    def octomap_callback(msg):
+        received['octomap_stamp'] = stamp(msg.header.stamp)
     node.create_subscription(PointCloud2, '/pointcloud', cloud_callback, qos)
+    node.create_subscription(Octomap, '/octomap', octomap_callback, qos)
     node.create_subscription(OccupancyGrid, '/mapUAV', map_callback, map_qos)
     node.create_subscription(Region2DArray, '/dude/regions', region_callback, qos)
     records = []
@@ -91,6 +95,7 @@ def main():
                 raise RuntimeError('OccuSG node exited; inspect node logs')
             if time.monotonic() > deadline:
                 raise TimeoutError(f'OccuSG input not acknowledged: cloud_stamp={received["pc_stamp"]}, '
+                                   f'octomap_stamp={received["octomap_stamp"]}, '
                                    f'map_updates={received["map_generation"]}, region_updates={received["region_generation"]}')
             rclpy.spin_once(node, timeout_sec=.02)
     def snapshot(index):
@@ -155,7 +160,8 @@ def main():
             previous_map, previous_region = received['map_generation'], received['region_generation']
             info_pub.publish(info)
             depth_pub.publish(image)
-            spin_until(lambda: received['pc_stamp'] == stamp(now) and received['map_generation'] > previous_map
+            spin_until(lambda: received['pc_stamp'] == stamp(now) and received['octomap_stamp'] == stamp(now)
+                       and received['map_generation'] > previous_map
                        and received['region_generation'] > previous_region, args.frame_timeout)
             while time.perf_counter() - started < .12:
                 rclpy.spin_once(node, timeout_sec=.01)
