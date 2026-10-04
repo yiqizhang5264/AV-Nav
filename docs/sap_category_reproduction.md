@@ -51,6 +51,10 @@ blacklisted for the episode. Only verified candidates may issue a target STOP.
   height uses the maximum retained observed point per cell, not ground truth.
 - Unknown space is occluding unless already mapped as free. Equal visibility
   scores resolve by fixed ring/angle enumeration, without motion-cost scoring.
+- The height map keeps observed surfaces at or below camera height, avoiding
+  projecting ceilings into solid floor-to-ceiling obstacle columns. This is an
+  explicit reconstruction choice aligned with VLFM's obstacle-height band;
+  overhangs and above-camera geometry are not fully modeled by this 2.5D map.
 
 ## Evaluation protocol
 
@@ -60,7 +64,8 @@ Habitat success measure. Do not import the paper's different benchmark success
 threshold. Both variants use the same pinned VLFM, sensors, episodes and services.
 
 `scripts/run_sap_eval.py` requires `.../hm3d/v1`, rejects unexpected categories,
-and archives source hashes, exact source IDs, frozen config, commits, environment,
+and archives source hashes, original IDs plus unique source-hash/row identities
+(HM3Dv1 repeats original IDs within scenes), frozen config, commits, environment,
 commands, per-episode metrics and verification events. Existing output directories
 are rejected. A run is complete only on zero process exit and an exact unique
 episode-set match. Shortened/limited runs are diagnostic only. VLM errors fail

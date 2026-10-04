@@ -21,7 +21,11 @@ class HeightMap:
         self.values = np.full(shape, -np.inf, dtype=np.float32)
         self.xy_to_px = xy_to_px
 
-    def update(self, points):
+    def update(self, points, max_height=None):
+        if max_height is not None:
+            # A ceiling surface is not a solid column from floor to ceiling.
+            # Keep the same below-camera obstacle band used for navigation.
+            points = points[points[:, 2] <= max_height]
         pixels = self.xy_to_px(points[:, :2])
         x, y = pixels.T
         valid = (x >= 0) & (y >= 0) & (x < self.values.shape[1]) & (y < self.values.shape[0])

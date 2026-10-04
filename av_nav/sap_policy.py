@@ -64,7 +64,7 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
         self._sap_observations = []
         _, depth, tf, lo, hi, fx, fy = self._observations_cache['object_map_rgbd'][0]
         self._sap_map.update_map(depth, tf, lo, hi, fx, fy, self._camera_fov)
-        self._sap_heights.update(depth_points(depth, tf, lo, hi, fx, fy))
+        self._sap_heights.update(depth_points(depth, tf, lo, hi, fx, fy), max_height=self._camera_height)
 
     def _update_object_map(self, *args):
         self._sap_rgbd = args

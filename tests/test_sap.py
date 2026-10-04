@@ -43,6 +43,12 @@ class SAPTests(unittest.TestCase):
         height.update(np.array([[0,0,.2],[0,0,1.5],[0,0,.5]]))
         self.assertEqual(height.values[50,50], 1.5)
 
+    def test_ceiling_does_not_become_a_solid_column(self):
+        grid = self.grid()
+        height = HeightMap(grid.free.shape, grid.xy_to_px)
+        height.update(np.array([[0,0,.2],[0,0,2.5],[0,0,.5]]), max_height=.88)
+        self.assertEqual(height.values[50,50], .5)
+
     def test_depth_units_and_camera_frame(self):
         points = depth_points(np.array([[.5]]), np.eye(4), 0, 10, 1, 1)
         np.testing.assert_allclose(points, [[5,0,0]])
