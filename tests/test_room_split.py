@@ -85,6 +85,24 @@ class RoomSplitTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             select(self.source, 5, 20261004, 'validation')
 
+    def test_online_jobs_preserve_fixed_sample_without_resampling(self):
+        sample = self.root / 'sample'
+        subprocess.run([sys.executable, str(ROOT / 'scripts/make_room_split.py'), '--source', str(self.source),
+                        '--output-dir', str(sample)], check=True, capture_output=True)
+        original = json.loads(gzip.decompress((sample / 'episodes.json.gz').read_bytes()))
+        manifest = json.loads((sample / 'selection.json').read_text())
+        jobs = self.root / 'jobs'
+        subprocess.run([sys.executable, str(ROOT / 'scripts/make_room_online_cases.py'), '--sample-dir', str(sample),
+                        '--output-dir', str(jobs)], check=True, capture_output=True)
+        for index in range(5):
+            job = jobs / f'{index:02d}'
+            subset = json.loads(gzip.decompress((job / 'episodes.json.gz').read_bytes()))
+            identity = json.loads((job / 'selection.json').read_text())
+            self.assertEqual(subset['episodes'], [original['episodes'][index]])
+            self.assertEqual(identity['cases'], [manifest['cases'][index]])
+            self.assertEqual(identity['parent_selection_sha256'], manifest['sha256'])
+            self.assertEqual(identity['parent_case_index'], index)
+
 
 if __name__ == '__main__':
     unittest.main()
