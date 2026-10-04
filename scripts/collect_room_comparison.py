@@ -97,7 +97,7 @@ def main():
             ax.set_aspect('equal'); ax.set_title(f'{scene} | {name} | {row.get(name+"_regions","?")} regions | {case["frames"]} frames')
             ax.set_xlabel('world x (m)'); ax.set_ylabel('-world z (m)')
         rows.append(row)
-    fig.suptitle('Same RGB-D / poses: qualitative room segmentation\nColors identify method-local regions; no verified room footprint GT',fontsize=13)
+    fig.suptitle('Same RGB-D / poses: qualitative room segmentation\nColors identify method-local regions; no verified room footprint GT\nGray: unknown | Black: occupied | White: unassigned free | Red: trajectory',fontsize=12)
     fig.tight_layout(rect=[0,0,1,.97])
     fig.savefig(output/'comparison.png',dpi=140)
     plt.close(fig)
