@@ -25,7 +25,7 @@ def episode_keys(rows, scenes_dir=None):
             if scenes_dir is None:
                 raise ValueError('Absolute scene requires the configured scene root')
             scene = scene.relative_to(Path(scenes_dir).resolve())
-        result.append((scene.as_posix(), str(row['episode_id'])))
+        result.append((scene.as_posix(), str(row.get('source_uid', row['episode_id']))))
     return result
 
 
@@ -35,8 +35,18 @@ def read_dataset(root, split, limit=None, scene=None):
         merged = json.load(stream)
     sources = [main]
     episodes = list(merged.get('episodes', []))
+    def identities(path, rows):
+        source_hash = digest(path)
+        return [dict(scene_id=e['scene_id'], episode_id=str(e['episode_id']),
+                     source_uid=source_hash+':'+str(i), source_file=path.name, source_row=i,
+                     source_sha256=source_hash,
+                     episode_sha256=hashlib.sha256(json.dumps(e, sort_keys=True).encode()).hexdigest())
+                for i,e in enumerate(rows)]
+    identity = identities(main, episodes)
     if scene:
-        episodes = [e for e in episodes if scene in Path(e['scene_id']).parts[-1]]
+        selected = [i for i,e in enumerate(episodes) if scene in Path(e['scene_id']).parts[-1]]
+        episodes = [episodes[i] for i in selected]
+        identity = [identity[i] for i in selected]
     goals = dict(merged.get('goals_by_category', {}))
     for path in sorted((root/split/'content').glob('*.json.gz')):
         if scene and path.name != scene+'.json.gz':
@@ -46,14 +56,17 @@ def read_dataset(root, split, limit=None, scene=None):
         with gzip.open(path, 'rt') as stream:
             data = json.load(stream)
         episodes.extend(data['episodes'])
+        identity.extend(identities(path, data['episodes']))
         goals.update(data.get('goals_by_category', {}))
         sources.append(path)
     if limit:
         episodes = episodes[:limit]
-    keys = [(e['scene_id'], str(e['episode_id'])) for e in episodes]
+        identity = identity[:limit]
+    keys = [e['source_uid'] for e in identity]
     if not keys or len(keys) != len(set(keys)):
         raise ValueError('Empty or duplicate source episode identities')
     merged.update(episodes=episodes, goals_by_category=goals,
+                  sap_source_identities=identity,
                   content_scenes_path='__no_external_content__/{scene}.json.gz')
     return merged, {str(p): digest(p) for p in sources}
 
@@ -124,7 +137,7 @@ def main():
     rows = []
     if (run/'episodes.jsonl').exists():
         rows = [json.loads(line) for line in (run/'episodes.jsonl').read_text().splitlines() if line]
-    expected = set(episode_keys(data['episodes'], args.scenes_dir))
+    expected = set(episode_keys(data['sap_source_identities'], args.scenes_dir))
     actual = set(episode_keys(rows, args.scenes_dir))
     complete = result.returncode == 0 and actual == expected and len(rows) == len(expected)
     summary = dict(complete=complete, returncode=result.returncode, expected=len(expected),

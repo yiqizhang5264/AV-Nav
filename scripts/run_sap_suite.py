@@ -19,7 +19,7 @@ def main():
     if json.loads(Path(args.config).read_text()).get('diagnostic'):
         p.error('Diagnostic configurations cannot run as full efficacy suites')
     data, hashes = read_dataset(Path(args.dataset_root), 'val')
-    expected = set(episode_keys(data['episodes'], args.scenes_dir))
+    expected = set(episode_keys(data['sap_source_identities'], args.scenes_dir))
     scenes = sorted(p.name[:-8] for p in (Path(args.dataset_root)/'val/content').glob('*.json.gz'))
     output = Path(args.output).resolve()
     identity = dict(commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),

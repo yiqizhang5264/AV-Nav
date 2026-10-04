@@ -69,7 +69,7 @@ class SAPTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 parse_reply(text, 'sufficiency')
 
-    def test_dataset_preserves_ids_and_rejects_duplicates(self):
+    def test_dataset_preserves_repeated_ids_with_source_row_identity(self):
         path = Path(__file__).resolve().parents[1]/'scripts/run_sap_eval.py'
         spec = importlib.util.spec_from_file_location('sap_eval', path)
         module = importlib.util.module_from_spec(spec)
@@ -92,5 +92,8 @@ class SAPTests(unittest.TestCase):
             self.assertEqual(len(hashes), 2)
             with gzip.open(content,'wt') as stream:
                 json.dump({'episodes':[episode,episode]},stream)
-            with self.assertRaises(ValueError):
-                module.read_dataset(root, 'val')
+            data, _ = module.read_dataset(root, 'val')
+            self.assertEqual([e['episode_id'] for e in data['episodes']], ['0057','0057'])
+            self.assertNotEqual(data['sap_source_identities'][0]['source_uid'],
+                                data['sap_source_identities'][1]['source_uid'])
+            self.assertEqual(len(set(module.episode_keys(data['sap_source_identities']))),2)
