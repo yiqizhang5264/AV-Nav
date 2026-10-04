@@ -1,5 +1,7 @@
 # HM3D v1 val：5 场景同观测分割对比
 
+本页记录的是先录制、再离线回放的实验。用户随后明确要求评估时在线增量分割，新的在线实验单独记录于 [在线协议与结果](room_segmentation_online_val.md)，不把本页结果当作在线实验结果。
+
 用户要求从 HM3D v1 val 随机抽取 5 个不同场景，每场景 1 个 episode，分别运行 OccuSG 和 Active room segmentation。沿用训练集对比的固定方法、权重和参数，不使用 val 结果调参，也不按运行结果替换样本。
 
 抽样源：`/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/val/content/*.json.gz`。在全部 val 场景文件中均匀抽取 5 个，再在每个选中文件中均匀抽取一行，种子 `20261004`。选择文件 SHA256：`fb89209efe8f42d853220c1826eb16d8dca8f6656ad9700ae757931e153313c8`。
