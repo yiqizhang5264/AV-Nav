@@ -1,0 +1,101 @@
+{
+  "capture": {
+    "returncode": 0
+  },
+  "replay": {
+    "returncode": 0,
+    "completed": 5
+  },
+  "methods": [
+    {
+      "method": "Active",
+      "case": 0,
+      "scene": "hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.glb",
+      "frames": 177,
+      "exit": {
+        "returncode": 0
+      }
+    },
+    {
+      "method": "Active",
+      "case": 1,
+      "scene": "hm3d/val/00880-Nfvxx8J5NCo/Nfvxx8J5NCo.basis.glb",
+      "frames": 300,
+      "exit": {
+        "returncode": 0
+      }
+    },
+    {
+      "method": "Active",
+      "case": 2,
+      "scene": "hm3d/val/00878-XB4GS9ShBRE/XB4GS9ShBRE.basis.glb",
+      "frames": 186,
+      "exit": {
+        "returncode": 0
+      }
+    },
+    {
+      "method": "Active",
+      "case": 3,
+      "scene": "hm3d/val/00873-bxsVRursffK/bxsVRursffK.basis.glb",
+      "frames": 328,
+      "exit": {
+        "returncode": 0
+      }
+    },
+    {
+      "method": "Active",
+      "case": 4,
+      "scene": "hm3d/val/00876-mv2HUxq3B53/mv2HUxq3B53.basis.glb",
+      "frames": 500,
+      "exit": {
+        "returncode": 0
+      }
+    },
+    {
+      "method": "OccuSG",
+      "case": 0,
+      "scene": "hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.glb",
+      "frames": 177,
+      "exit": {
+        "returncode": 0
+      }
+    },
+    {
+      "method": "OccuSG",
+      "case": 1,
+      "scene": "hm3d/val/00880-Nfvxx8J5NCo/Nfvxx8J5NCo.basis.glb",
+      "frames": 300,
+      "exit": {
+        "returncode": 0
+      }
+    },
+    {
+      "method": "OccuSG",
+      "case": 2,
+      "scene": "hm3d/val/00878-XB4GS9ShBRE/XB4GS9ShBRE.basis.glb",
+      "frames": 186,
+      "exit": {
+        "returncode": 0
+      }
+    },
+    {
+      "method": "OccuSG",
+      "case": 3,
+      "scene": "hm3d/val/00873-bxsVRursffK/bxsVRursffK.basis.glb",
+      "frames": 328,
+      "exit": {
+        "returncode": 0
+      }
+    },
+    {
+      "method": "OccuSG",
+      "case": 4,
+      "scene": "hm3d/val/00876-mv2HUxq3B53/mv2HUxq3B53.basis.glb",
+      "frames": 500,
+      "exit": {
+        "returncode": 0
+      }
+    }
+  ]
+}

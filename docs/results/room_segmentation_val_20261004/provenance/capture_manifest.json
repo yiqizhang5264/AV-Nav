@@ -1,0 +1,84 @@
+{
+  "command": [
+    "/home/zyq/miniconda3/envs/vlfm/bin/python",
+    "-u",
+    "/home/zyq/AV-Nav-worktrees/room-val-7b876c4/scripts/run_vlfm_evidence.py",
+    "--vlfm-root",
+    "/home/zyq/AV-Nav-worktrees/vlfm-original-1224d7e/external/vlfm",
+    "habitat_baselines.evaluate=true",
+    "habitat_baselines.eval.video_option=[]",
+    "habitat_baselines.test_episode_count=5",
+    "habitat_baselines.num_environments=1",
+    "habitat_baselines.torch_gpu_id=0",
+    "habitat_baselines.eval.split=val",
+    "habitat.dataset.split=val",
+    "habitat.environment.iterator_options.shuffle=False",
+    "habitat.environment.max_episode_steps=500",
+    "habitat.dataset.data_path=/home/zyq/AV-Nav-worktrees/room-val-7b876c4/runs/val_capture5_20261004/hm3dv1_selected_episodes.json.gz",
+    "habitat.dataset.scenes_dir=/home/zyq/vlfm/data/scene_datasets",
+    "habitat_baselines.tensorboard_dir=/home/zyq/AV-Nav-worktrees/room-val-7b876c4/runs/val_capture5_20261004/tb",
+    "hydra.run.dir=/home/zyq/AV-Nav-worktrees/room-val-7b876c4/runs/val_capture5_20261004/hydra"
+  ],
+  "av_nav_commit": "7b876c485afbb8c274c7f594812364c41db8c2a8",
+  "vlfm_commit": "584ed56008754fde7997d904983607def8328322",
+  "selection": {
+    "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/val",
+    "seed": 20261004,
+    "partition": "validation",
+    "count": 5,
+    "selection_algorithm": "uniform-scene-shards-then-uniform-source-row-v2",
+    "dataset_version_claim": "HM3D v1 episode data; scene asset version must be verified separately",
+    "cases": [
+      {
+        "scene_id": "hm3d/val/00853-5cdEh9F2hJL/5cdEh9F2hJL.basis.glb",
+        "episode_id": "0",
+        "object_category": "toilet",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/val/content/5cdEh9F2hJL.json.gz",
+        "source_index": 66,
+        "episode_sha256": "dc11a981c93d6fa8d73c2a7cfc62157e648140d2645c3646d986c0b1516fa75d",
+        "source_sha256": "d0591c97aafd3d3c14f090625c3b75098757c345d3c97a70dbffac2842bdc157"
+      },
+      {
+        "scene_id": "hm3d/val/00880-Nfvxx8J5NCo/Nfvxx8J5NCo.basis.glb",
+        "episode_id": "0",
+        "object_category": "chair",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/val/content/Nfvxx8J5NCo.json.gz",
+        "source_index": 24,
+        "episode_sha256": "0a6eb6196a3033269fef78757793c251bb5d2eecc8bdfece6149a889b81bf25e",
+        "source_sha256": "51f55b8f505938f32126df46f29c6d7728daae79f5a2d3893089eb4c53b2b904"
+      },
+      {
+        "scene_id": "hm3d/val/00878-XB4GS9ShBRE/XB4GS9ShBRE.basis.glb",
+        "episode_id": "0",
+        "object_category": "toilet",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/val/content/XB4GS9ShBRE.json.gz",
+        "source_index": 95,
+        "episode_sha256": "6da4bbfeef3a9bba1e00dd7fe85cd62f468c84b129eb41dd0bad3d6f7ff26b77",
+        "source_sha256": "28c87de95eccf588efb0495f00646b27f9a7c224237cfdd598e5622cd519d449"
+      },
+      {
+        "scene_id": "hm3d/val/00873-bxsVRursffK/bxsVRursffK.basis.glb",
+        "episode_id": "0",
+        "object_category": "chair",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/val/content/bxsVRursffK.json.gz",
+        "source_index": 90,
+        "episode_sha256": "ee19f560201655baaf11f152c8841a63c5fcd93c41153f23478c928b87c3fbf7",
+        "source_sha256": "074cbf3fdbcb84b9fddd17ef242b77e26616733f6b3e091210fc4d4d6f720dd5"
+      },
+      {
+        "scene_id": "hm3d/val/00876-mv2HUxq3B53/mv2HUxq3B53.basis.glb",
+        "episode_id": "0",
+        "object_category": "toilet",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/val/content/mv2HUxq3B53.json.gz",
+        "source_index": 85,
+        "episode_sha256": "f18610ada6a79798fe06326824d2cbcec49d945511b73f249bcf853147799741",
+        "source_sha256": "d0c060f9673c10df027e5bda1f26dfa4b8ee8df99e847187b26eec82a2dabeab"
+      }
+    ],
+    "sha256": "fb89209efe8f42d853220c1826eb16d8dca8f6656ad9700ae757931e153313c8"
+  },
+  "gpu": "3",
+  "max_steps": 500,
+  "purpose": "Shared trajectory input for room segmentation; not autonomous exploration comparison",
+  "runtime_id_note": "Habitat renumbers loaded episodes; match scene/start pose/category and source row, not runtime ID."
+}
