@@ -145,7 +145,7 @@ def main():
                 detected.remove(door)
             labels.fill(0)
             for vertex in topo.g.vs:
-                cells = np.asarray(vertex['room_exp'], dtype=int)
+                cells = np.asarray(vertex['room_exp'] or [], dtype=int)
                 if cells.size:
                     labels[cells[:, 0], cells[:, 1]] = vertex.index + 1
             mapper.map_copy.fill(0)

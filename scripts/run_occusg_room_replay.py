@@ -85,7 +85,8 @@ def main():
             if any(proc.poll() is not None for proc in processes):
                 raise RuntimeError('OccuSG node exited; inspect node logs')
             if time.monotonic() > deadline:
-                raise TimeoutError('OccuSG pipeline did not acknowledge the input frame')
+                raise TimeoutError(f'OccuSG input not acknowledged: cloud_stamp={received["pc_stamp"]}, '
+                                   f'map_updates={received["map_generation"]}, region_updates={received["region_generation"]}')
             rclpy.spin_once(node, timeout_sec=.02)
     def snapshot(index):
         grid, region_msg = received['map'], received['regions']
@@ -114,6 +115,9 @@ def main():
         spin_until(lambda: depth_pub.get_subscription_count() > 0 and info_pub.get_subscription_count() > 0
                    and node.count_subscribers('/pointcloud') >= 2 and node.count_subscribers('/mapUAV') >= 2
                    and node.count_publishers('/dude/regions') > 0, 30)
+        discovery_deadline = time.monotonic() + 1
+        while time.monotonic() < discovery_deadline:
+            rclpy.spin_once(node, timeout_sec=.05)
         frames = sorted(case.glob('[0-9][0-9][0-9][0-9].npz'))
         floor_y = source['episode']['start_position'][1]
         for index, frame in enumerate(frames):
