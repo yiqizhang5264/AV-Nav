@@ -1,0 +1,26 @@
+{
+  "collector_commit": "c152fb0880cdf9779259abd967a0caa4f4475295",
+  "collector_scripts_sha256": {
+    "replay_room_capture.py": "18f2602701f84bf627d6ba0b1ec76f27b59461c817bb6bff9202389283480265",
+    "archive_room_provenance.py": "85d60d0542e1f2f7a076f03fac3abd859176eebb7e60b8290adf97c5173cf429",
+    "audit_room_resources.py": "4ed32d44ede598783a02f1f23169b8d85270f574e92f8d4b3218d190df01db67",
+    "run_room_capture.py": "0d15bb629693f18d0b85a0c8a6428761b0d9fae14acf6e0cd30a3697131b8db2",
+    "run_active_room_replay.py": "7ff7278280c2d82b398e4217142078813b1fa20d5f4fb815e753d47517a00322",
+    "collect_room_comparison.py": "7fa57c31b14d428e20cdad39e485744a7f4eb7fe242bd3edd5e4e5b5257079d5",
+    "make_room_split.py": "cb8b9a6978ee6ac48b233981394d134b953e5b54aab54b9e8a29958fc81703f9",
+    "run_occusg_room_replay.py": "3d81691e651f7d21c7db4e082e2424e458be46760be934b5326cc40ff8937f91"
+  },
+  "active_adapter_commit": "9cc7c1c79353d3f268b97fb152989c3b2e9b9f50",
+  "occusg_adapter_commit": "8b9b44d",
+  "capture_commit": "cc961e7",
+  "replay_commit": "0f28e75",
+  "vlfm_commit": "584ed56008754fde7997d904983607def8328322",
+  "paths": {
+    "replay": "/home/zyq/AV-Nav-worktrees/room-0f28e75/runs/replay_full5_20261004",
+    "active": "/home/zyq/AV-Nav-worktrees/room-active-passive-final/runs/active_full5_v4",
+    "occusg": "/home/zyq/AV-Nav-worktrees/room-ccbb1c1/runs/occusg_final5",
+    "capture": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004",
+    "build": "/home/zyq/AV-Nav-worktrees/room-6cdffd1/runs/occusg_build_v3"
+  },
+  "scope": "HM3D v1 ObjectNav episodes / HM3D-0.2 scene assets; shared observations; qualitative only"
+}

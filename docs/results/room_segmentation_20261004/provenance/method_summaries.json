@@ -1,0 +1,587 @@
+[
+  {
+    "upstream_commit": "a941e3a5a1c8e16920a158fa0a9198c95be9c978",
+    "detr_commit": "29901c51d7fe8712168b8d0d64351170bc0f83e0",
+    "door_weights_sha256": "d971e3b760421eb29665c1ca986854ce8ec57ddcc50209fcc77125c5e3cef7ec",
+    "frames": 87,
+    "door_trigger_frames": 15,
+    "final_room_count": 2,
+    "final_detected_doors": 4,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "update_every": 10,
+      "detector_resize": [
+        256,
+        256
+      ],
+      "pose_source": "simulator",
+      "source_sha256": "f2f47bd65f8173fd44c69ab7afcec7e381514b9ff8a6daecf874f88484033b49",
+      "grid_resolution_m": 0.05,
+      "map_size_m": 48,
+      "native_x": "24-(world_z-start_z)",
+      "native_y": "24-(world_x-start_x)",
+      "labels_index_order": "native_y,native_x",
+      "door_filter_bot_xy": "[native_y,native_x] on transposed occupancy",
+      "exploration_policy": "disabled shared trajectory",
+      "upstream_visualization_disabled": true,
+      "room_transition": "upstream update_topo on observed component; no autonomous goals",
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.basis.glb",
+        "episode_id": "36",
+        "object_category": "chair",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/3XYAD64HpDr.json.gz",
+        "source_index": 17984,
+        "episode_sha256": "09a66de941a4c819af9be34c76782e696015cb56c05ad13f6527a365f7ee0e4a",
+        "source_sha256": "5404e4cfa51e5ff7022681c47c15dd8d35cbaa7f2f733351df44b95fda5ba4e9"
+      },
+      "frames": 87,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/3XYAD64HpDr.basis__0__64073a0337d6",
+      "steps_sha256": "749ce98d3f2f3242219877396833b4f1e3e75bfd8a887e27e6b318d888585c91",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 87,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 7.00752592086792,
+          "distance_to_goal": 0.04606035351753235,
+          "success": 1.0,
+          "spl": 0.5528161252239864,
+          "soft_spl": 0.5473291210914303,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": -179.999991348578,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "Active"
+  },
+  {
+    "final_room_count": 5,
+    "frames": 87,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "ros_frame": "x=world_x,y=-world_z,z=world_y-start_y",
+      "pose_source": "simulator",
+      "source_sha256": "3d81691e651f7d21c7db4e082e2424e458be46760be934b5326cc40ff8937f91",
+      "rmw_implementation": "rmw_cyclonedds_cpp",
+      "ros_domain_id": "186",
+      "reliable_cloud_transport": true,
+      "native_nodes": true,
+      "object_graph_disabled": true,
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.basis.glb",
+        "episode_id": "36",
+        "object_category": "chair",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/3XYAD64HpDr.json.gz",
+        "source_index": 17984,
+        "episode_sha256": "09a66de941a4c819af9be34c76782e696015cb56c05ad13f6527a365f7ee0e4a",
+        "source_sha256": "5404e4cfa51e5ff7022681c47c15dd8d35cbaa7f2f733351df44b95fda5ba4e9"
+      },
+      "frames": 87,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/3XYAD64HpDr.basis__0__64073a0337d6",
+      "steps_sha256": "749ce98d3f2f3242219877396833b4f1e3e75bfd8a887e27e6b318d888585c91",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 87,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 7.00752592086792,
+          "distance_to_goal": 0.04606035351753235,
+          "success": 1.0,
+          "spl": 0.5528161252239864,
+          "soft_spl": 0.5473291210914303,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": -179.999991348578,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "OccuSG"
+  },
+  {
+    "upstream_commit": "a941e3a5a1c8e16920a158fa0a9198c95be9c978",
+    "detr_commit": "29901c51d7fe8712168b8d0d64351170bc0f83e0",
+    "door_weights_sha256": "d971e3b760421eb29665c1ca986854ce8ec57ddcc50209fcc77125c5e3cef7ec",
+    "frames": 132,
+    "door_trigger_frames": 48,
+    "final_room_count": 3,
+    "final_detected_doors": 2,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "update_every": 10,
+      "detector_resize": [
+        256,
+        256
+      ],
+      "pose_source": "simulator",
+      "source_sha256": "f2f47bd65f8173fd44c69ab7afcec7e381514b9ff8a6daecf874f88484033b49",
+      "grid_resolution_m": 0.05,
+      "map_size_m": 48,
+      "native_x": "24-(world_z-start_z)",
+      "native_y": "24-(world_x-start_x)",
+      "labels_index_order": "native_y,native_x",
+      "door_filter_bot_xy": "[native_y,native_x] on transposed occupancy",
+      "exploration_policy": "disabled shared trajectory",
+      "upstream_visualization_disabled": true,
+      "room_transition": "upstream update_topo on observed component; no autonomous goals",
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.basis.glb",
+        "episode_id": "19",
+        "object_category": "toilet",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/E1NrAhMoqvB.json.gz",
+        "source_index": 34285,
+        "episode_sha256": "23cd5078f17c82c0320ec4a4ad9444e2ea2a83ae31cea9bcc4c27f5cf4e50326",
+        "source_sha256": "3af5823ee305e06bc9121d60bdc43dfc9deeb92f0c40ba61f81f4c784fc57891"
+      },
+      "frames": 132,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/E1NrAhMoqvB.basis__1__b3da3b1e6c1e",
+      "steps_sha256": "c2a442ed113bd2425d61510ec70c7eab4ae4b60c931d5717a729879884b43969",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 132,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 7.154160022735596,
+          "distance_to_goal": 0.03671867027878761,
+          "success": 1.0,
+          "spl": 0.2879009128326415,
+          "soft_spl": 0.28570899755074813,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": -30.000041815961076,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "Active"
+  },
+  {
+    "final_room_count": 8,
+    "frames": 132,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "ros_frame": "x=world_x,y=-world_z,z=world_y-start_y",
+      "pose_source": "simulator",
+      "source_sha256": "3d81691e651f7d21c7db4e082e2424e458be46760be934b5326cc40ff8937f91",
+      "rmw_implementation": "rmw_cyclonedds_cpp",
+      "ros_domain_id": "187",
+      "reliable_cloud_transport": true,
+      "native_nodes": true,
+      "object_graph_disabled": true,
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.basis.glb",
+        "episode_id": "19",
+        "object_category": "toilet",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/E1NrAhMoqvB.json.gz",
+        "source_index": 34285,
+        "episode_sha256": "23cd5078f17c82c0320ec4a4ad9444e2ea2a83ae31cea9bcc4c27f5cf4e50326",
+        "source_sha256": "3af5823ee305e06bc9121d60bdc43dfc9deeb92f0c40ba61f81f4c784fc57891"
+      },
+      "frames": 132,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/E1NrAhMoqvB.basis__1__b3da3b1e6c1e",
+      "steps_sha256": "c2a442ed113bd2425d61510ec70c7eab4ae4b60c931d5717a729879884b43969",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 132,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 7.154160022735596,
+          "distance_to_goal": 0.03671867027878761,
+          "success": 1.0,
+          "spl": 0.2879009128326415,
+          "soft_spl": 0.28570899755074813,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": -30.000041815961076,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "OccuSG"
+  },
+  {
+    "upstream_commit": "a941e3a5a1c8e16920a158fa0a9198c95be9c978",
+    "detr_commit": "29901c51d7fe8712168b8d0d64351170bc0f83e0",
+    "door_weights_sha256": "d971e3b760421eb29665c1ca986854ce8ec57ddcc50209fcc77125c5e3cef7ec",
+    "frames": 309,
+    "door_trigger_frames": 95,
+    "final_room_count": 2,
+    "final_detected_doors": 1,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "update_every": 10,
+      "detector_resize": [
+        256,
+        256
+      ],
+      "pose_source": "simulator",
+      "source_sha256": "f2f47bd65f8173fd44c69ab7afcec7e381514b9ff8a6daecf874f88484033b49",
+      "grid_resolution_m": 0.05,
+      "map_size_m": 48,
+      "native_x": "24-(world_z-start_z)",
+      "native_y": "24-(world_x-start_x)",
+      "labels_index_order": "native_y,native_x",
+      "door_filter_bot_xy": "[native_y,native_x] on transposed occupancy",
+      "exploration_policy": "disabled shared trajectory",
+      "upstream_visualization_disabled": true,
+      "room_transition": "upstream update_topo on observed component; no autonomous goals",
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.basis.glb",
+        "episode_id": "69",
+        "object_category": "chair",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/LcAd9dhvVwh.json.gz",
+        "source_index": 12498,
+        "episode_sha256": "0c5e6dd554762e1102bfbe3f83d66580073984e66d8808611209290306cf677f",
+        "source_sha256": "5f6b0bf3cc8824c1597bbcd2b936aafeac3b42b3416e5c6654080fa227ea64e8"
+      },
+      "frames": 309,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/LcAd9dhvVwh.basis__2__225c8bc66766",
+      "steps_sha256": "d37949b46b7724f6ab2557d10c97033dcf7db7ce30823ce6c96d844f2fd375ad",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 309,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 9.207447052001953,
+          "distance_to_goal": 0.04065093398094177,
+          "success": 1.0,
+          "spl": 0.13442000948519447,
+          "soft_spl": 0.13364571008435355,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": -1.288904670667244e-06,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "Active"
+  },
+  {
+    "final_room_count": 3,
+    "frames": 309,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "ros_frame": "x=world_x,y=-world_z,z=world_y-start_y",
+      "pose_source": "simulator",
+      "source_sha256": "3d81691e651f7d21c7db4e082e2424e458be46760be934b5326cc40ff8937f91",
+      "rmw_implementation": "rmw_cyclonedds_cpp",
+      "ros_domain_id": "188",
+      "reliable_cloud_transport": true,
+      "native_nodes": true,
+      "object_graph_disabled": true,
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.basis.glb",
+        "episode_id": "69",
+        "object_category": "chair",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/LcAd9dhvVwh.json.gz",
+        "source_index": 12498,
+        "episode_sha256": "0c5e6dd554762e1102bfbe3f83d66580073984e66d8808611209290306cf677f",
+        "source_sha256": "5f6b0bf3cc8824c1597bbcd2b936aafeac3b42b3416e5c6654080fa227ea64e8"
+      },
+      "frames": 309,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/LcAd9dhvVwh.basis__2__225c8bc66766",
+      "steps_sha256": "d37949b46b7724f6ab2557d10c97033dcf7db7ce30823ce6c96d844f2fd375ad",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 309,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 9.207447052001953,
+          "distance_to_goal": 0.04065093398094177,
+          "success": 1.0,
+          "spl": 0.13442000948519447,
+          "soft_spl": 0.13364571008435355,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": -1.288904670667244e-06,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "OccuSG"
+  },
+  {
+    "upstream_commit": "a941e3a5a1c8e16920a158fa0a9198c95be9c978",
+    "detr_commit": "29901c51d7fe8712168b8d0d64351170bc0f83e0",
+    "door_weights_sha256": "d971e3b760421eb29665c1ca986854ce8ec57ddcc50209fcc77125c5e3cef7ec",
+    "frames": 99,
+    "door_trigger_frames": 24,
+    "final_room_count": 2,
+    "final_detected_doors": 3,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "update_every": 10,
+      "detector_resize": [
+        256,
+        256
+      ],
+      "pose_source": "simulator",
+      "source_sha256": "f2f47bd65f8173fd44c69ab7afcec7e381514b9ff8a6daecf874f88484033b49",
+      "grid_resolution_m": 0.05,
+      "map_size_m": 48,
+      "native_x": "24-(world_z-start_z)",
+      "native_y": "24-(world_x-start_x)",
+      "labels_index_order": "native_y,native_x",
+      "door_filter_bot_xy": "[native_y,native_x] on transposed occupancy",
+      "exploration_policy": "disabled shared trajectory",
+      "upstream_visualization_disabled": true,
+      "room_transition": "upstream update_topo on observed component; no autonomous goals",
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.basis.glb",
+        "episode_id": "34",
+        "object_category": "bed",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/TSJmdttd2GV.json.gz",
+        "source_index": 8306,
+        "episode_sha256": "6e1308fcb9249c816e1f382b3985e7badee8771cb7ed44395b3c4dcf7aa9a138",
+        "source_sha256": "431a6bf3bbd995d2a919da4dff8ebcfcf30b65773ed8dc016c793e44facb179c"
+      },
+      "frames": 99,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/TSJmdttd2GV.basis__3__45a7d4587573",
+      "steps_sha256": "93f166ecb6f5cf34fdbb546463fec20541686b988c042ed620023ed354366f6e",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 99,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 6.366550445556641,
+          "distance_to_goal": 0.02591356821358204,
+          "success": 1.0,
+          "spl": 0.3072801515709372,
+          "soft_spl": 0.30528521314908247,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": 30.000000834826057,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "Active"
+  },
+  {
+    "final_room_count": 10,
+    "frames": 99,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "ros_frame": "x=world_x,y=-world_z,z=world_y-start_y",
+      "pose_source": "simulator",
+      "source_sha256": "3d81691e651f7d21c7db4e082e2424e458be46760be934b5326cc40ff8937f91",
+      "rmw_implementation": "rmw_cyclonedds_cpp",
+      "ros_domain_id": "189",
+      "reliable_cloud_transport": true,
+      "native_nodes": true,
+      "object_graph_disabled": true,
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.basis.glb",
+        "episode_id": "34",
+        "object_category": "bed",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/TSJmdttd2GV.json.gz",
+        "source_index": 8306,
+        "episode_sha256": "6e1308fcb9249c816e1f382b3985e7badee8771cb7ed44395b3c4dcf7aa9a138",
+        "source_sha256": "431a6bf3bbd995d2a919da4dff8ebcfcf30b65773ed8dc016c793e44facb179c"
+      },
+      "frames": 99,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/TSJmdttd2GV.basis__3__45a7d4587573",
+      "steps_sha256": "93f166ecb6f5cf34fdbb546463fec20541686b988c042ed620023ed354366f6e",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 99,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 6.366550445556641,
+          "distance_to_goal": 0.02591356821358204,
+          "success": 1.0,
+          "spl": 0.3072801515709372,
+          "soft_spl": 0.30528521314908247,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": 30.000000834826057,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "OccuSG"
+  },
+  {
+    "upstream_commit": "a941e3a5a1c8e16920a158fa0a9198c95be9c978",
+    "detr_commit": "29901c51d7fe8712168b8d0d64351170bc0f83e0",
+    "door_weights_sha256": "d971e3b760421eb29665c1ca986854ce8ec57ddcc50209fcc77125c5e3cef7ec",
+    "frames": 253,
+    "door_trigger_frames": 101,
+    "final_room_count": 0,
+    "final_detected_doors": 0,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "update_every": 10,
+      "detector_resize": [
+        256,
+        256
+      ],
+      "pose_source": "simulator",
+      "source_sha256": "f2f47bd65f8173fd44c69ab7afcec7e381514b9ff8a6daecf874f88484033b49",
+      "grid_resolution_m": 0.05,
+      "map_size_m": 48,
+      "native_x": "24-(world_z-start_z)",
+      "native_y": "24-(world_x-start_x)",
+      "labels_index_order": "native_y,native_x",
+      "door_filter_bot_xy": "[native_y,native_x] on transposed occupancy",
+      "exploration_policy": "disabled shared trajectory",
+      "upstream_visualization_disabled": true,
+      "room_transition": "upstream update_topo on observed component; no autonomous goals",
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.basis.glb",
+        "episode_id": "25",
+        "object_category": "bed",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/j6fHrce9pHR.json.gz",
+        "source_index": 31195,
+        "episode_sha256": "f8cfea8851722c9d784d01a63a6744b11ee5c92ae4ccedba68921b40199e250e",
+        "source_sha256": "1114b859b262d44308db83ad138ae130aabba6602d3a2396d4a5a7e95b6dff2f"
+      },
+      "frames": 253,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/j6fHrce9pHR.basis__4__c245e1153c5e",
+      "steps_sha256": "07a761e8a2013f381e424bf430a6ed353143233b0ae666be01db8542577f5e5c",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 253,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 5.507282733917236,
+          "distance_to_goal": 0.038269899785518646,
+          "success": 1.0,
+          "spl": 0.07964077691175844,
+          "soft_spl": 0.07871678062342483,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": -150.00003832507613,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "Active"
+  },
+  {
+    "final_room_count": 13,
+    "frames": 253,
+    "accuracy": null,
+    "accuracy_reason": "No verified room footprint GT",
+    "adapter": {
+      "ros_frame": "x=world_x,y=-world_z,z=world_y-start_y",
+      "pose_source": "simulator",
+      "source_sha256": "3d81691e651f7d21c7db4e082e2424e458be46760be934b5326cc40ff8937f91",
+      "rmw_implementation": "rmw_cyclonedds_cpp",
+      "ros_domain_id": "192",
+      "reliable_cloud_transport": true,
+      "native_nodes": true,
+      "object_graph_disabled": true,
+      "floor_policy": "reject transitions >0.3m"
+    },
+    "source": {
+      "selection": {
+        "scene_id": "hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.basis.glb",
+        "episode_id": "25",
+        "object_category": "bed",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/j6fHrce9pHR.json.gz",
+        "source_index": 31195,
+        "episode_sha256": "f8cfea8851722c9d784d01a63a6744b11ee5c92ae4ccedba68921b40199e250e",
+        "source_sha256": "1114b859b262d44308db83ad138ae130aabba6602d3a2396d4a5a7e95b6dff2f"
+      },
+      "frames": 253,
+      "evidence_dir": "/home/zyq/AV-Nav-worktrees/room-cc961e7/runs/hm3dv1_room_capture5_20261004/evidence/episodes/j6fHrce9pHR.basis__4__c245e1153c5e",
+      "steps_sha256": "07a761e8a2013f381e424bf430a6ed353143233b0ae666be01db8542577f5e5c",
+      "rgb_mae_max": 0.0,
+      "hfov": 79,
+      "sensor_height": 0.88,
+      "depth_units": "meters",
+      "result": {
+        "steps_recorded": 253,
+        "failure_cause": "did_not_fail",
+        "metrics": {
+          "reward": 5.507282733917236,
+          "distance_to_goal": 0.038269899785518646,
+          "success": 1.0,
+          "spl": 0.07964077691175844,
+          "soft_spl": 0.07871678062342483,
+          "distance_to_goal_reward": -0.0,
+          "traveled_stairs": 0.0,
+          "yaw": -150.00003832507613,
+          "target_detected": 1.0,
+          "stop_called": 1.0
+        }
+      }
+    },
+    "method": "OccuSG"
+  }
+]

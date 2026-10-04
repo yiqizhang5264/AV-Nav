@@ -1,0 +1,1601 @@
+{
+  "python": "/home/zyq/miniconda3/envs/vlfm/bin/python",
+  "habitat_sim": "0.2.4",
+  "av_nav_commit": "96ef3719962605c0a4841a206bb9406651ea6bfa",
+  "selection": {
+    "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train",
+    "seed": 20261004,
+    "partition": "calibration",
+    "count": 5,
+    "selection_algorithm": "uniform-scene-shards-then-uniform-source-row-v2",
+    "dataset_version_claim": "HM3D v1 episode data; scene asset version must be verified separately",
+    "cases": [
+      {
+        "scene_id": "hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.basis.glb",
+        "episode_id": "36",
+        "object_category": "chair",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/3XYAD64HpDr.json.gz",
+        "source_index": 17984,
+        "episode_sha256": "09a66de941a4c819af9be34c76782e696015cb56c05ad13f6527a365f7ee0e4a",
+        "source_sha256": "5404e4cfa51e5ff7022681c47c15dd8d35cbaa7f2f733351df44b95fda5ba4e9"
+      },
+      {
+        "scene_id": "hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.basis.glb",
+        "episode_id": "19",
+        "object_category": "toilet",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/E1NrAhMoqvB.json.gz",
+        "source_index": 34285,
+        "episode_sha256": "23cd5078f17c82c0320ec4a4ad9444e2ea2a83ae31cea9bcc4c27f5cf4e50326",
+        "source_sha256": "3af5823ee305e06bc9121d60bdc43dfc9deeb92f0c40ba61f81f4c784fc57891"
+      },
+      {
+        "scene_id": "hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.basis.glb",
+        "episode_id": "69",
+        "object_category": "chair",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/LcAd9dhvVwh.json.gz",
+        "source_index": 12498,
+        "episode_sha256": "0c5e6dd554762e1102bfbe3f83d66580073984e66d8808611209290306cf677f",
+        "source_sha256": "5f6b0bf3cc8824c1597bbcd2b936aafeac3b42b3416e5c6654080fa227ea64e8"
+      },
+      {
+        "scene_id": "hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.basis.glb",
+        "episode_id": "34",
+        "object_category": "bed",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/TSJmdttd2GV.json.gz",
+        "source_index": 8306,
+        "episode_sha256": "6e1308fcb9249c816e1f382b3985e7badee8771cb7ed44395b3c4dcf7aa9a138",
+        "source_sha256": "431a6bf3bbd995d2a919da4dff8ebcfcf30b65773ed8dc016c793e44facb179c"
+      },
+      {
+        "scene_id": "hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.basis.glb",
+        "episode_id": "25",
+        "object_category": "bed",
+        "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/j6fHrce9pHR.json.gz",
+        "source_index": 31195,
+        "episode_sha256": "f8cfea8851722c9d784d01a63a6744b11ee5c92ae4ccedba68921b40199e250e",
+        "source_sha256": "1114b859b262d44308db83ad138ae130aabba6602d3a2396d4a5a7e95b6dff2f"
+      }
+    ],
+    "sha256": "61e943dc0d6c1a685c5d941e1478be5ffc76a042f1fdb00e1d1c98718b109bed"
+  },
+  "scene_config": "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/hm3d_annotated_basis.scene_dataset_config.json",
+  "scene_config_sha256": "c16fa23b09e36d528c3f12c9799eaa9cf0d733dcd22c9f329c0508d551b640a4",
+  "cases": [
+    {
+      "scene_id": "hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.basis.glb",
+      "episode_id": "36",
+      "object_category": "chair",
+      "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/3XYAD64HpDr.json.gz",
+      "source_index": 17984,
+      "episode_sha256": "09a66de941a4c819af9be34c76782e696015cb56c05ad13f6527a365f7ee0e4a",
+      "source_sha256": "5404e4cfa51e5ff7022681c47c15dd8d35cbaa7f2f733351df44b95fda5ba4e9",
+      "scene_path": "/home/zyq/vlfm/data/scene_datasets/hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.basis.glb",
+      "resolved_scene_path": "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.basis.glb",
+      "scene_files": {
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.basis.glb": "9656ca730b3363a226b4dc985e7cd771618902fb871b64bc09a6946d5957fb01",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.basis.navmesh": "67f9f0009dd968e0e291f92b9a6ae4b260f636b527b5e2b771643506ac53dd25",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.semantic.glb": "b8cbe440243c8a88216a30803814bc902b89ce0bee0eb994f94d6ee3315c8e70",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.semantic.txt": "a25d752e4f89f00b49a7d3c71e68f8e7f1c84a5a8f39333e814dc288823928ed"
+      },
+      "semantic_object_count": 575,
+      "regions": [
+        {
+          "id": "_-1",
+          "category": null,
+          "object_count": 1,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_0",
+          "category": null,
+          "object_count": 78,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_1",
+          "category": null,
+          "object_count": 61,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_2",
+          "category": null,
+          "object_count": 29,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_3",
+          "category": null,
+          "object_count": 20,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_4",
+          "category": null,
+          "object_count": 74,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_5",
+          "category": null,
+          "object_count": 51,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_6",
+          "category": null,
+          "object_count": 35,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_7",
+          "category": null,
+          "object_count": 13,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_8",
+          "category": null,
+          "object_count": 73,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_9",
+          "category": null,
+          "object_count": 62,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_10",
+          "category": null,
+          "object_count": 10,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_11",
+          "category": null,
+          "object_count": 34,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_12",
+          "category": null,
+          "object_count": 21,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_13",
+          "category": null,
+          "object_count": 13,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        }
+      ],
+      "navmesh_loaded": true,
+      "start_navigable": true
+    },
+    {
+      "scene_id": "hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.basis.glb",
+      "episode_id": "19",
+      "object_category": "toilet",
+      "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/E1NrAhMoqvB.json.gz",
+      "source_index": 34285,
+      "episode_sha256": "23cd5078f17c82c0320ec4a4ad9444e2ea2a83ae31cea9bcc4c27f5cf4e50326",
+      "source_sha256": "3af5823ee305e06bc9121d60bdc43dfc9deeb92f0c40ba61f81f4c784fc57891",
+      "scene_path": "/home/zyq/vlfm/data/scene_datasets/hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.basis.glb",
+      "resolved_scene_path": "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.basis.glb",
+      "scene_files": {
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.basis.glb": "5e04a7ff486db8827c1b893916e4d26ae216e0a39fe6f38beabf05b1865a2fa8",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.basis.navmesh": "b300a6860557c2ab6f10bcd018622d08a3958bab3437df1c65ea1c7a4e1ac101",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.semantic.glb": "f43bf9b01796748afdba675c4479bb7bc2a186e08dc780f4bf32a45127ef0ab4",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.semantic.txt": "3122bc93c258aac7467251c742e0a4a5083e3518194589d33d43397281c8b773"
+      },
+      "semantic_object_count": 1018,
+      "regions": [
+        {
+          "id": "_-1",
+          "category": null,
+          "object_count": 1,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_1",
+          "category": null,
+          "object_count": 56,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_2",
+          "category": null,
+          "object_count": 76,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_3",
+          "category": null,
+          "object_count": 70,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_4",
+          "category": null,
+          "object_count": 84,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_5",
+          "category": null,
+          "object_count": 23,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_6",
+          "category": null,
+          "object_count": 60,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_7",
+          "category": null,
+          "object_count": 18,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_8",
+          "category": null,
+          "object_count": 35,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_9",
+          "category": null,
+          "object_count": 76,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_10",
+          "category": null,
+          "object_count": 95,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_11",
+          "category": null,
+          "object_count": 72,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_12",
+          "category": null,
+          "object_count": 166,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_13",
+          "category": null,
+          "object_count": 49,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_14",
+          "category": null,
+          "object_count": 65,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_15",
+          "category": null,
+          "object_count": 72,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        }
+      ],
+      "navmesh_loaded": true,
+      "start_navigable": true
+    },
+    {
+      "scene_id": "hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.basis.glb",
+      "episode_id": "69",
+      "object_category": "chair",
+      "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/LcAd9dhvVwh.json.gz",
+      "source_index": 12498,
+      "episode_sha256": "0c5e6dd554762e1102bfbe3f83d66580073984e66d8808611209290306cf677f",
+      "source_sha256": "5f6b0bf3cc8824c1597bbcd2b936aafeac3b42b3416e5c6654080fa227ea64e8",
+      "scene_path": "/home/zyq/vlfm/data/scene_datasets/hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.basis.glb",
+      "resolved_scene_path": "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.basis.glb",
+      "scene_files": {
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.basis.glb": "ff5a96cc984a7da1b82f3835b2d7259c71f0f0c8103216ee4c4cc318d0293cd0",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.basis.navmesh": "3cd06ee44e3e90be9bd81581d51e4749bbeeab0e84bb3e930a10d0d7196a6a05",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.semantic.glb": "67b76034b4a2051db6383afe7406e55193c382734ea6a68f5d8c8b7f5851a298",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.semantic.txt": "a3877b29deaffe27928d8c17eb36c5f9d78cdf6e2ea4e4a6c2e791a469400c9c"
+      },
+      "semantic_object_count": 847,
+      "regions": [
+        {
+          "id": "_-1",
+          "category": null,
+          "object_count": 1,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_1",
+          "category": null,
+          "object_count": 18,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_2",
+          "category": null,
+          "object_count": 58,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_3",
+          "category": null,
+          "object_count": 64,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_4",
+          "category": null,
+          "object_count": 30,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_5",
+          "category": null,
+          "object_count": 61,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_6",
+          "category": null,
+          "object_count": 78,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_7",
+          "category": null,
+          "object_count": 47,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_8",
+          "category": null,
+          "object_count": 41,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_9",
+          "category": null,
+          "object_count": 29,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_10",
+          "category": null,
+          "object_count": 33,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_11",
+          "category": null,
+          "object_count": 37,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_12",
+          "category": null,
+          "object_count": 52,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_13",
+          "category": null,
+          "object_count": 15,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_14",
+          "category": null,
+          "object_count": 60,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_15",
+          "category": null,
+          "object_count": 45,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_16",
+          "category": null,
+          "object_count": 17,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_17",
+          "category": null,
+          "object_count": 32,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_18",
+          "category": null,
+          "object_count": 28,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_19",
+          "category": null,
+          "object_count": 37,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_20",
+          "category": null,
+          "object_count": 42,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_21",
+          "category": null,
+          "object_count": 22,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        }
+      ],
+      "navmesh_loaded": true,
+      "start_navigable": true
+    },
+    {
+      "scene_id": "hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.basis.glb",
+      "episode_id": "34",
+      "object_category": "bed",
+      "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/TSJmdttd2GV.json.gz",
+      "source_index": 8306,
+      "episode_sha256": "6e1308fcb9249c816e1f382b3985e7badee8771cb7ed44395b3c4dcf7aa9a138",
+      "source_sha256": "431a6bf3bbd995d2a919da4dff8ebcfcf30b65773ed8dc016c793e44facb179c",
+      "scene_path": "/home/zyq/vlfm/data/scene_datasets/hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.basis.glb",
+      "resolved_scene_path": "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.basis.glb",
+      "scene_files": {
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.basis.glb": "bc4be67d27516be272f1d6bbba7828101f6d264a77b1d08d54dfe188cea23e90",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.basis.navmesh": "5372b2ec406f8fa9732d0289a951ac295428c115b607ae787b3715b5ad8eb772",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.semantic.glb": "a279eac53b945a03dda9c2e9ab25e8e44c275bae5a7bcc9573255ef869790a1e",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.semantic.txt": "daa360b85b982fb1a48afd1cff7bc9ceca36ab02e503b486b01d5892eca7fb47"
+      },
+      "semantic_object_count": 963,
+      "regions": [
+        {
+          "id": "_-1",
+          "category": null,
+          "object_count": 1,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_0",
+          "category": null,
+          "object_count": 50,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_1",
+          "category": null,
+          "object_count": 48,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_2",
+          "category": null,
+          "object_count": 54,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_3",
+          "category": null,
+          "object_count": 52,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_4",
+          "category": null,
+          "object_count": 47,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_5",
+          "category": null,
+          "object_count": 45,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_6",
+          "category": null,
+          "object_count": 33,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_7",
+          "category": null,
+          "object_count": 36,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_8",
+          "category": null,
+          "object_count": 38,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_9",
+          "category": null,
+          "object_count": 47,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_10",
+          "category": null,
+          "object_count": 9,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_11",
+          "category": null,
+          "object_count": 83,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_12",
+          "category": null,
+          "object_count": 11,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_13",
+          "category": null,
+          "object_count": 47,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_14",
+          "category": null,
+          "object_count": 51,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_15",
+          "category": null,
+          "object_count": 144,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_16",
+          "category": null,
+          "object_count": 167,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        }
+      ],
+      "navmesh_loaded": true,
+      "start_navigable": true
+    },
+    {
+      "scene_id": "hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.basis.glb",
+      "episode_id": "25",
+      "object_category": "bed",
+      "source": "/home/zyq/vlfm/data/datasets/objectnav/hm3d/v1/train/content/j6fHrce9pHR.json.gz",
+      "source_index": 31195,
+      "episode_sha256": "f8cfea8851722c9d784d01a63a6744b11ee5c92ae4ccedba68921b40199e250e",
+      "source_sha256": "1114b859b262d44308db83ad138ae130aabba6602d3a2396d4a5a7e95b6dff2f",
+      "scene_path": "/home/zyq/vlfm/data/scene_datasets/hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.basis.glb",
+      "resolved_scene_path": "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.basis.glb",
+      "scene_files": {
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.basis.glb": "4fe82cc7384b367b824bce1b0b6f6355778133cb666d8f0fbdb04f268c209243",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.basis.navmesh": "f4c61e7d2e2142bb6f2d2d38d51225705d02469fdcd980de8cfb77e2a2c2e73a",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.semantic.glb": "10083c70f106c79b8ef8c14eb3f62242023ef4ab92a24780873e47afe76ee4a4",
+        "/home/zyq/vlfm/data/versioned_data/hm3d-0.2/hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.semantic.txt": "9ec90108b109ba3d88cb968a599b10a1c3fd14b69f960027b938f23bbeb8f046"
+      },
+      "semantic_object_count": 860,
+      "regions": [
+        {
+          "id": "_-1",
+          "category": null,
+          "object_count": 1,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_0",
+          "category": null,
+          "object_count": 54,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_1",
+          "category": null,
+          "object_count": 29,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_2",
+          "category": null,
+          "object_count": 30,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_3",
+          "category": null,
+          "object_count": 44,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_4",
+          "category": null,
+          "object_count": 31,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_5",
+          "category": null,
+          "object_count": 11,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_6",
+          "category": null,
+          "object_count": 33,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_7",
+          "category": null,
+          "object_count": 75,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_8",
+          "category": null,
+          "object_count": 43,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_9",
+          "category": null,
+          "object_count": 21,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_10",
+          "category": null,
+          "object_count": 34,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_11",
+          "category": null,
+          "object_count": 27,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_12",
+          "category": null,
+          "object_count": 50,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_13",
+          "category": null,
+          "object_count": 25,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_14",
+          "category": null,
+          "object_count": 6,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_15",
+          "category": null,
+          "object_count": 41,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_16",
+          "category": null,
+          "object_count": 36,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_17",
+          "category": null,
+          "object_count": 99,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_18",
+          "category": null,
+          "object_count": 49,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_19",
+          "category": null,
+          "object_count": 21,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_20",
+          "category": null,
+          "object_count": 34,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_21",
+          "category": null,
+          "object_count": 41,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "id": "_22",
+          "category": null,
+          "object_count": 25,
+          "aabb_center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "aabb_sizes": [
+            null,
+            null,
+            null
+          ]
+        }
+      ],
+      "navmesh_loaded": true,
+      "start_navigable": true
+    }
+  ],
+  "ground_truth_note": "Region IDs/AABBs alone are not precise room-footprint ground truth."
+}

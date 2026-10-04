@@ -1,0 +1,13 @@
+{
+  "upstream_commit": "2bca2fa06af87fd9dd0542957039be8f580f0dca",
+  "submodules": " 14b8cb9e6534ba21e84f624c94d20960f6613f3c src/mapconversion (heads/ros2)\n 7bb98eaa4235f9ca37bc388e242fce902209fc4e src/octomap_mapping (heads/ros2)\n-c790c8e315c40d3110a6602c2c41576b8e5770fc src/semantic_perception/third_party/YOLOs-CPP\n",
+  "build_changes": [
+    {
+      "file": "src/octomap_mapping/octomap_server/src/octomap_server.cpp",
+      "original_sha256": "90863d590345616ee8b154554aeb4b71b0aa8845232f9f504c16500718ad9cb1",
+      "adapted_sha256": "0ead126fa7c40236e89a22f59df643d3428e816817e94cf82796e98cd084a8a2",
+      "change": "Optional reliable cloud subscription; default false preserves native transport"
+    }
+  ],
+  "note": "Humble pcl_ros supplies transforms.hpp; replay transport only, no geometry or segmentation changes."
+}

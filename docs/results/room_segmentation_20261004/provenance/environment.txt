@@ -1,0 +1,227 @@
+absl-py==2.3.1
+addict==2.4.0
+altair==5.5.0
+annotated-doc==0.0.4
+annotated-types==0.7.0
+antlr4-python3-runtime==4.9.3
+asttokens==3.0.1
+attrs @ file:///home/conda/feedstock_root/build_artifacts/attrs_1741918516150/work
+bleach==6.2.0
+blinker==1.9.0
+blis==1.3.3
+braceexpand==0.1.7
+cachetools==6.2.6
+catalogue==2.0.10
+certifi @ file:///home/conda/feedstock_root/build_artifacts/certifi_1754231422783/work/certifi
+cffi==2.0.0
+cfgv==3.4.0
+charset-normalizer==3.4.4
+click==8.1.8
+cloudpathlib==0.23.0
+cloudpickle==3.1.2
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1733218098505/work
+comm==0.2.3
+confection==0.1.5
+ConfigArgParse==1.7.1
+contexttimer==0.3.3
+contourpy==1.3.0
+cryptography==46.0.4
+cycler @ file:///home/conda/feedstock_root/build_artifacts/cycler_1733332471406/work
+cymem==2.0.13
+dash==4.0.0
+decorator==5.2.1
+decord==0.6.0
+depth_camera_filtering @ git+https://github.com/naokiyokoyama/depth_camera_filtering@39d6e2f391c8b2198a67ad96f94bf6da0acd48a0
+distlib==0.4.0
+einops==0.8.2
+exceptiongroup==1.3.1
+executing==2.2.1
+fairscale==0.4.4
+faster-fifo==1.5.2
+fastjsonschema==2.21.2
+filelock==3.19.1
+Flask==3.1.2
+fonttools==4.60.2
+frontier_exploration @ git+https://github.com/naokiyokoyama/frontier_exploration.git@8523aa857e4b81d15e14a506fe94a77d5f2e7d5d
+fsspec==2025.10.0
+ftfy==6.3.1
+gitdb @ file:///home/conda/feedstock_root/build_artifacts/gitdb_1735887193964/work
+GitPython @ file:///home/conda/feedstock_root/build_artifacts/gitpython_1753444155689/work
+google-auth==2.48.0
+google-auth-oauthlib==0.4.6
+groundingdino==0.1.0
+grpcio==1.78.0
+gym==0.23.0
+gym-notices==0.1.0
+# Editable install with no version control (habitat-baselines==0.2.4)
+-e /home/zyq/habitat-lab-0.2.4/habitat-baselines
+# Editable install with no version control (habitat-lab==0.2.4)
+-e /home/zyq/habitat-lab-0.2.4/habitat-lab
+habitat-sim==0.2.4
+hf-xet==1.2.0
+huggingface_hub==0.36.2
+hydra-core==1.3.2
+identify==2.6.15
+idna==3.11
+ifcfg==0.24
+imageio @ file:///home/conda/feedstock_root/build_artifacts/imageio_1738273805233/work
+imageio-ffmpeg @ file:///home/conda/feedstock_root/build_artifacts/imageio-ffmpeg_1737102630951/work
+importlib_metadata==8.7.1
+importlib_resources==6.5.2
+iopath==0.1.10
+ipython==8.18.1
+ipywidgets==8.1.8
+itsdangerous==2.2.0
+jedi==0.19.2
+Jinja2==3.1.6
+joblib==1.5.3
+jsonschema==4.25.1
+jsonschema-specifications==2025.9.1
+jupyter_core==5.8.1
+jupyterlab_widgets==3.0.16
+kaggle==1.7.4.5
+kiwisolver @ file:///home/conda/feedstock_root/build_artifacts/kiwisolver_1725459266648/work
+lazy_loader==0.4
+llvmlite==0.43.0
+lmdb==1.7.5
+magnum @ file:///opt/conda/envs/py39/conda-bld/habitat-sim_1680307574209/work/build/deps/magnum-bindings/src/python
+Markdown==3.9
+markdown-it-py==3.0.0
+MarkupSafe==3.0.3
+matplotlib==3.9.4
+matplotlib-inline==0.2.1
+mdurl==0.1.2
+mobile_sam @ git+https://github.com/ChaoningZhang/MobileSAM.git@b01a9ccef3b9e10b099b544efe004d0871802c3b
+moviepy==2.2.1
+mpmath==1.3.0
+msgpack==1.1.2
+murmurhash==1.0.15
+narwhals==2.16.0
+nbformat==5.10.4
+nest-asyncio==1.6.0
+networkx==3.2.1
+nodeenv==1.10.0
+numba @ file:///home/conda/feedstock_root/build_artifacts/numba_1718888028049/work
+numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1707225342954/work/dist/numpy-1.26.4-cp39-cp39-linux_x86_64.whl#sha256=c799942b5898f6e6c60264d1663a6469a475290e758c654aeeb78e2596463abd
+numpy-quaternion @ file:///home/conda/feedstock_root/build_artifacts/quaternion_1719301748607/work
+nvidia-cublas-cu12==12.8.4.1
+nvidia-cuda-cupti-cu12==12.8.90
+nvidia-cuda-nvrtc-cu12==12.8.93
+nvidia-cuda-runtime-cu12==12.8.90
+nvidia-cudnn-cu12==9.10.2.21
+nvidia-cufft-cu12==11.3.3.83
+nvidia-cufile-cu12==1.13.1.3
+nvidia-curand-cu12==10.3.9.90
+nvidia-cusolver-cu12==11.7.3.90
+nvidia-cusparse-cu12==12.5.8.93
+nvidia-cusparselt-cu12==0.7.1
+nvidia-nccl-cu12==2.27.3
+nvidia-nvjitlink-cu12==12.8.93
+nvidia-nvtx-cu12==12.8.90
+oauthlib==3.3.1
+objectio==0.2.29
+omegaconf==2.3.0
+open3d==0.19.0
+opencv-python==4.5.5.64
+opencv-python-headless==4.5.5.64
+opendatasets==0.1.22
+packaging==25.0
+pandas==2.3.3
+parso==0.8.5
+pexpect==4.9.0
+Pillow @ file:///home/conda/feedstock_root/build_artifacts/pillow_1680694271308/work
+platformdirs==4.4.0
+plotly==6.5.2
+portalocker==3.2.0
+pre_commit==4.3.0
+preshed==3.0.12
+proglog==0.1.12
+prompt_toolkit==3.0.52
+protobuf==3.20.1
+ptyprocess==0.7.0
+pure_eval==0.2.3
+pyarrow==21.0.0
+pyasn1==0.6.2
+pyasn1_modules==0.4.2
+pycocoevalcap==1.2
+pycocotools==2.0.11
+pycparser==2.23
+pydantic==2.12.5
+pydantic_core==2.41.5
+pydeck==0.9.1
+Pygments==2.19.2
+pyparsing @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_pyparsing_1753873557/work
+pyquaternion==0.9.9
+PySocks==1.7.1
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_python-dateutil_1751104122/work
+python-dotenv==1.2.1
+python-magic==0.4.27
+python-slugify==8.0.4
+pytz==2025.2
+PyYAML==6.0.3
+referencing==0.36.2
+regex==2026.1.15
+requests==2.32.5
+requests-oauthlib==2.0.0
+retrying==1.4.2
+rich==14.3.2
+rpds-py==0.27.1
+rsa==4.9.1
+safetensors==0.7.0
+salesforce-lavis==1.0.2
+scikit-image==0.24.0
+scikit-learn==1.6.1
+scipy @ file:///home/conda/feedstock_root/build_artifacts/scipy-split_1716470218293/work/dist/scipy-1.13.1-cp39-cp39-linux_x86_64.whl#sha256=e6696cb8683d94467891b7648e068a3970f6bc0a1b3c1aa7f9bc89458eafd2f0
+seaborn==0.13.2
+sentencepiece==0.2.1
+shellingham==1.5.4
+simplejson==3.20.2
+six @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_six_1753199211/work
+smart_open==7.5.0
+smmap @ file:///home/conda/feedstock_root/build_artifacts/smmap_1611376390914/work
+spacy==3.8.11
+spacy-legacy==3.0.12
+spacy-loggers==1.0.5
+srsly==2.5.2
+stack-data==0.6.3
+streamlit==1.50.0
+supervision==0.6.0
+sympy==1.14.0
+tenacity==9.1.2
+tensorboard==2.8.0
+tensorboard-data-server==0.6.1
+tensorboard-plugin-wit==1.8.1
+text-unidecode==1.3
+thinc==8.3.9
+threadpoolctl==3.6.0
+tifffile==2024.8.30
+timm==0.4.12
+tokenizers==0.13.3
+toml==0.10.2
+tomli==2.4.0
+torch==1.12.1+cu113
+torchvision==0.13.1+cu113
+tornado @ file:///home/conda/feedstock_root/build_artifacts/tornado_1754731992698/work
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1735661334605/work
+traitlets==5.14.3
+transformers==4.26.0
+triton==3.4.0
+typer==0.23.2
+typer-slim==0.23.2
+typing-inspection==0.4.2
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_typing_extensions_1751643513/work
+tzdata==2025.3
+urllib3==2.6.3
+virtualenv==20.37.0
+-e git+https://github.com/bdaiinstitute/vlfm.git@584ed56008754fde7997d904983607def8328322#egg=vlfm
+wasabi==1.1.3
+watchdog==6.0.0
+wcwidth==0.6.0
+weasel==0.4.3
+webdataset==0.1.40
+webencodings==0.5.1
+Werkzeug==3.1.5
+widgetsnbextension==4.0.15
+wrapt==2.1.1
+yapf==0.43.0
+zipp==3.23.0

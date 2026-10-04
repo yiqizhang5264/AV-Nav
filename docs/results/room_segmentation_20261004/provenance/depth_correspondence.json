@@ -1,0 +1,27 @@
+[
+  {
+    "scene_id": "hm3d/train/00035-3XYAD64HpDr/3XYAD64HpDr.basis.glb",
+    "frames": 87,
+    "depth_max_abs_error": 0.0
+  },
+  {
+    "scene_id": "hm3d/train/00750-E1NrAhMoqvB/E1NrAhMoqvB.basis.glb",
+    "frames": 132,
+    "depth_max_abs_error": 0.0
+  },
+  {
+    "scene_id": "hm3d/train/00150-LcAd9dhvVwh/LcAd9dhvVwh.basis.glb",
+    "frames": 309,
+    "depth_max_abs_error": 0.0
+  },
+  {
+    "scene_id": "hm3d/train/00657-TSJmdttd2GV/TSJmdttd2GV.basis.glb",
+    "frames": 99,
+    "depth_max_abs_error": 0.0
+  },
+  {
+    "scene_id": "hm3d/train/00238-j6fHrce9pHR/j6fHrce9pHR.basis.glb",
+    "frames": 253,
+    "depth_max_abs_error": 0.0
+  }
+]
