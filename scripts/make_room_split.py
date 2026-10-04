@@ -11,14 +11,14 @@ def select(source, count, seed, partition):
     source = Path(source)
     if count < 1:
         raise ValueError('Count must be positive')
-    if source.name != 'train':
-        raise ValueError('Initial room comparison must use the training split')
+    if (source.name == 'train' and partition not in {'calibration', 'development'}) or (source.name == 'val' and partition != 'validation') or source.name not in {'train', 'val'}:
+        raise ValueError('Use training split with calibration/development or val split with validation')
     # HM3Dv1 training IDs repeat even within a category. Identity therefore
     # includes the immutable source hash and source row, not just episode_id.
     paths = []
     for path in sorted((source / 'content').glob('*.json.gz')):
         bucket = int(hashlib.sha256(('scene-v1|' + path.stem).encode()).hexdigest()[:8], 16) % 4
-        if (partition == 'calibration' and bucket != 0) or (partition == 'development' and bucket == 0):
+        if partition == 'validation' or (partition == 'calibration' and bucket != 0) or (partition == 'development' and bucket == 0):
             paths.append(path)
     if len(paths) < count:
         raise ValueError(f'Only {len(paths)} distinct eligible scenes; requested {count}')
@@ -73,7 +73,7 @@ def main():
     parser.add_argument('--output-dir', required=True, help='New immutable directory under runs/')
     parser.add_argument('--count', type=int, default=5)
     parser.add_argument('--seed', type=int, default=20261004)
-    parser.add_argument('--partition', choices=['calibration', 'development'], default='calibration')
+    parser.add_argument('--partition', choices=['calibration', 'development', 'validation'], default='calibration')
     args = parser.parse_args()
     output = Path(args.output_dir)
     if output.exists():

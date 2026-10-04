@@ -71,6 +71,20 @@ class RoomSplitTests(unittest.TestCase):
         result = subprocess.run(command + ['--output-dir', str(self.root / 'a')], capture_output=True)
         self.assertNotEqual(result.returncode, 0)
 
+    def test_validation_uses_all_val_scenes_and_preserves_rows(self):
+        val = self.root / 'val'
+        self.source.rename(val)
+        data, manifest = select(val, 40, 20261004, 'validation')
+        self.assertEqual(len({e['scene_id'] for e in data['episodes']}), 40)
+        self.assertEqual(manifest['partition'], 'validation')
+        for episode, case in zip(data['episodes'], manifest['cases']):
+            original = json.loads(gzip.decompress(Path(case['source']).read_bytes()))
+            self.assertEqual(episode, original['episodes'][case['source_index']])
+        with self.assertRaises(ValueError):
+            select(val, 5, 20261004, 'calibration')
+        with self.assertRaises(ValueError):
+            select(self.source, 5, 20261004, 'validation')
+
 
 if __name__ == '__main__':
     unittest.main()

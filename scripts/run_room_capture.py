@@ -21,6 +21,9 @@ def main():
     output = Path(args.output_dir).resolve()
     vlfm = Path(args.vlfm_root).resolve()
     selection = json.loads((sample / 'selection.json').read_text())
+    split = Path(selection['source']).name
+    if split not in {'train', 'val'}:
+        raise ValueError('Unsupported dataset split')
     if hashlib.sha256((sample / 'episodes.json.gz').read_bytes()).hexdigest() != selection['sha256']:
         raise ValueError('Sample hash mismatch')
     pin = subprocess.check_output(['git', '-C', str(vlfm), 'rev-parse', 'HEAD'], text=True).strip()
@@ -39,7 +42,7 @@ def main():
                'habitat_baselines.evaluate=true', 'habitat_baselines.eval.video_option=[]',
                f'habitat_baselines.test_episode_count={selection["count"]}',
                'habitat_baselines.num_environments=1', 'habitat_baselines.torch_gpu_id=0',
-               'habitat_baselines.eval.split=train', 'habitat.dataset.split=train',
+               f'habitat_baselines.eval.split={split}', f'habitat.dataset.split={split}',
                'habitat.environment.iterator_options.shuffle=False',
                f'habitat.environment.max_episode_steps={args.max_steps}',
                f'habitat.dataset.data_path={dataset}',
