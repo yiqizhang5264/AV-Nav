@@ -24,6 +24,8 @@ def read_dataset(root, split, limit=None):
     episodes = list(merged.get('episodes', []))
     goals = dict(merged.get('goals_by_category', {}))
     for path in sorted((root/split/'content').glob('*.json.gz')):
+        if limit and len(episodes) >= limit:
+            break
         with gzip.open(path, 'rt') as stream:
             data = json.load(stream)
         episodes.extend(data['episodes'])

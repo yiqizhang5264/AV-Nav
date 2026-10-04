@@ -36,7 +36,7 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
         self.verifier = Verifier(self.sap['vlm'])
         self._mobile_sam = CandidateSAM(self._mobile_sam, self)
         self._sap_map = ObstacleMap(min_height=.15, max_height=.88, agent_radius=.18, hole_area_thresh=-1)
-        self._sap_episode = -1
+        self._sap_episode = -2
         self._sap_reset()
 
     def _sap_reset(self):
@@ -162,7 +162,8 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
                     self._event('stale_candidate', goal=goal)
                     self._sap_decisions.append((goal.copy(), False))
                     return self._resume()
-                return super()._pointnav(goal, stop=False)
+                action = super()._pointnav(goal, stop=False)
+                return TorchActionIDs.TURN_LEFT if int(action.item()) == 0 else action
             self._sap_active = dict(goal=goal.copy(), center=obs.center[:2].copy(), best=obs,
                                    score=-1, attempts=0, visited=[robot.copy()])
             if self._score(obs) >= self.sap['sufficiency_threshold']:
