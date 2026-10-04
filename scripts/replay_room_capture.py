@@ -14,6 +14,7 @@ def main():
     p.add_argument('--output-dir', required=True)
     p.add_argument('--gpu', default='3')
     p.add_argument('--limit-frames', type=int)
+    p.add_argument('--case-index', type=int, help='Single selected case for server smoke')
     args = p.parse_args()
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
     import cv2
@@ -26,7 +27,8 @@ def main():
     manifest = json.loads((capture / 'manifest.json').read_text())
     config = yaml.safe_load((capture / 'hydra/.hydra/config.yaml').read_text())
     hc = config['habitat']['simulator']
-    agent_config = hc['agents'][hc['agents_order'][0]]
+    assert len(hc['agents']) == 1
+    agent_config = next(iter(hc['agents'].values()))
     cameras = agent_config['sim_sensors']
     rgb, depth = cameras['rgb_sensor'], cameras['depth_sensor']
     sample = json.loads(gzip.decompress((capture / 'hm3dv1_selected_episodes.json.gz').read_bytes()))
@@ -35,8 +37,11 @@ def main():
                    frame_convention='Habitat world x-right,y-up,z-back; sensor quaternion stored wxyz',
                    diagnostic=args.limit_frames is not None)
     for case_index, episode in enumerate(episodes):
+        if args.case_index is not None and case_index != args.case_index:
+            continue
         candidates = []
-        for folder in sorted((capture / 'evidence').iterdir()):
+        for meta_path in sorted((capture / 'evidence').rglob('episode.json')):
+            folder = meta_path.parent
             if not (folder / 'result.json').exists():
                 continue
             meta = json.loads((folder / 'episode.json').read_text())
@@ -48,8 +53,8 @@ def main():
         evidence = candidates[0]
         rows = [json.loads(line) for line in (evidence / 'steps.jsonl').read_text().splitlines()]
         assert [r['step'] for r in rows] == list(range(len(rows)))
-        scene = Path(hc['scene_dataset']) if hc.get('scene_dataset') != 'default' else Path('/home/zyq/vlfm/data/scene_datasets/hm3d/hm3d_annotated_basis.scene_dataset_config.json')
-        if not scene.is_absolute():
+        scene = Path(hc['scene_dataset'])
+        if str(scene) != 'default' and not scene.is_absolute():
             scene = Path('/home/zyq/AV-Nav-worktrees/vlfm-original-1224d7e/external/vlfm') / scene
         cfg = habitat_sim.SimulatorConfiguration()
         cfg.scene_id = str(Path('/home/zyq/vlfm/data/scene_datasets') / episode['scene_id'])
