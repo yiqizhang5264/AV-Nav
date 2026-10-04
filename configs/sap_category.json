@@ -1,0 +1,16 @@
+{
+  "method": "sap_category_paper_reimplementation",
+  "sufficiency_threshold": 7,
+  "max_repositions": 3,
+  "association_radius": 0.75,
+  "max_reposition_steps": 60,
+  "max_path_m": 20.0,
+  "arrival_radius": 0.25,
+  "seed": 100,
+  "vlm": {
+    "base_url": "http://127.0.0.1:8000/v1",
+    "model": "Qwen/Qwen3.5-9B",
+    "max_tokens": 1024,
+    "disable_thinking": true
+  }
+}
