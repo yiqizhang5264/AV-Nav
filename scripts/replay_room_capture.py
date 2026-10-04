@@ -45,8 +45,10 @@ def main():
             if not (folder / 'result.json').exists():
                 continue
             meta = json.loads((folder / 'episode.json').read_text())
-            if (meta['scene_id'].endswith(episode['scene_id']) and meta['start_position'] == episode['start_position']
-                    and meta['start_rotation'] == episode['start_rotation'] and meta['object_category'] == episode['object_category']):
+            if (meta['scene_id'].endswith(episode['scene_id'])
+                    and np.allclose(meta['start_position'], episode['start_position'], atol=1e-6, rtol=0)
+                    and np.allclose(meta['start_rotation'], episode['start_rotation'], atol=1e-6, rtol=0)
+                    and meta['object_category'] == episode['object_category']):
                 candidates.append(folder)
         if len(candidates) != 1:
             raise ValueError(f'Expected exactly one finished matching trajectory: {episode["scene_id"]}')
