@@ -93,7 +93,7 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
 
     def _ask(self, obs, kind):
         result, record = self.verifier.ask(obs, self._target_object.split('|')[0], kind)
-        self._sap_calls += 1
+        self._sap_calls += record.get('api_requests', 1)
         folder = Path(os.environ['AV_RUN_DIR'])/'evidence'
         folder.mkdir(exist_ok=True)
         name = f'ep{self._sap_episode}_step{self._num_steps}_{self._sap_calls}.png'

@@ -104,7 +104,7 @@ class SAPTests(unittest.TestCase):
             result, record = Verifier(dict(base_url='http://local/v1',model='qwen',max_tokens=8192)).ask(
                 observation,'bed','category')
         self.assertEqual(result, {'matches':False})
-        self.assertEqual(budgets, [8192,10240])
+        self.assertEqual(budgets, [8192,512])
         self.assertEqual(len(record['retry_failures']),1)
 
     def test_exhausted_retries_fail_instead_of_approving_candidate(self):
@@ -116,6 +116,47 @@ class SAPTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 Verifier(dict(base_url='http://local/v1',model='qwen',max_tokens=8192)).ask(
                     observation,'bed','category')
+
+    def test_thinking_continuation_keeps_images_and_does_not_disable_thinking(self):
+        import io
+        observation = SimpleNamespace(rgb=np.zeros((8,8,3),dtype=np.uint8),bbox=(0,0,4,4))
+        replies=[dict(choices=[dict(message=dict(content=None,reasoning='visual assessment'),finish_reason='length')]),
+                 dict(choices=[dict(message=dict(content=None,reasoning='"matches":false}'),finish_reason='stop')])]
+        requests=[]
+        def respond(request, **kwargs):
+            requests.append(json.loads(request.data))
+            return io.BytesIO(json.dumps(replies.pop(0)).encode())
+        with patch('av_nav.sap_vlm.urllib.request.urlopen',side_effect=respond):
+            result, record=Verifier(dict(base_url='http://local/v1',model='qwen',max_tokens=8192)).ask(
+                observation,'bed','category')
+        self.assertEqual(result,{'matches':False})
+        self.assertEqual(record['reasoning'],'visual assessment')
+        self.assertEqual(record['api_requests'],2)
+        self.assertEqual(requests[1]['messages'][0],requests[0]['messages'][0])
+        self.assertTrue(requests[1]['chat_template_kwargs']['enable_thinking'])
+        self.assertTrue(requests[1]['continue_final_message'])
+        self.assertFalse(requests[1]['add_generation_prompt'])
+        self.assertIn('visual assessment\n',requests[1]['messages'][-1]['content'])
+        self.assertTrue(requests[1]['messages'][-1]['content'].endswith('</think>\n\n{'))
+
+    def test_continuation_never_accepts_invalid_final_text_or_uses_initial_cot_as_answer(self):
+        import io
+        observation=SimpleNamespace(rgb=np.zeros((8,8,3),dtype=np.uint8),bbox=(0,0,4,4))
+        calls=[]
+        def respond(request, **kwargs):
+            body=json.loads(request.data);calls.append(body)
+            if body.get('continue_final_message'):
+                message=dict(content=None,reasoning='not a JSON answer')
+                finish='stop'
+            else:
+                message=dict(content=None,reasoning='I guess {"matches":true} but need to think more')
+                finish='length'
+            return io.BytesIO(json.dumps(dict(choices=[dict(message=message,finish_reason=finish)])).encode())
+        with patch('av_nav.sap_vlm.urllib.request.urlopen',side_effect=respond):
+            with self.assertRaises(RuntimeError):
+                Verifier(dict(base_url='http://local/v1',model='qwen',max_tokens=8192)).ask(
+                    observation,'bed','category')
+        self.assertEqual(len(calls),6)
 
     def test_dataset_preserves_repeated_ids_with_source_row_identity(self):
         path = Path(__file__).resolve().parents[1]/'scripts/run_sap_eval.py'

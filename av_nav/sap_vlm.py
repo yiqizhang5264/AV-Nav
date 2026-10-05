@@ -52,6 +52,27 @@ class Verifier:
     def __init__(self, config):
         self.config = config
 
+    def _post(self, payload):
+        request = urllib.request.Request(self.config['base_url'].rstrip('/')+'/chat/completions',
+            data=json.dumps(payload).encode(), headers={'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+os.environ.get('SAP_VLM_API_KEY', 'local')})
+        with urllib.request.urlopen(request, timeout=300) as response:
+            return json.load(response)
+
+    @staticmethod
+    def final_payload(payload, reasoning):
+        """Continue the same visual request after closing its exhausted think block."""
+        assistant = ('<think>\n'+reasoning+
+            '\n\nThe thinking budget is exhausted. Give the final JSON now.\n</think>\n\n{')
+        return dict(payload, messages=payload['messages']+[dict(role='assistant',content=assistant)],
+                    max_tokens=512, continue_final_message=True, add_generation_prompt=False)
+
+    @staticmethod
+    def _failure(record):
+        if os.environ.get('AV_RUN_DIR'):
+            with (Path(os.environ['AV_RUN_DIR'])/'vlm_errors.jsonl').open('a') as stream:
+                stream.write(json.dumps(record)+'\n')
+
     def ask(self, observation, target, kind):
         image = Image.fromarray(observation.rgb)
         crop = image.crop(observation.bbox)
@@ -77,30 +98,46 @@ class Verifier:
         payload = dict(model=self.config['model'], messages=[dict(role='user', content=content)],
                        temperature=0, max_tokens=self.config['max_tokens'])
         payload['chat_template_kwargs'] = {'enable_thinking': not self.config.get('disable_thinking', False)}
-        request = urllib.request.Request(self.config['base_url'].rstrip('/')+'/chat/completions',
-            data=json.dumps(payload).encode(), headers={'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+os.environ.get('SAP_VLM_API_KEY', 'local')})
         failures = []
+        api_requests = 0
         for attempt in range(3):
             # Thinking can consume the initial budget before producing final JSON.
             # Preserve thinking and allow more completion tokens on retries.
             payload['max_tokens'] = min(12288, self.config['max_tokens'] + attempt * 2048)
-            request.data = json.dumps(payload).encode()
             raw = None
+            continuation = None
             try:
-                with urllib.request.urlopen(request, timeout=300) as response:
-                    raw = json.load(response)
+                api_requests += 1
+                raw = self._post(payload)
                 message = raw['choices'][0]['message']
                 reply = message.get('content')
+                reasoning = message.get('reasoning_content', message.get('reasoning'))
+                continuation = None
+                if (not reply or not reply.strip()) and reasoning and raw['choices'][0].get('finish_reason') == 'length':
+                    exhausted = dict(attempt=attempt+1, kind=kind,
+                        error='Thinking budget exhausted; continuing with closed think block',
+                        completion_budget=payload['max_tokens'], raw_response=raw)
+                    failures.append(exhausted)
+                    self._failure(exhausted)
+                    api_requests += 1
+                    continuation = self._post(self.final_payload(payload, reasoning))
+                    final_message = continuation['choices'][0]['message']
+                    # vLLM 0.18.1's non-streaming Qwen parser labels this as
+                    # reasoning even though the prompt has already closed </think>.
+                    # Only here, in explicitly prefixed final-answer generation,
+                    # is that field treated as final text. Never parse initial CoT.
+                    final_text = (final_message.get('content') or
+                                  final_message.get('reasoning_content') or final_message.get('reasoning'))
+                    reply = '{'+final_text if isinstance(final_text,str) else None
                 result = parse_reply(reply, kind)
                 return result, dict(prompt=prompt, response=reply, usage=raw.get('usage'),
-                    reasoning=message.get('reasoning_content', message.get('reasoning')),
-                    retry_failures=failures, completion_budget=payload['max_tokens'])
+                    reasoning=reasoning, thinking_continuation=continuation,
+                    retry_failures=failures, completion_budget=payload['max_tokens'],
+                    api_requests=api_requests)
             except (ValueError, KeyError, IndexError, urllib.error.URLError, TimeoutError) as error:
                 failure = dict(attempt=attempt + 1, kind=kind, error=str(error),
-                               completion_budget=payload['max_tokens'], raw_response=raw)
+                               completion_budget=payload['max_tokens'], raw_response=raw,
+                               continuation_response=continuation)
                 failures.append(failure)
-                if os.environ.get('AV_RUN_DIR'):
-                    with (Path(os.environ['AV_RUN_DIR'])/'vlm_errors.jsonl').open('a') as stream:
-                        stream.write(json.dumps(failure)+'\n')
+                self._failure(failure)
         raise RuntimeError('VLM verification failed after three attempts: '+failures[-1]['error'])
