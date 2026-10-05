@@ -71,6 +71,23 @@ def read_dataset(root, split, limit=None, scene=None):
     return merged, {str(p): digest(p) for p in sources}
 
 
+def resume_dataset(data, path):
+    """Accept only a unique, identity-checked deterministic completed prefix."""
+    rows = [json.loads(x) for x in Path(path).read_text().splitlines() if x.strip()]
+    identities = data['sap_source_identities']
+    if len(rows) > len(identities):
+        raise ValueError('Resume contains too many episodes')
+    for row, identity in zip(rows, identities):
+        for key in ('scene_id', 'source_uid', 'source_sha256', 'source_row', 'episode_sha256'):
+            if row.get(key) != identity[key]:
+                raise ValueError('Resume source identity/prefix mismatch: '+key)
+        if not all(isinstance(row.get('metrics', {}).get(k), (int, float)) for k in ('success','spl')):
+            raise ValueError('Resume metrics are missing')
+    pending = dict(data, episodes=data['episodes'][len(rows):],
+                   sap_source_identities=identities[len(rows):])
+    return pending, rows
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', default=str(ROOT/'configs/sap_category.json'))
@@ -80,6 +97,7 @@ def main():
     parser.add_argument('--split', choices=['train', 'val'], default='val')
     parser.add_argument('--limit', type=int)
     parser.add_argument('--scene', help='Exact content-file stem, for scene sharding')
+    parser.add_argument('--resume-episodes', help='Validated completed prefix from a previous attempt')
     parser.add_argument('--max-steps', type=int, default=500)
     parser.add_argument('--gpu', default='1')
     parser.add_argument('--variant', choices=['baseline', 'sap'], default='sap')
@@ -93,12 +111,26 @@ def main():
         parser.error('Expected the HM3Dv1 ObjectNav dataset root .../hm3d/v1')
     config = json.loads(Path(args.config).read_text())
     data, hashes = read_dataset(root, args.split, args.limit, args.scene)
+    expected = set(episode_keys(data['sap_source_identities'], args.scenes_dir))
+    prior_rows = []
+    if args.resume_episodes:
+        old = Path(args.resume_episodes).resolve()
+        old_manifest = json.loads((old.parent/'manifest.json').read_text())
+        if any(old_manifest.get(k) != v for k,v in
+               dict(config=config, source_sha256=hashes, variant=args.variant, split=args.split).items()):
+            parser.error('Resume configuration or source dataset changed')
+        data, prior_rows = resume_dataset(data, old)
+        for row in prior_rows:
+            row.setdefault('evaluation_commit', old_manifest['commit'])
+            row.setdefault('evaluation_run', str(old.parent))
     categories = set(e['object_category'] for e in data['episodes'])
     allowed = {'chair', 'bed', 'plant', 'toilet', 'tv_monitor', 'sofa'}
     if not categories <= allowed:
         parser.error('Unexpected ObjectNav categories: '+str(categories))
     run = Path(args.output).resolve()
     run.mkdir(parents=True, exist_ok=False)
+    if prior_rows:
+        (run/'episodes.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in prior_rows))
     dataset = run/'hm3dv1_episodes.json.gz'
     with gzip.open(dataset, 'wt') as stream:
         json.dump(data, stream)
@@ -121,7 +153,10 @@ def main():
     if args.variant == 'sap':
         command.append('habitat_baselines.rl.policy.name=SAPCategoryPolicy')
     manifest = dict(started=datetime.now(timezone.utc).isoformat(), benchmark='HM3Dv1 ObjectNav',
-        split=args.split, scene=args.scene, variant=args.variant, expected_episodes=len(data['episodes']),
+        split=args.split, scene=args.scene, variant=args.variant, expected_episodes=len(expected),
+        inherited_episodes=len(prior_rows), pending_episodes=len(data['episodes']),
+        resume_from=str(Path(args.resume_episodes).resolve()) if args.resume_episodes else None,
+        resume_sha256=digest(Path(args.resume_episodes)) if args.resume_episodes else None,
         diagnostic=bool(config.get('diagnostic')) or args.split != 'val' or args.limit is not None or args.max_steps != 500,
         config=config, source_sha256=hashes, dataset_sha256=digest(dataset), command=command,
         commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
@@ -133,11 +168,11 @@ def main():
     freeze = subprocess.run([sys.executable, '-m', 'pip', 'freeze'], capture_output=True, text=True)
     (run/'environment.txt').write_text(freeze.stdout)
     with (run/'console.log').open('w') as stream:
-        result = subprocess.run(command, cwd=upstream, env=env, stdout=stream, stderr=subprocess.STDOUT)
+        result = (subprocess.run(command, cwd=upstream, env=env, stdout=stream, stderr=subprocess.STDOUT)
+                  if data['episodes'] else subprocess.CompletedProcess(command, 0))
     rows = []
     if (run/'episodes.jsonl').exists():
         rows = [json.loads(line) for line in (run/'episodes.jsonl').read_text().splitlines() if line]
-    expected = set(episode_keys(data['sap_source_identities'], args.scenes_dir))
     actual = set(episode_keys(rows, args.scenes_dir))
     complete = result.returncode == 0 and actual == expected and len(rows) == len(expected)
     summary = dict(complete=complete, returncode=result.returncode, expected=len(expected),

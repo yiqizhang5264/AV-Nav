@@ -4,10 +4,12 @@ import tempfile
 import gzip
 import json
 import unittest
+from unittest.mock import patch
+from types import SimpleNamespace
 import numpy as np
 from av_nav.planner import Grid
 from av_nav.sap_geometry import HeightMap, depth_points, select_view
-from av_nav.sap_vlm import parse_reply
+from av_nav.sap_vlm import parse_reply, Verifier
 
 
 class SAPTests(unittest.TestCase):
@@ -75,6 +77,35 @@ class SAPTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 parse_reply(text, 'sufficiency')
 
+    def test_thinking_exhaustion_retries_without_accepting_empty_content(self):
+        import io
+        observation = SimpleNamespace(rgb=np.zeros((8,8,3),dtype=np.uint8), bbox=(0,0,4,4))
+        replies = [dict(choices=[dict(message=dict(content=None,reasoning_content='unfinished'),
+                                     finish_reason='length')]),
+                   dict(choices=[dict(message=dict(content='{"matches":false}'))])]
+        budgets = []
+        def respond(request, **kwargs):
+            body = json.loads(request.data)
+            budgets.append(body['max_tokens'])
+            self.assertTrue(body['chat_template_kwargs']['enable_thinking'])
+            return io.BytesIO(json.dumps(replies.pop(0)).encode())
+        with patch('av_nav.sap_vlm.urllib.request.urlopen', side_effect=respond):
+            result, record = Verifier(dict(base_url='http://local/v1',model='qwen',max_tokens=8192)).ask(
+                observation,'bed','category')
+        self.assertEqual(result, {'matches':False})
+        self.assertEqual(budgets, [8192,10240])
+        self.assertEqual(len(record['retry_failures']),1)
+
+    def test_exhausted_retries_fail_instead_of_approving_candidate(self):
+        import io
+        observation = SimpleNamespace(rgb=np.zeros((8,8,3),dtype=np.uint8), bbox=(0,0,4,4))
+        def respond(*args, **kwargs):
+            return io.BytesIO(b'{"choices":[{"message":{"content":""}}]}')
+        with patch('av_nav.sap_vlm.urllib.request.urlopen', side_effect=respond):
+            with self.assertRaises(RuntimeError):
+                Verifier(dict(base_url='http://local/v1',model='qwen',max_tokens=8192)).ask(
+                    observation,'bed','category')
+
     def test_dataset_preserves_repeated_ids_with_source_row_identity(self):
         path = Path(__file__).resolve().parents[1]/'scripts/run_sap_eval.py'
         spec = importlib.util.spec_from_file_location('sap_eval', path)
@@ -103,3 +134,14 @@ class SAPTests(unittest.TestCase):
             self.assertNotEqual(data['sap_source_identities'][0]['source_uid'],
                                 data['sap_source_identities'][1]['source_uid'])
             self.assertEqual(len(set(module.episode_keys(data['sap_source_identities']))),2)
+            row = dict(data['sap_source_identities'][0], metrics={'success':1,'spl':.5})
+            resume = root/'episodes.jsonl'
+            resume.write_text(json.dumps(row)+'\n')
+            pending, rows = module.resume_dataset(data, resume)
+            self.assertEqual(len(pending['episodes']),1)
+            self.assertEqual(pending['sap_source_identities'][0]['source_row'],1)
+            self.assertEqual(len(rows),1)
+            row['episode_sha256'] = 'changed'
+            resume.write_text(json.dumps(row)+'\n')
+            with self.assertRaises(ValueError):
+                module.resume_dataset(data, resume)

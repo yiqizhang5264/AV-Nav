@@ -4,10 +4,14 @@ import io
 import json
 import os
 import urllib.request
+import urllib.error
+from pathlib import Path
 from PIL import Image, ImageDraw
 
 
 def parse_reply(text, kind):
+    if not isinstance(text, str) or not text.strip():
+        raise ValueError('VLM returned no final JSON content')
     text = text.strip()
     if text.startswith('```'):
         text = text.split('\n', 1)[1].rsplit('```', 1)[0]
@@ -54,9 +58,27 @@ class Verifier:
         request = urllib.request.Request(self.config['base_url'].rstrip('/')+'/chat/completions',
             data=json.dumps(payload).encode(), headers={'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+os.environ.get('SAP_VLM_API_KEY', 'local')})
-        with urllib.request.urlopen(request, timeout=180) as response:
-            raw = json.load(response)
-        reply = raw['choices'][0]['message']['content']
-        return parse_reply(reply, kind), dict(prompt=prompt, response=reply, usage=raw.get('usage'),
-            reasoning=raw['choices'][0]['message'].get('reasoning_content',
-                       raw['choices'][0]['message'].get('reasoning')))
+        failures = []
+        for attempt in range(3):
+            # Thinking can consume the initial budget before producing final JSON.
+            # Preserve thinking and allow more completion tokens on retries.
+            payload['max_tokens'] = min(12288, self.config['max_tokens'] + attempt * 2048)
+            request.data = json.dumps(payload).encode()
+            raw = None
+            try:
+                with urllib.request.urlopen(request, timeout=300) as response:
+                    raw = json.load(response)
+                message = raw['choices'][0]['message']
+                reply = message.get('content')
+                result = parse_reply(reply, kind)
+                return result, dict(prompt=prompt, response=reply, usage=raw.get('usage'),
+                    reasoning=message.get('reasoning_content', message.get('reasoning')),
+                    retry_failures=failures, completion_budget=payload['max_tokens'])
+            except (ValueError, KeyError, IndexError, urllib.error.URLError, TimeoutError) as error:
+                failure = dict(attempt=attempt + 1, kind=kind, error=str(error),
+                               completion_budget=payload['max_tokens'], raw_response=raw)
+                failures.append(failure)
+                if os.environ.get('AV_RUN_DIR'):
+                    with (Path(os.environ['AV_RUN_DIR'])/'vlm_errors.jsonl').open('a') as stream:
+                        stream.write(json.dumps(failure)+'\n')
+        raise RuntimeError('VLM verification failed after three attempts: '+failures[-1]['error'])

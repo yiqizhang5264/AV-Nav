@@ -12,6 +12,7 @@ def install():
     original = logger.log_episode_stats
     with gzip.open(os.environ['AV_DATASET_FILE'], 'rt') as stream:
         source = json.load(stream)['sap_source_identities']
+    manifest = json.loads((Path(os.environ['AV_RUN_DIR'])/'manifest.json').read_text())
 
     def log(episode_id, scene_id, infos):
         identity = source[int(episode_id)]
@@ -27,7 +28,8 @@ def install():
                 value = value.item()
             if isinstance(value, (str,int,float,bool)):
                 metrics[key] = None if isinstance(value,float) and not np.isfinite(value) else value
-        row = dict(identity, runtime_episode_id=str(episode_id), failure_cause=failure, metrics=metrics)
+        row = dict(identity, runtime_episode_id=str(episode_id), failure_cause=failure, metrics=metrics,
+                   evaluation_commit=manifest['commit'], evaluation_run=os.environ['AV_RUN_DIR'])
         with (Path(os.environ['AV_RUN_DIR'])/'episodes.jsonl').open('a') as stream:
             stream.write(json.dumps(row, allow_nan=False)+'\n')
         return failure

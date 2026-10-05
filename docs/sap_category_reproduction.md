@@ -82,3 +82,21 @@ Use a dedicated fixed-commit worktree for each long evaluation. All RGB evidence
 and run files remain untracked. Compare SR, SPL, soft-SPL, per-episode success,
 VLM calls, repositions and zero-trigger frequency against `--variant baseline`.
 No efficacy result is claimed before a complete evaluation.
+
+## Engineering repair on 2026-10-05
+
+Empty or malformed final VLM content now retries up to three calls with thinking
+still enabled. Completion budgets are 8192, 10240 and 12288 tokens; each failed
+response is archived in `vlm_errors.jsonl`. Exhaustion still fails the attempt;
+it never automatically approves an unverified candidate. This changes the
+inference protocol and must be disclosed with results; category prompts and
+navigation thresholds are unchanged.
+
+`--resume-from` explicitly imports a previous suite's completed deterministic
+prefix. Source rows, source and episode hashes, configuration and benchmark must
+match. Each attempt writes a new directory and resumes only remaining episodes;
+each row retains its originating commit and run path. This is an engineering
+continuation across commits, not a homogeneous fixed-commit rerun. Global RNG
+state is restarted, so resumed trajectories are not claimed to be identical to
+an uninterrupted run. Final comparison must disclose this lineage. Old failed
+attempts and their evidence remain intact.

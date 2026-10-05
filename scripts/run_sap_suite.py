@@ -15,6 +15,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--gpu', default='1')
     p.add_argument('--variant', choices=['baseline','sap'], default='sap')
+    p.add_argument('--resume-from', help='Explicit previous suite; retains per-episode commit provenance')
     args = p.parse_args()
     if json.loads(Path(args.config).read_text()).get('diagnostic'):
         p.error('Diagnostic configurations cannot run as full efficacy suites')
@@ -25,6 +26,9 @@ def main():
     identity = dict(commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
                     config_sha256=digest(Path(args.config)), source_sha256=hashes,
                     scenes_dir=str(Path(args.scenes_dir).resolve()), variant=args.variant)
+    if args.resume_from:
+        identity['resume_from'] = str(Path(args.resume_from).resolve())
+        identity['parent_suite_sha256'] = digest(Path(args.resume_from)/'suite.json')
     manifest = output/'suite.json'
     if output.exists():
         if not manifest.exists() or json.loads(manifest.read_text()) != identity:
@@ -35,17 +39,26 @@ def main():
     all_rows = []
     for scene in scenes:
         scene_rows = None
+        previous = None
+        if args.resume_from:
+            candidates = sorted((Path(args.resume_from)/scene).glob('attempt_*/episodes.jsonl'))
+            if candidates:
+                previous = candidates[-1]
         for attempt in range(1,4):
             run = output/scene/f'attempt_{attempt:02}'
             if not run.exists():
                 command = [sys.executable,str(ROOT/'scripts/run_sap_eval.py'),
                     '--config',args.config,'--dataset-root',args.dataset_root,'--scenes-dir',args.scenes_dir,
                     '--output',str(run),'--gpu',args.gpu,'--variant',args.variant,'--scene',scene]
+                if previous and previous.exists():
+                    command.extend(['--resume-episodes', str(previous)])
                 subprocess.run(command, check=False)
             summary = run/'summary.json'
             if summary.exists() and json.loads(summary.read_text()).get('complete'):
                 scene_rows = [json.loads(line) for line in (run/'episodes.jsonl').read_text().splitlines()]
                 break
+            if (run/'episodes.jsonl').exists():
+                previous = run/'episodes.jsonl'
         if scene_rows is None:
             raise SystemExit('Scene failed three attempts: '+scene)
         all_rows.extend(scene_rows)
