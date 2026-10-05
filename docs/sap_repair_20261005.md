@@ -1,12 +1,18 @@
 # SAP evaluation repair and continuation, 2026-10-05
 
-Runtime commit: `d0d8a2a293b8b087a29e1f637f7ff2aa1a442ffa`.
+Final runtime commit: `b747e29` (retry and resume base: `d0d8a2a`).
 Pinned VLFM: `584ed56008754fde7997d904983607def8328322`.
 
 The old suite's third attempt failed with `JSONDecodeError` after 48 completed
 episodes, 43 successes. The failed request's raw output was not recorded by the
 old code, so whether its final content was empty, truncated or malformed cannot
 be determined from that traceback alone.
+The first repair run captured the same episode's sufficiency response: it
+contained explanatory prose followed by one valid fenced JSON object, finished
+normally after 6277 completion tokens. The strict old parser rejected the prose.
+The final parser extracts exactly one complete JSON object and validates its
+schema, rejecting ambiguous multiple objects. Replaying the actual recorded
+failure now returns visibility 5 and perspective 5.
 
 The repair retries invalid/empty VLM results and transport errors three times,
 with completion budgets 8192, 10240 and 12288. Thinking stays enabled. Failed
@@ -21,8 +27,8 @@ continuation is not claimed to reproduce uninterrupted stochastic trajectories.
 
 Validation:
 
-- Local unit suite: 68 tests, one OpenCV-dependent skip.
-- Server unit suite: all 68 tests passed.
+- Final local unit suite: 69 tests, one OpenCV-dependent skip.
+- Final server unit suite: all 69 tests passed.
 - First training smoke failed before evaluation because the fresh worktree lacked
   local weight links; this is not an efficacy result. Links were added without
   changing upstream source.
@@ -31,9 +37,13 @@ Validation:
 - Live Qwen API check returned valid negative category JSON and nonempty reasoning.
 
 Execution uses a new immutable worktree:
-`/home/zyq/AV-Nav-worktrees/sap-hm3dv1-resume-d0d8a2a`.
+`/home/zyq/AV-Nav-worktrees/sap-hm3dv1-resume-b747e29`.
 New output:
-`/home/zyq/AV-Nav/runs/sap_hm3dv1_val_thinking_resume_d0d8a2a_20261005`.
+`/home/zyq/AV-Nav/runs/sap_hm3dv1_val_thinking_resume_b747e29_20261005`.
+The first repair run (`...resume_d0d8a2a_20261005`) was interrupted during the
+49th episode after capturing the malformed response. It completed no new
+episodes; the final run inherits its unchanged 48 completed rows. Its worktree,
+logs and raw response are preserved.
 Old outputs remain intact at
 `/home/zyq/AV-Nav/runs/sap_hm3dv1_val_thinking_5cf1d2f`.
 Session `sap_hm3dv1_thinking`: SAP on physical GPU 3; Qwen thinking on GPU 2.
