@@ -60,3 +60,11 @@ Resume manifests confirm 99 inherited and zero pending in the first scene;
 31 inherited and 68 pending in the second scene. Session
 `sap_hm3dv1_thinking` uses the fixed runtime commit. The original VLFM
 evaluation remains separate on GPU 1.
+
+At 20:12 Singapore time, the actual previously failing request in scene
+`5cdEh9F2hJL`, source row 31, completed through thinking-budget recovery.
+The final validated scores were visibility 2 and perspective 2. The
+`sufficiency` event records the continuation response; subsequent viewpoint
+selection and navigation advanced from step 103 to step 109. This verifies
+recovery past the observed stalled request. The episode is still in progress;
+the retained count remains 130 completed distinct episodes, 97 successes.
