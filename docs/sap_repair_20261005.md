@@ -52,3 +52,10 @@ The existing VLFM evaluation continues on GPU 1. No baseline was started.
 The result lineage contains two code commits and different VLM retry budgets;
 report it as an engineering continuation, not a single-commit rerun. Full-val
 performance remains unavailable until exact coverage of all 2000 episodes.
+
+Post-launch verification: the previously failing 49th episode completed with
+success 1. Its sufficiency/category decisions were recorded normally, including
+a rejected candidate and a later accepted candidate. The cumulative file now
+contains 49 unique source episodes and 44 successes; the next episode has
+started. This confirms recovery past the observed parser failure, not full-val
+efficacy.
