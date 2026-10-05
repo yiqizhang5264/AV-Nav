@@ -77,6 +77,17 @@ class SAPTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 parse_reply(text, 'sufficiency')
 
+    def test_final_json_with_explanation_and_fence(self):
+        self.assertEqual(parse_reply('The object is visible.\n```json\n'
+            '{"visibility":5,"perspective":5}\n```', 'sufficiency'),
+            {'visibility':5,'perspective':5})
+        self.assertEqual(parse_reply('It is a sofa.\n{"matches":false}', 'category'),
+                         {'matches':False})
+        for text in ['{"matches":false} then {"matches":true}',
+                     'Explanation {"matches":"false"}', '[]', 'No matching object.']:
+            with self.assertRaises(ValueError):
+                parse_reply(text, 'category')
+
     def test_thinking_exhaustion_retries_without_accepting_empty_content(self):
         import io
         observation = SimpleNamespace(rgb=np.zeros((8,8,3),dtype=np.uint8), bbox=(0,0,4,4))

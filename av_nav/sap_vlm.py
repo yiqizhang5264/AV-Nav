@@ -15,7 +15,29 @@ def parse_reply(text, kind):
     text = text.strip()
     if text.startswith('```'):
         text = text.split('\n', 1)[1].rsplit('```', 1)[0]
-    value = json.loads(text)
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError:
+        # Qwen may add explanatory prose before its fenced final answer.
+        # Accept exactly one complete object, never infer a result from prose.
+        decoder = json.JSONDecoder()
+        objects = []
+        cursor = 0
+        while cursor < len(text):
+            start = text.find('{', cursor)
+            if start < 0:
+                break
+            try:
+                item, consumed = decoder.raw_decode(text[start:])
+                objects.append(item)
+                cursor = start + consumed
+            except json.JSONDecodeError:
+                cursor = start + 1
+        if len(objects) != 1:
+            raise ValueError('Expected exactly one complete final JSON object')
+        value = objects[0]
+    if not isinstance(value, dict):
+        raise ValueError('Expected a final JSON object')
     keys = ('visibility', 'perspective') if kind == 'sufficiency' else ('matches',)
     for key in keys:
         if kind == 'sufficiency':

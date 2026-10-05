@@ -91,6 +91,10 @@ response is archived in `vlm_errors.jsonl`. Exhaustion still fails the attempt;
 it never automatically approves an unverified candidate. This changes the
 inference protocol and must be disclosed with results; category prompts and
 navigation thresholds are unchanged.
+Explanatory prose or Markdown surrounding exactly one complete JSON object is
+accepted after the same strict schema validation; ambiguous multiple objects
+are rejected. A captured failure showed a valid scored object preceded by prose,
+which the previous parser rejected.
 
 `--resume-from` explicitly imports a previous suite's completed deterministic
 prefix. Source rows, source and episode hashes, configuration and benchmark must
