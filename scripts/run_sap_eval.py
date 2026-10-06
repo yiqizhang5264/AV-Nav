@@ -101,6 +101,7 @@ def main():
     parser.add_argument('--max-steps', type=int, default=500)
     parser.add_argument('--gpu', default='1')
     parser.add_argument('--variant', choices=['baseline', 'sap'], default='sap')
+    parser.add_argument('--save-video', action='store_true', help='Save an episode MP4 and source identity index')
     args = parser.parse_args()
     if args.limit is not None and args.limit < 1:
         parser.error('limit must be positive')
@@ -140,11 +141,13 @@ def main():
     env = os.environ.copy()
     env.update(CUDA_VISIBLE_DEVICES=args.gpu, AV_RUN_DIR=str(run), AV_DATASET_FILE=str(dataset),
                SAP_CONFIG=str(frozen_config), SAP_VARIANT=args.variant, PYTHONHASHSEED=str(config['seed']),
+               SAP_SAVE_VIDEO='1' if args.save_video else '0',
                PYTHONPATH=os.pathsep.join([str(ROOT), str(upstream), env.get('PYTHONPATH', '')]))
     command = [sys.executable, '-u', str(ROOT/'scripts/run_sap_runtime.py'),
         'habitat_baselines.evaluate=true', 'habitat_baselines.num_environments=1',
         'habitat_baselines.torch_gpu_id=0', 'habitat_baselines.test_episode_count=-1',
-        'habitat_baselines.eval.video_option=[]', f'habitat_baselines.eval.split={args.split}',
+        'habitat_baselines.eval.video_option=[disk]' if args.save_video else 'habitat_baselines.eval.video_option=[]',
+        f'habitat_baselines.video_dir={run/"videos"}', f'habitat_baselines.eval.split={args.split}',
         f'habitat.seed={config["seed"]}', f'habitat.environment.max_episode_steps={args.max_steps}',
         'habitat.environment.iterator_options.shuffle=False',
         'habitat.environment.iterator_options.group_by_scene=False',
@@ -155,6 +158,7 @@ def main():
     manifest = dict(started=datetime.now(timezone.utc).isoformat(), benchmark='HM3Dv1 ObjectNav',
         split=args.split, scene=args.scene, variant=args.variant, expected_episodes=len(expected),
         inherited_episodes=len(prior_rows), pending_episodes=len(data['episodes']),
+        save_video=args.save_video,
         resume_from=str(Path(args.resume_episodes).resolve()) if args.resume_episodes else None,
         resume_sha256=digest(Path(args.resume_episodes)) if args.resume_episodes else None,
         diagnostic=bool(config.get('diagnostic')) or args.split != 'val' or args.limit is not None or args.max_steps != 500,

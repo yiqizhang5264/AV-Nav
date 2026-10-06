@@ -16,6 +16,7 @@ def main():
     p.add_argument('--gpu', default='1')
     p.add_argument('--variant', choices=['baseline','sap'], default='sap')
     p.add_argument('--resume-from', help='Explicit previous suite; retains per-episode commit provenance')
+    p.add_argument('--save-video', action='store_true')
     args = p.parse_args()
     if json.loads(Path(args.config).read_text()).get('diagnostic'):
         p.error('Diagnostic configurations cannot run as full efficacy suites')
@@ -29,6 +30,8 @@ def main():
     if args.resume_from:
         identity['resume_from'] = str(Path(args.resume_from).resolve())
         identity['parent_suite_sha256'] = digest(Path(args.resume_from)/'suite.json')
+    if args.save_video:
+        identity['save_video'] = True
     manifest = output/'suite.json'
     if output.exists():
         if not manifest.exists() or json.loads(manifest.read_text()) != identity:
@@ -52,6 +55,8 @@ def main():
                     '--output',str(run),'--gpu',args.gpu,'--variant',args.variant,'--scene',scene]
                 if previous and previous.exists():
                     command.extend(['--resume-episodes', str(previous)])
+                if args.save_video:
+                    command.append('--save-video')
                 subprocess.run(command, check=False)
             summary = run/'summary.json'
             if summary.exists() and json.loads(summary.read_text()).get('complete'):

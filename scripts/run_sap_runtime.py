@@ -13,6 +13,14 @@ def install():
     with gzip.open(os.environ['AV_DATASET_FILE'], 'rt') as stream:
         source = json.load(stream)['sap_source_identities']
     manifest = json.loads((Path(os.environ['AV_RUN_DIR'])/'manifest.json').read_text())
+    pending = {}
+
+    def write_row(row):
+        with (Path(os.environ['AV_RUN_DIR'])/'episodes.jsonl').open('a') as stream:
+            stream.write(json.dumps(row, allow_nan=False)+'\n')
+
+    def video_saved(episode_id):
+        write_row(pending.pop(str(episode_id)))
 
     def log(episode_id, scene_id, infos):
         identity = source[int(episode_id)]
@@ -30,14 +38,21 @@ def install():
                 metrics[key] = None if isinstance(value,float) and not np.isfinite(value) else value
         row = dict(identity, runtime_episode_id=str(episode_id), failure_cause=failure, metrics=metrics,
                    evaluation_commit=manifest['commit'], evaluation_run=os.environ['AV_RUN_DIR'])
-        with (Path(os.environ['AV_RUN_DIR'])/'episodes.jsonl').open('a') as stream:
-            stream.write(json.dumps(row, allow_nan=False)+'\n')
+        if os.environ.get('SAP_SAVE_VIDEO') == '1':
+            # A completed video episode is durable only after MP4 encoding.
+            pending[str(episode_id)] = row
+        else:
+            write_row(row)
         return failure
 
     logger.log_episode_stats = log
+    return source, video_saved
 
 def main():
-    install()
+    source, video_saved = install()
+    if os.environ.get('SAP_SAVE_VIDEO') == '1':
+        from av_nav.sap_video import install_video
+        install_video(source, video_saved)
     if os.environ['SAP_VARIANT'] != 'baseline':
         import av_nav.sap_policy  # noqa: F401
     runpy.run_module('vlfm.run', run_name='__main__')
