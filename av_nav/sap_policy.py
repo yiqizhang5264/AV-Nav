@@ -11,6 +11,7 @@ from .geometry import observe, angle_delta
 from .planner import Grid
 from .sap_geometry import HeightMap, depth_points, select_view
 from .sap_vlm import Verifier
+from .sap_rejections import RejectedCandidates
 from .trace import native
 
 
@@ -43,6 +44,7 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
         self._sap_episode += 1
         self._sap_observations = []
         self._sap_decisions = []
+        self._sap_rejections = RejectedCandidates(self.sap['association_radius'])
         self._sap_active = None
         self._sap_calls = self._sap_moves = self._sap_triggers = 0
         self._sap_map.reset()
@@ -84,10 +86,7 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
         # candidate, so a blacklisted nearest object cannot hide all other objects.
         cloud = self._object_map.clouds.get(self._target_object)
         if cloud is not None:
-            for center, accepted in self._sap_decisions:
-                if not accepted:
-                    cloud = cloud[np.linalg.norm(cloud[:, :2]-center, axis=1) >= self.sap['association_radius']]
-            self._object_map.clouds[self._target_object] = cloud
+            self._object_map.clouds[self._target_object] = self._sap_rejections.filter_cloud(cloud)
             self._object_map.last_target_coord = None
         return super()._get_target_object_location(position)
 
@@ -111,6 +110,10 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
         state = self._sap_active
         accepted = self._ask(state['best'], 'category')['matches']
         self._sap_decisions.append((state['center'].copy(), accepted))
+        if not accepted:
+            count = self._sap_rejections.add(state['observations'], state['goal'], state['center'])
+            self._event('candidate_rejected', footprint_points=count,
+                        goal=state['goal'], center=state['center'])
         self._event('decision', accepted=accepted, goal=state['goal'], center=state['center'],
                     attempts=state['attempts'], best_score=state['score'])
         self._sap_active = None
@@ -146,6 +149,7 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
         return True
 
     def _score(self, obs):
+        self._sap_active['observations'].append(obs)
         value = self._ask(obs, 'sufficiency')
         score = value['visibility'] + value['perspective']
         state = self._sap_active
@@ -170,11 +174,17 @@ class SAPCategoryPolicy(HabitatITMPolicyV2):
                 if np.linalg.norm(robot-goal) <= self._pointnav_stop_radius:
                     self._event('stale_candidate', goal=goal)
                     self._sap_decisions.append((goal.copy(), False))
+                    self._sap_rejections.add([], goal, goal)
                     return self._resume()
                 action = super()._pointnav(goal, stop=False)
                 return TorchActionIDs.TURN_LEFT if int(action.item()) == 0 else action
+            if self._sap_rejections.rejects(obs):
+                count = self._sap_rejections.add([obs], goal, obs.center[:2])
+                self._event('rejected_candidate_reobserved', footprint_points=count,
+                            goal=goal, center=obs.center[:2])
+                return self._resume()
             self._sap_active = dict(goal=goal.copy(), center=obs.center[:2].copy(), best=obs,
-                                   score=-1, attempts=0, visited=[robot.copy()])
+                                   score=-1, attempts=0, visited=[robot.copy()], observations=[])
             if self._score(obs) >= self.sap['sufficiency_threshold']:
                 return self._verify()
             self._sap_triggers += 1
