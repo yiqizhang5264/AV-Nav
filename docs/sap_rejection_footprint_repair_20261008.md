@@ -35,3 +35,34 @@ and is not added to efficacy metrics. The repair commit changes policy behavior,
 so aggregated results across the resume boundary must retain their mixed-commit
 provenance. Server regression/smoke checks are diagnostic checks, not efficacy
 measurements. Existing VLFM evaluation and model services are left running.
+
+## Server validation and deployment
+
+The server ran all 75 tests successfully, including the OpenCV-dependent test.
+The first Habitat smoke attempt failed before navigation because the new
+worktree lacked its untracked `dummy_policy.pth` resource link. That failed
+attempt was preserved; missing dataset, scene and dummy-checkpoint links were
+added without changing the upstream checkout's tracked files.
+
+The second smoke attempt replayed only the pending source-row-33 episode with
+a 30-step cap, real Qwen thinking, and video saving. At step 12, category
+verification rejected the candidate and saved a 510-point footprint. It reached
+the 30-step limit with only two VLM API calls, one rejection and no further
+verification of that candidate. It exited normally and encoded its video.
+There were zero AVV reposition triggers in this smoke episode. Its shortened
+unsuccessful episode and inherited rows are diagnostic data, not efficacy
+results, and are not used to resume the formal evaluation.
+
+The formal suite resumed on GPU 3 at fixed policy commit `dc53468` in
+`/home/zyq/AV-Nav-worktrees/sap-hm3dv1-rejections-dc53468`, with videos enabled,
+using the old video's suite as its source of completed prefixes:
+
+`/home/zyq/AV-Nav/runs/sap_hm3dv1_val_video_e13dd1e_20261006`.
+
+The new formal output is
+`/home/zyq/AV-Nav/runs/sap_hm3dv1_val_video_rejections_dc53468_20261008`.
+Source row 33 restarts from the old scene's durable prefix of 33 completed
+episodes (rows 0–32). Previous metrics, evidence and videos remain in their
+original directories. Commands, server test output, diagnostic attempts and
+deployment metadata are stored untracked under
+`/home/zyq/AV-Nav/runs/sap_rejection_checks_dc53468_20261008`.
