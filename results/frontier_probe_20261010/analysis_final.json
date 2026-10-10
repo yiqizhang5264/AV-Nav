@@ -1,0 +1,3273 @@
+{
+  "schema": "vlfm.frontier_probe_analysis.v1",
+  "source_replay": "/home/zyq/vlfm_evidence_runs/frontier_probe_cpu_20261010_1188547",
+  "total_expected": 8,
+  "complete_cases": 8,
+  "population_efficacy_claim": false,
+  "counterfactual_recovery_measured": false,
+  "no_gpu_inference": true,
+  "cases": [
+    {
+      "dataset": "hm3dv1",
+      "episode_key": "5cdEh9F2hJL.basis.glb_59",
+      "stratum": "failure_budget500_return",
+      "original_success": false,
+      "original_steps": 500,
+      "frontier_decisions": 481,
+      "exact_frontier_decisions": 481,
+      "empty_frontier_stops": 0,
+      "decision_branch_counts": {
+        "highest_noncyclic": 61,
+        "keep_last": 420
+      },
+      "cyclic_checks": 61,
+      "cyclic_hits": 0,
+      "shadow_same_numeric_state_action_missed_steps": [],
+      "shadow_note": "Offline exact numeric tuple comparison only. Not a policy change, not a tolerance-based cycle detector, no counterfactual rollout.",
+      "total_traveled_xy_m": 70.67977733928359,
+      "observed_forward_actions": 293,
+      "forward_actions_without_translation_1e6m": 8,
+      "motion_note": "Pre-action to next pre-action pose, excludes final action without a saved next observation; lack of translation does not by itself identify a collision.",
+      "non_top_rank_selections": 100,
+      "delayed_known_frontier_switches": [
+        {
+          "step": 185,
+          "goal_xy": [
+            -6.142677669529664,
+            4.992677669529667
+          ],
+          "distance_from_robot_xy_m": 3.7937521971055403,
+          "earliest_matched_step": 141,
+          "earliest_matched_frontier_xy": [
+            -5.7,
+            5
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.12731974068936358,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -2.7,
+            7.25
+          ],
+          "nearest_frontier_distance_xy_m": 1.4705512514147498,
+          "nearest_frontier_value": 0.11896125011263387,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 6
+        },
+        {
+          "step": 306,
+          "goal_xy": [
+            -8.039644660940672,
+            2.0396446609406724
+          ],
+          "distance_from_robot_xy_m": 6.4087950337035196,
+          "earliest_matched_step": 267,
+          "earliest_matched_frontier_xy": [
+            -8.157322330470336,
+            2.007322330470333
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11645872446154817,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -8.220710678118655,
+            6.120710678118655
+          ],
+          "nearest_frontier_distance_xy_m": 5.147194388744276,
+          "nearest_frontier_value": 0.1127229779958725,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 8
+        },
+        {
+          "step": 401,
+          "goal_xy": [
+            -8.8,
+            -3.375
+          ],
+          "distance_from_robot_xy_m": 3.3175275077708637,
+          "earliest_matched_step": 376,
+          "earliest_matched_frontier_xy": [
+            -8.8,
+            -3.375
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.10956569155676898,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -6.8073223304703365,
+            -2.142677669529661
+          ],
+          "nearest_frontier_distance_xy_m": 2.013677753057669,
+          "nearest_frontier_value": 0.10632534165948893,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 6
+        },
+        {
+          "step": 443,
+          "goal_xy": [
+            -9.535355339059327,
+            0.5853553390593277
+          ],
+          "distance_from_robot_xy_m": 4.381789458572031,
+          "earliest_matched_step": 401,
+          "earliest_matched_frontier_xy": [
+            -9.504289321881345,
+            0.6
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.10768468404077568,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -6.8073223304703365,
+            -2.142677669529661
+          ],
+          "nearest_frontier_distance_xy_m": 2.8165186510373847,
+          "nearest_frontier_value": 0.10632534165948893,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 4
+        },
+        {
+          "step": 474,
+          "goal_xy": [
+            -1.942677669529664,
+            -3.692677669529661
+          ],
+          "distance_from_robot_xy_m": 8.085569039596674,
+          "earliest_matched_step": 88,
+          "earliest_matched_frontier_xy": [
+            -2.3146446609406723,
+            -3.4
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.10683604146799455,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -10.260355339059327,
+            1.0603553390593277
+          ],
+          "nearest_frontier_distance_xy_m": 1.5129535504259042,
+          "nearest_frontier_value": 0.10539703065166385,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 5
+        }
+      ],
+      "delayed_known_frontier_note": "A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
+      "old_pose_near_goal_selection_steps": [],
+      "old_pose_near_goal_note": "Per-decision count, not trip count. Goal >=3m away, <=0.5m from a pose >=20 actions old. No path-cost or low-gain inference.",
+      "processed_map_area_removed_on_steps": 115,
+      "total_seen_processed_map_m2": 63.405,
+      "first_return": {
+        "screen_witness": {
+          "leave_step": 31,
+          "furthest_step": 52,
+          "return_step": 79,
+          "excursion_m": 3.0129,
+          "return_distance_m": 0.4786
+        },
+        "full": {
+          "start_pre_action_step": 31,
+          "end_pre_action_step": 79,
+          "actions": 48,
+          "traveled_xy_m": 5.899847439581055,
+          "new_processed_map_m2": 2.5949999999999998,
+          "new_processed_map_m2_per_traveled_m": 0.4398418817731784,
+          "mode_counts": {
+            "explore": 48
+          },
+          "decision_branch_counts": {
+            "keep_last": 44,
+            "highest_noncyclic": 4
+          }
+        },
+        "outward": {
+          "start_pre_action_step": 31,
+          "end_pre_action_step": 52,
+          "actions": 21,
+          "traveled_xy_m": 3.149845679319019,
+          "new_processed_map_m2": 2.535,
+          "new_processed_map_m2_per_traveled_m": 0.8048013325364101,
+          "mode_counts": {
+            "explore": 21
+          },
+          "decision_branch_counts": {
+            "keep_last": 19,
+            "highest_noncyclic": 2
+          }
+        },
+        "return_leg": {
+          "start_pre_action_step": 52,
+          "end_pre_action_step": 79,
+          "actions": 27,
+          "traveled_xy_m": 2.750001760262037,
+          "new_processed_map_m2": 0.06,
+          "new_processed_map_m2_per_traveled_m": 0.021818167852475423,
+          "mode_counts": {
+            "explore": 27
+          },
+          "decision_branch_counts": {
+            "keep_last": 25,
+            "highest_noncyclic": 2
+          }
+        },
+        "pure_explore": true,
+        "decision_examples": [
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv1",
+              "episode_key": "5cdEh9F2hJL.basis.glb_59",
+              "step": 31,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -0.32071067811865533,
+                -2.170710678118655
+              ],
+              [
+                1.667677669529661,
+                -4.667677669529661
+              ],
+              [
+                0.9,
+                -4.025
+              ]
+            ],
+            "robot_xy": [
+              1.125001072883606,
+              -2.948556423187256
+            ],
+            "last_frontier_before": [
+              1.667677669529661,
+              -4.667677669529661
+            ],
+            "last_value_before": 0.10403056146401712,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 755857043165573,
+            "sorted_frontiers_xy": [
+              [
+                1.667677669529661,
+                -4.667677669529661
+              ],
+              [
+                0.9,
+                -4.025
+              ],
+              [
+                -0.32071067811865533,
+                -2.170710678118655
+              ]
+            ],
+            "sorted_values": [
+              0.1042263699767058,
+              0.10415985810293657,
+              0.10362341928742297
+            ],
+            "top_two_values": [
+              0.1042263699767058,
+              0.10415985810293657
+            ],
+            "sorted_to_input_matches": [
+              [
+                1
+              ],
+              [
+                2
+              ],
+              [
+                0
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 0,
+              "current_value": 0.1042263699767058,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              1
+            ],
+            "selected_frontier_xy": [
+              1.667677669529661,
+              -4.667677669529661
+            ],
+            "selected_value": 0.1042263699767058,
+            "last_frontier_after": [
+              1.667677669529661,
+              -4.667677669529661
+            ],
+            "last_value_after": 0.1042263699767058,
+            "decision_elapsed_ms": 0.811404,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv1",
+              "episode_key": "5cdEh9F2hJL.basis.glb_59",
+              "step": 52,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -0.32071067811865533,
+                -2.170710678118655
+              ],
+              [
+                1.2,
+                -6.293933982822017
+              ],
+              [
+                0.9,
+                -4.025
+              ]
+            ],
+            "robot_xy": [
+              1.675079584121704,
+              -5.910858154296875
+            ],
+            "last_frontier_before": [
+              1.2719669914110114,
+              -6.278033008588989
+            ],
+            "last_value_before": 0.10645762754834681,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 755863793471031,
+            "sorted_frontiers_xy": [
+              [
+                1.2,
+                -6.293933982822017
+              ],
+              [
+                0.9,
+                -4.025
+              ],
+              [
+                -0.32071067811865533,
+                -2.170710678118655
+              ]
+            ],
+            "sorted_values": [
+              0.11085455491455905,
+              0.10416309043658264,
+              0.10362341928742297
+            ],
+            "top_two_values": [
+              0.11085455491455905,
+              0.10416309043658264
+            ],
+            "sorted_to_input_matches": [
+              [
+                1
+              ],
+              [
+                2
+              ],
+              [
+                0
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 0,
+              "current_value": 0.11085455491455905,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "within_0.5m"
+            },
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              1
+            ],
+            "selected_frontier_xy": [
+              1.2,
+              -6.293933982822017
+            ],
+            "selected_value": 0.11085455491455905,
+            "last_frontier_after": [
+              1.2,
+              -6.293933982822017
+            ],
+            "last_value_after": 0.11085455491455905,
+            "decision_elapsed_ms": 0.927592,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv1",
+              "episode_key": "5cdEh9F2hJL.basis.glb_59",
+              "step": 79,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -0.32071067811865533,
+                -2.170710678118655
+              ]
+            ],
+            "robot_xy": [
+              1.2085740566253662,
+              -3.4198312759399414
+            ],
+            "last_frontier_before": [
+              -0.32071067811865533,
+              -2.170710678118655
+            ],
+            "last_value_before": 0.10493968783013043,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 755871986531530,
+            "sorted_frontiers_xy": [
+              [
+                -0.32071067811865533,
+                -2.170710678118655
+              ]
+            ],
+            "sorted_values": [
+              0.10493968783013043
+            ],
+            "top_two_values": [
+              0.10493968783013043
+            ],
+            "sorted_to_input_matches": [
+              [
+                0
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 0,
+              "current_value": 0.10493968783013043,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              0
+            ],
+            "selected_frontier_xy": [
+              -0.32071067811865533,
+              -2.170710678118655
+            ],
+            "selected_value": 0.10493968783013043,
+            "last_frontier_after": [
+              -0.32071067811865533,
+              -2.170710678118655
+            ],
+            "last_value_after": 0.10493968783013043,
+            "decision_elapsed_ms": 0.800506,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          }
+        ]
+      },
+      "original_printed_value_matches": 481,
+      "printed_value_precision": "two decimals of percent, not full-precision original value"
+    },
+    {
+      "dataset": "hm3dv2",
+      "episode_key": "5cdEh9F2hJL.basis.glb_9",
+      "stratum": "failure_budget500_return",
+      "original_success": false,
+      "original_steps": 500,
+      "frontier_decisions": 488,
+      "exact_frontier_decisions": 488,
+      "empty_frontier_stops": 0,
+      "decision_branch_counts": {
+        "highest_noncyclic": 23,
+        "keep_last": 465
+      },
+      "cyclic_checks": 23,
+      "cyclic_hits": 0,
+      "shadow_same_numeric_state_action_missed_steps": [],
+      "shadow_note": "Offline exact numeric tuple comparison only. Not a policy change, not a tolerance-based cycle detector, no counterfactual rollout.",
+      "total_traveled_xy_m": 77.30833888640322,
+      "observed_forward_actions": 313,
+      "forward_actions_without_translation_1e6m": 3,
+      "motion_note": "Pre-action to next pre-action pose, excludes final action without a saved next observation; lack of translation does not by itself identify a collision.",
+      "non_top_rank_selections": 165,
+      "delayed_known_frontier_switches": [
+        {
+          "step": 81,
+          "goal_xy": [
+            2.05,
+            2.35
+          ],
+          "distance_from_robot_xy_m": 4.0419614934050605,
+          "earliest_matched_step": 37,
+          "earliest_matched_frontier_xy": [
+            2.05,
+            2.35
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11007878021975506,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            2.05,
+            2.35
+          ],
+          "nearest_frontier_distance_xy_m": 4.0419614934050605,
+          "nearest_frontier_value": 0.11007878021975506,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 7
+        },
+        {
+          "step": 134,
+          "goal_xy": [
+            2.6396446609406725,
+            -2.95
+          ],
+          "distance_from_robot_xy_m": 5.041593799413922,
+          "earliest_matched_step": 29,
+          "earliest_matched_frontier_xy": [
+            2.657322330470339,
+            -2.657322330470339
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11251452222960372,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            2.3353553390593276,
+            -0.31464466094067234
+          ],
+          "nearest_frontier_distance_xy_m": 2.4048163496419717,
+          "nearest_frontier_value": 0.1015325319681071,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 6
+        },
+        {
+          "step": 244,
+          "goal_xy": [
+            2.475,
+            -7.75
+          ],
+          "distance_from_robot_xy_m": 3.799771071933908,
+          "earliest_matched_step": 164,
+          "earliest_matched_frontier_xy": [
+            2.475,
+            -7.75
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11209561154330613,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            3.775,
+            -5.85
+          ],
+          "nearest_frontier_distance_xy_m": 2.191060636803767,
+          "nearest_frontier_value": 0.10412826658042174,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 8
+        },
+        {
+          "step": 290,
+          "goal_xy": [
+            -1.9,
+            -6.25
+          ],
+          "distance_from_robot_xy_m": 3.0550393599409156,
+          "earliest_matched_step": 262,
+          "earliest_matched_frontier_xy": [
+            -1.9,
+            -6.225
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11329055516964731,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -1.9,
+            -6.25
+          ],
+          "nearest_frontier_distance_xy_m": 3.0550393599409156,
+          "nearest_frontier_value": 0.11329055516964731,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 6
+        },
+        {
+          "step": 310,
+          "goal_xy": [
+            7.917677669529661,
+            -0.5323223304703362
+          ],
+          "distance_from_robot_xy_m": 10.906496289101456,
+          "earliest_matched_step": 187,
+          "earliest_matched_frontier_xy": [
+            7.917677669529661,
+            -0.5323223304703362
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.10633738378894031,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -2.4853553390593275,
+            -6.7353553390593275
+          ],
+          "nearest_frontier_distance_xy_m": 1.3401015028169103,
+          "nearest_frontier_value": 0.10072094202041626,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 6
+        },
+        {
+          "step": 383,
+          "goal_xy": [
+            -1.75,
+            -6.914644660940672
+          ],
+          "distance_from_robot_xy_m": 10.950788251774753,
+          "earliest_matched_step": 310,
+          "earliest_matched_frontier_xy": [
+            -1.9853553390593277,
+            -6.9853553390593275
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11884412703463776,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            7.775,
+            0.675
+          ],
+          "nearest_frontier_distance_xy_m": 1.6405061588472736,
+          "nearest_frontier_value": 0.11137009292943788,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 5
+        },
+        {
+          "step": 466,
+          "goal_xy": [
+            7.775,
+            0.675
+          ],
+          "distance_from_robot_xy_m": 11.76556051384205,
+          "earliest_matched_step": 383,
+          "earliest_matched_frontier_xy": [
+            7.775,
+            0.675
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11137009292943788,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -3.635355339059328,
+            -7.9853553390593275
+          ],
+          "nearest_frontier_distance_xy_m": 2.5928535335139435,
+          "nearest_frontier_value": 0.10611755984376928,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 4
+        }
+      ],
+      "delayed_known_frontier_note": "A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
+      "old_pose_near_goal_selection_steps": [],
+      "old_pose_near_goal_note": "Per-decision count, not trip count. Goal >=3m away, <=0.5m from a pose >=20 actions old. No path-cost or low-gain inference.",
+      "processed_map_area_removed_on_steps": 86,
+      "total_seen_processed_map_m2": 53.605,
+      "first_return": {
+        "screen_witness": {
+          "leave_step": 59,
+          "furthest_step": 81,
+          "return_step": 102,
+          "excursion_m": 3.1246,
+          "return_distance_m": 0.5
+        },
+        "full": {
+          "start_pre_action_step": 59,
+          "end_pre_action_step": 102,
+          "actions": 43,
+          "traveled_xy_m": 6.4999984361086645,
+          "new_processed_map_m2": 1.4225,
+          "new_processed_map_m2_per_traveled_m": 0.21884620650025943,
+          "mode_counts": {
+            "explore": 43
+          },
+          "decision_branch_counts": {
+            "keep_last": 41,
+            "highest_noncyclic": 2
+          }
+        },
+        "outward": {
+          "start_pre_action_step": 59,
+          "end_pre_action_step": 81,
+          "actions": 22,
+          "traveled_xy_m": 3.499999050785806,
+          "new_processed_map_m2": 1.4225,
+          "new_processed_map_m2_per_traveled_m": 0.4064286816536782,
+          "mode_counts": {
+            "explore": 22
+          },
+          "decision_branch_counts": {
+            "keep_last": 21,
+            "highest_noncyclic": 1
+          }
+        },
+        "return_leg": {
+          "start_pre_action_step": 81,
+          "end_pre_action_step": 102,
+          "actions": 21,
+          "traveled_xy_m": 2.999999385322859,
+          "new_processed_map_m2": 0,
+          "new_processed_map_m2_per_traveled_m": 0,
+          "mode_counts": {
+            "explore": 21
+          },
+          "decision_branch_counts": {
+            "highest_noncyclic": 1,
+            "keep_last": 20
+          }
+        },
+        "pure_explore": true,
+        "decision_examples": [
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv2",
+              "episode_key": "5cdEh9F2hJL.basis.glb_9",
+              "step": 59,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -1.35,
+                -2.85
+              ],
+              [
+                -2.067677669529664,
+                -0.867677669529661
+              ],
+              [
+                -1.0103553390593276,
+                1.7603553390593276
+              ],
+              [
+                1.3,
+                1.975
+              ],
+              [
+                2.05,
+                2.35
+              ],
+              [
+                2.2853553390593278,
+                -0.31464466094067234
+              ],
+              [
+                2.425,
+                -1.85
+              ],
+              [
+                5.214644660940673,
+                -1.35
+              ],
+              [
+                5.0146446609406725,
+                -2.55
+              ],
+              [
+                2.6396446609406725,
+                -2.7
+              ]
+            ],
+            "robot_xy": [
+              0.15849338471889496,
+              -0.475480318069458
+            ],
+            "last_frontier_before": [
+              -1.0103553390593276,
+              1.7603553390593276
+            ],
+            "last_value_before": 0.10765950698720145,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756039073841069,
+            "sorted_frontiers_xy": [
+              [
+                1.3,
+                1.975
+              ],
+              [
+                2.05,
+                2.35
+              ],
+              [
+                -2.067677669529664,
+                -0.867677669529661
+              ],
+              [
+                -1.0103553390593276,
+                1.7603553390593276
+              ],
+              [
+                2.6396446609406725,
+                -2.7
+              ],
+              [
+                2.2853553390593278,
+                -0.31464466094067234
+              ],
+              [
+                5.214644660940673,
+                -1.35
+              ],
+              [
+                2.425,
+                -1.85
+              ],
+              [
+                5.0146446609406725,
+                -2.55
+              ],
+              [
+                -1.35,
+                -2.85
+              ]
+            ],
+            "sorted_values": [
+              0.11077458620131801,
+              0.11007878021975506,
+              0.10635201213662127,
+              0.10587355910786034,
+              0.10548524803982207,
+              0.10525137524955988,
+              0.10503896191794798,
+              0.10473103574985354,
+              0.10386823287509195,
+              0.0950201004743576
+            ],
+            "top_two_values": [
+              0.11077458620131801,
+              0.11007878021975506
+            ],
+            "sorted_to_input_matches": [
+              [
+                3
+              ],
+              [
+                4
+              ],
+              [
+                1
+              ],
+              [
+                2
+              ],
+              [
+                9
+              ],
+              [
+                5
+              ],
+              [
+                7
+              ],
+              [
+                6
+              ],
+              [
+                8
+              ],
+              [
+                0
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 3,
+              "current_value": 0.10587355910786034,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 3,
+            "selected_input_indices": [
+              2
+            ],
+            "selected_frontier_xy": [
+              -1.0103553390593276,
+              1.7603553390593276
+            ],
+            "selected_value": 0.10587355910786034,
+            "last_frontier_after": [
+              -1.0103553390593276,
+              1.7603553390593276
+            ],
+            "last_value_after": 0.10587355910786034,
+            "decision_elapsed_ms": 1.686941,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv2",
+              "episode_key": "5cdEh9F2hJL.basis.glb_9",
+              "step": 81,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                2.05,
+                2.35
+              ],
+              [
+                2.2853553390593278,
+                -0.31464466094067234
+              ],
+              [
+                2.425,
+                -1.85
+              ],
+              [
+                5.214644660940673,
+                -1.35
+              ],
+              [
+                5.0146446609406725,
+                -2.55
+              ],
+              [
+                2.6396446609406725,
+                -2.7
+              ],
+              [
+                -1.35,
+                -2.85
+              ]
+            ],
+            "robot_xy": [
+              -1.9575316905975342,
+              1.8235567808151245
+            ],
+            "last_frontier_before": [
+              -2.75,
+              1.35
+            ],
+            "last_value_before": 0.11594976135838264,
+            "cyclic_checks": [
+              {
+                "sorted_index": 0,
+                "frontier_xy": [
+                  2.05,
+                  2.35
+                ],
+                "cyclic": false,
+                "top_two_values": [
+                  0.11007878021975506,
+                  0.10548524803982207
+                ]
+              }
+            ],
+            "branch": "highest_noncyclic",
+            "started_monotonic_ns": 756045531186984,
+            "sorted_frontiers_xy": [
+              [
+                2.05,
+                2.35
+              ],
+              [
+                2.6396446609406725,
+                -2.7
+              ],
+              [
+                2.2853553390593278,
+                -0.31464466094067234
+              ],
+              [
+                5.214644660940673,
+                -1.35
+              ],
+              [
+                2.425,
+                -1.85
+              ],
+              [
+                5.0146446609406725,
+                -2.55
+              ],
+              [
+                -1.35,
+                -2.85
+              ]
+            ],
+            "sorted_values": [
+              0.11007878021975506,
+              0.10548524803982207,
+              0.10525137524955988,
+              0.10503896191794798,
+              0.10473103574985354,
+              0.10386823287509195,
+              0.0950201004743576
+            ],
+            "top_two_values": [
+              0.11007878021975506,
+              0.10548524803982207
+            ],
+            "sorted_to_input_matches": [
+              [
+                0
+              ],
+              [
+                5
+              ],
+              [
+                1
+              ],
+              [
+                3
+              ],
+              [
+                2
+              ],
+              [
+                4
+              ],
+              [
+                6
+              ]
+            ],
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              0
+            ],
+            "selected_frontier_xy": [
+              2.05,
+              2.35
+            ],
+            "selected_value": 0.11007878021975506,
+            "last_frontier_after": [
+              2.05,
+              2.35
+            ],
+            "last_value_after": 0.11007878021975506,
+            "decision_elapsed_ms": 1.333174,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv2",
+              "episode_key": "5cdEh9F2hJL.basis.glb_9",
+              "step": 102,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                2.05,
+                2.35
+              ],
+              [
+                2.2853553390593278,
+                -0.31464466094067234
+              ],
+              [
+                2.425,
+                -1.85
+              ],
+              [
+                5.214644660940673,
+                -1.35
+              ],
+              [
+                5.0146446609406725,
+                -2.55
+              ],
+              [
+                2.6396446609406725,
+                -2.7
+              ],
+              [
+                -1.35,
+                -2.85
+              ]
+            ],
+            "robot_xy": [
+              -0.09150607138872147,
+              -0.04246797785162926
+            ],
+            "last_frontier_before": [
+              2.05,
+              2.35
+            ],
+            "last_value_before": 0.11007878021975506,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756051889986901,
+            "sorted_frontiers_xy": [
+              [
+                2.05,
+                2.35
+              ],
+              [
+                2.6396446609406725,
+                -2.7
+              ],
+              [
+                2.2853553390593278,
+                -0.31464466094067234
+              ],
+              [
+                5.214644660940673,
+                -1.35
+              ],
+              [
+                2.425,
+                -1.85
+              ],
+              [
+                5.0146446609406725,
+                -2.55
+              ],
+              [
+                -1.35,
+                -2.85
+              ]
+            ],
+            "sorted_values": [
+              0.11007878021975506,
+              0.10548524803982207,
+              0.10525137524955988,
+              0.10503896191794798,
+              0.10473103574985354,
+              0.10386823287509195,
+              0.0950201004743576
+            ],
+            "top_two_values": [
+              0.11007878021975506,
+              0.10548524803982207
+            ],
+            "sorted_to_input_matches": [
+              [
+                0
+              ],
+              [
+                5
+              ],
+              [
+                1
+              ],
+              [
+                3
+              ],
+              [
+                2
+              ],
+              [
+                4
+              ],
+              [
+                6
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 0,
+              "current_value": 0.11007878021975506,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              0
+            ],
+            "selected_frontier_xy": [
+              2.05,
+              2.35
+            ],
+            "selected_value": 0.11007878021975506,
+            "last_frontier_after": [
+              2.05,
+              2.35
+            ],
+            "last_value_after": 0.11007878021975506,
+            "decision_elapsed_ms": 1.432937,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          }
+        ]
+      },
+      "original_printed_value_matches": 488,
+      "printed_value_precision": "two decimals of percent, not full-precision original value"
+    },
+    {
+      "dataset": "hm3dv1",
+      "episode_key": "4ok3usBNeis.basis.glb_33",
+      "stratum": "failure_strict_nf_return",
+      "original_success": false,
+      "original_steps": 278,
+      "frontier_decisions": 265,
+      "exact_frontier_decisions": 265,
+      "empty_frontier_stops": 1,
+      "decision_branch_counts": {
+        "highest_noncyclic": 17,
+        "keep_last": 248,
+        "no_frontiers_stop": 1
+      },
+      "cyclic_checks": 17,
+      "cyclic_hits": 0,
+      "shadow_same_numeric_state_action_missed_steps": [],
+      "shadow_note": "Offline exact numeric tuple comparison only. Not a policy change, not a tolerance-based cycle detector, no counterfactual rollout.",
+      "total_traveled_xy_m": 39.81500773004911,
+      "observed_forward_actions": 160,
+      "forward_actions_without_translation_1e6m": 0,
+      "motion_note": "Pre-action to next pre-action pose, excludes final action without a saved next observation; lack of translation does not by itself identify a collision.",
+      "non_top_rank_selections": 79,
+      "delayed_known_frontier_switches": [
+        {
+          "step": 80,
+          "goal_xy": [
+            -6.157322330470336,
+            -3.007322330470339
+          ],
+          "distance_from_robot_xy_m": 4.588681834642966,
+          "earliest_matched_step": 44,
+          "earliest_matched_frontier_xy": [
+            -6.388388347648319,
+            -2.8383883476483165
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.10788264459371151,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -3.545710678118655,
+            -0.95
+          ],
+          "nearest_frontier_distance_xy_m": 3.3309541495619657,
+          "nearest_frontier_value": 0.10740557342100567,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 4
+        },
+        {
+          "step": 204,
+          "goal_xy": [
+            -4.007322330470336,
+            0.6073223304703333
+          ],
+          "distance_from_robot_xy_m": 4.99780296171709,
+          "earliest_matched_step": 177,
+          "earliest_matched_frontier_xy": [
+            -4.007322330470336,
+            0.6073223304703333
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.12082815062677987,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -6.9,
+            -4.05
+          ],
+          "nearest_frontier_distance_xy_m": 0.7944540842062314,
+          "nearest_frontier_value": 0.11566863153891155,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 2
+        },
+        {
+          "step": 240,
+          "goal_xy": [
+            -6.9,
+            -4.05
+          ],
+          "distance_from_robot_xy_m": 4.977546723105971,
+          "earliest_matched_step": 198,
+          "earliest_matched_frontier_xy": [
+            -6.75,
+            -4.25
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11566863153891155,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -6.9,
+            -4.05
+          ],
+          "nearest_frontier_distance_xy_m": 4.977546723105971,
+          "nearest_frontier_value": 0.11566863153891155,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 1
+        }
+      ],
+      "delayed_known_frontier_note": "A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
+      "old_pose_near_goal_selection_steps": [],
+      "old_pose_near_goal_note": "Per-decision count, not trip count. Goal >=3m away, <=0.5m from a pose >=20 actions old. No path-cost or low-gain inference.",
+      "processed_map_area_removed_on_steps": 43,
+      "total_seen_processed_map_m2": 32.98,
+      "first_return": {
+        "screen_witness": {
+          "leave_step": 108,
+          "furthest_step": 125,
+          "return_step": 169,
+          "excursion_m": 3.0796,
+          "return_distance_m": 0.3571
+        },
+        "full": {
+          "start_pre_action_step": 108,
+          "end_pre_action_step": 169,
+          "actions": 61,
+          "traveled_xy_m": 8.815010550108422,
+          "new_processed_map_m2": 7.787500000000001,
+          "new_processed_map_m2_per_traveled_m": 0.8834362654170865,
+          "mode_counts": {
+            "explore": 61
+          },
+          "decision_branch_counts": {
+            "keep_last": 56,
+            "highest_noncyclic": 5
+          }
+        },
+        "outward": {
+          "start_pre_action_step": 108,
+          "end_pre_action_step": 125,
+          "actions": 17,
+          "traveled_xy_m": 3.249999835770864,
+          "new_processed_map_m2": 4.7775,
+          "new_processed_map_m2_per_traveled_m": 1.4700000742821053,
+          "mode_counts": {
+            "explore": 17
+          },
+          "decision_branch_counts": {
+            "keep_last": 16,
+            "highest_noncyclic": 1
+          }
+        },
+        "return_leg": {
+          "start_pre_action_step": 125,
+          "end_pre_action_step": 169,
+          "actions": 44,
+          "traveled_xy_m": 5.565010714337559,
+          "new_processed_map_m2": 3.01,
+          "new_processed_map_m2_per_traveled_m": 0.5408794617852413,
+          "mode_counts": {
+            "explore": 44
+          },
+          "decision_branch_counts": {
+            "keep_last": 40,
+            "highest_noncyclic": 4
+          }
+        },
+        "pure_explore": true,
+        "decision_examples": [
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv1",
+              "episode_key": "4ok3usBNeis.basis.glb_33",
+              "step": 108,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -8.410355339059327,
+                -2.8
+              ],
+              [
+                -6.1,
+                -2
+              ],
+              [
+                -3.5896446609406722,
+                -0.85
+              ],
+              [
+                -6.114644660940672,
+                -3.05
+              ],
+              [
+                -8.542677669529663,
+                -3.642677669529661
+              ],
+              [
+                -9.425,
+                -3.8
+              ]
+            ],
+            "robot_xy": [
+              -4.54006290435791,
+              -2.082531213760376
+            ],
+            "last_frontier_before": [
+              -6.114644660940672,
+              -3.05
+            ],
+            "last_value_before": 0.11603345890990235,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756211800875806,
+            "sorted_frontiers_xy": [
+              [
+                -9.425,
+                -3.8
+              ],
+              [
+                -8.542677669529663,
+                -3.642677669529661
+              ],
+              [
+                -6.114644660940672,
+                -3.05
+              ],
+              [
+                -8.410355339059327,
+                -2.8
+              ],
+              [
+                -6.1,
+                -2
+              ],
+              [
+                -3.5896446609406722,
+                -0.85
+              ]
+            ],
+            "sorted_values": [
+              0.13431702554225922,
+              0.1252512620363458,
+              0.125152578580832,
+              0.12493247054661119,
+              0.1229836208918347,
+              0.11246074434835893
+            ],
+            "top_two_values": [
+              0.13431702554225922,
+              0.1252512620363458
+            ],
+            "sorted_to_input_matches": [
+              [
+                5
+              ],
+              [
+                4
+              ],
+              [
+                3
+              ],
+              [
+                0
+              ],
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 2,
+              "current_value": 0.125152578580832,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 2,
+            "selected_input_indices": [
+              3
+            ],
+            "selected_frontier_xy": [
+              -6.114644660940672,
+              -3.05
+            ],
+            "selected_value": 0.125152578580832,
+            "last_frontier_after": [
+              -6.114644660940672,
+              -3.05
+            ],
+            "last_value_after": 0.125152578580832,
+            "decision_elapsed_ms": 1.016312,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv1",
+              "episode_key": "4ok3usBNeis.basis.glb_33",
+              "step": 125,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -7.857322330470336,
+                -1.342677669529661
+              ],
+              [
+                -6.188388347648319,
+                -1.5616116523516836
+              ],
+              [
+                -3.5896446609406722,
+                -0.85
+              ],
+              [
+                -6.120710678118655,
+                -3.4707106781186554
+              ]
+            ],
+            "robot_xy": [
+              -7.555607318878174,
+              -2.707530975341797
+            ],
+            "last_frontier_before": [
+              -8.242677669529664,
+              -1.5073223304703334
+            ],
+            "last_value_before": 0.11173611134290695,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756216053821913,
+            "sorted_frontiers_xy": [
+              [
+                -6.188388347648319,
+                -1.5616116523516836
+              ],
+              [
+                -6.120710678118655,
+                -3.4707106781186554
+              ],
+              [
+                -3.5896446609406722,
+                -0.85
+              ],
+              [
+                -7.857322330470336,
+                -1.342677669529661
+              ]
+            ],
+            "sorted_values": [
+              0.12173265218734741,
+              0.11892405982637774,
+              0.11246074434835893,
+              0.11173611134290695
+            ],
+            "top_two_values": [
+              0.12173265218734741,
+              0.11892405982637774
+            ],
+            "sorted_to_input_matches": [
+              [
+                1
+              ],
+              [
+                3
+              ],
+              [
+                2
+              ],
+              [
+                0
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 3,
+              "current_value": 0.11173611134290695,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "within_0.5m"
+            },
+            "selected_sorted_index": 3,
+            "selected_input_indices": [
+              0
+            ],
+            "selected_frontier_xy": [
+              -7.857322330470336,
+              -1.342677669529661
+            ],
+            "selected_value": 0.11173611134290695,
+            "last_frontier_after": [
+              -7.857322330470336,
+              -1.342677669529661
+            ],
+            "last_value_after": 0.11173611134290695,
+            "decision_elapsed_ms": 0.750258,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv1",
+              "episode_key": "4ok3usBNeis.basis.glb_33",
+              "step": 169,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -3.5896446609406722,
+                -0.85
+              ],
+              [
+                -5.85,
+                -5.6
+              ],
+              [
+                -6.6,
+                -4.585355339059328
+              ]
+            ],
+            "robot_xy": [
+              -4.874570369720459,
+              -2.207531452178955
+            ],
+            "last_frontier_before": [
+              -3.5896446609406722,
+              -0.85
+            ],
+            "last_value_before": 0.12430515870027477,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756230409728044,
+            "sorted_frontiers_xy": [
+              [
+                -5.85,
+                -5.6
+              ],
+              [
+                -3.5896446609406722,
+                -0.85
+              ],
+              [
+                -6.6,
+                -4.585355339059328
+              ]
+            ],
+            "sorted_values": [
+              0.13087340301417755,
+              0.12430515870027477,
+              0.11995956183700125
+            ],
+            "top_two_values": [
+              0.13087340301417755,
+              0.12430515870027477
+            ],
+            "sorted_to_input_matches": [
+              [
+                1
+              ],
+              [
+                0
+              ],
+              [
+                2
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 1,
+              "current_value": 0.12430515870027477,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 1,
+            "selected_input_indices": [
+              0
+            ],
+            "selected_frontier_xy": [
+              -3.5896446609406722,
+              -0.85
+            ],
+            "selected_value": 0.12430515870027477,
+            "last_frontier_after": [
+              -3.5896446609406722,
+              -0.85
+            ],
+            "last_value_after": 0.12430515870027477,
+            "decision_elapsed_ms": 0.887487,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          }
+        ]
+      },
+      "original_printed_value_matches": 265,
+      "printed_value_precision": "two decimals of percent, not full-precision original value"
+    },
+    {
+      "dataset": "hm3dv2",
+      "episode_key": "7MXmsvcQjpJ.basis.glb_5",
+      "stratum": "failure_strict_nf_return",
+      "original_success": false,
+      "original_steps": 133,
+      "frontier_decisions": 120,
+      "exact_frontier_decisions": 120,
+      "empty_frontier_stops": 1,
+      "decision_branch_counts": {
+        "highest_noncyclic": 14,
+        "keep_last": 106,
+        "no_frontiers_stop": 1
+      },
+      "cyclic_checks": 14,
+      "cyclic_hits": 0,
+      "shadow_same_numeric_state_action_missed_steps": [],
+      "shadow_note": "Offline exact numeric tuple comparison only. Not a policy change, not a tolerance-based cycle detector, no counterfactual rollout.",
+      "total_traveled_xy_m": 17.539507352441962,
+      "observed_forward_actions": 73,
+      "forward_actions_without_translation_1e6m": 2,
+      "motion_note": "Pre-action to next pre-action pose, excludes final action without a saved next observation; lack of translation does not by itself identify a collision.",
+      "non_top_rank_selections": 15,
+      "delayed_known_frontier_switches": [
+        {
+          "step": 57,
+          "goal_xy": [
+            1.092677669529661,
+            -0.49267766952966385
+          ],
+          "distance_from_robot_xy_m": 4.886988973554222,
+          "earliest_matched_step": 12,
+          "earliest_matched_frontier_xy": [
+            1,
+            -0.55
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11281679979875098,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            1.092677669529661,
+            -0.49267766952966385
+          ],
+          "nearest_frontier_distance_xy_m": 4.886988973554222,
+          "nearest_frontier_value": 0.11281679979875098,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 1
+        }
+      ],
+      "delayed_known_frontier_note": "A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
+      "old_pose_near_goal_selection_steps": [],
+      "old_pose_near_goal_note": "Per-decision count, not trip count. Goal >=3m away, <=0.5m from a pose >=20 actions old. No path-cost or low-gain inference.",
+      "processed_map_area_removed_on_steps": 50,
+      "total_seen_processed_map_m2": 28.47,
+      "first_return": {
+        "screen_witness": {
+          "leave_step": 27,
+          "furthest_step": 57,
+          "return_step": 89,
+          "excursion_m": 3.4827,
+          "return_distance_m": 0.4007
+        },
+        "full": {
+          "start_pre_action_step": 27,
+          "end_pre_action_step": 89,
+          "actions": 62,
+          "traveled_xy_m": 8.78950573268287,
+          "new_processed_map_m2": 3.6125,
+          "new_processed_map_m2_per_traveled_m": 0.4110014954046041,
+          "mode_counts": {
+            "explore": 62
+          },
+          "decision_branch_counts": {
+            "highest_noncyclic": 7,
+            "keep_last": 55
+          }
+        },
+        "outward": {
+          "start_pre_action_step": 27,
+          "end_pre_action_step": 57,
+          "actions": 30,
+          "traveled_xy_m": 4.7500008518841375,
+          "new_processed_map_m2": 2.29,
+          "new_processed_map_m2_per_traveled_m": 0.48210517669520997,
+          "mode_counts": {
+            "explore": 30
+          },
+          "decision_branch_counts": {
+            "highest_noncyclic": 4,
+            "keep_last": 26
+          }
+        },
+        "return_leg": {
+          "start_pre_action_step": 57,
+          "end_pre_action_step": 89,
+          "actions": 32,
+          "traveled_xy_m": 4.039504880798731,
+          "new_processed_map_m2": 1.3225000000000002,
+          "new_processed_map_m2_per_traveled_m": 0.32739160838407066,
+          "mode_counts": {
+            "explore": 32
+          },
+          "decision_branch_counts": {
+            "highest_noncyclic": 3,
+            "keep_last": 29
+          }
+        },
+        "pure_explore": true,
+        "decision_examples": [
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv2",
+              "episode_key": "7MXmsvcQjpJ.basis.glb_5",
+              "step": 27,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -2.7,
+                -4.475
+              ],
+              [
+                -1.807322330470336,
+                -2.957322330470339
+              ],
+              [
+                1.092677669529661,
+                -0.49267766952966385
+              ]
+            ],
+            "robot_xy": [
+              -0.12499970942735672,
+              -1.899519443511963
+            ],
+            "last_frontier_before": [
+              -0.7926776695296638,
+              -0.992677669529661
+            ],
+            "last_value_before": 0.12344591538071313,
+            "cyclic_checks": [
+              {
+                "sorted_index": 0,
+                "frontier_xy": [
+                  -1.807322330470336,
+                  -2.957322330470339
+                ],
+                "cyclic": false,
+                "top_two_values": [
+                  0.11896447248828149,
+                  0.11860565642925902
+                ]
+              }
+            ],
+            "branch": "highest_noncyclic",
+            "started_monotonic_ns": 756274702235529,
+            "sorted_frontiers_xy": [
+              [
+                -1.807322330470336,
+                -2.957322330470339
+              ],
+              [
+                -2.7,
+                -4.475
+              ],
+              [
+                1.092677669529661,
+                -0.49267766952966385
+              ]
+            ],
+            "sorted_values": [
+              0.11896447248828149,
+              0.11860565642925902,
+              0.11281679979875098
+            ],
+            "top_two_values": [
+              0.11896447248828149,
+              0.11860565642925902
+            ],
+            "sorted_to_input_matches": [
+              [
+                1
+              ],
+              [
+                0
+              ],
+              [
+                2
+              ]
+            ],
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              1
+            ],
+            "selected_frontier_xy": [
+              -1.807322330470336,
+              -2.957322330470339
+            ],
+            "selected_value": 0.11896447248828149,
+            "last_frontier_after": [
+              -1.807322330470336,
+              -2.957322330470339
+            ],
+            "last_value_after": 0.11896447248828149,
+            "decision_elapsed_ms": 1.068607,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv2",
+              "episode_key": "7MXmsvcQjpJ.basis.glb_5",
+              "step": 57,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                1.092677669529661,
+                -0.49267766952966385
+              ]
+            ],
+            "robot_xy": [
+              -3.607051372528076,
+              -1.832531452178955
+            ],
+            "last_frontier_before": [
+              -4.125,
+              -2.05
+            ],
+            "last_value_before": 0.11163807564243794,
+            "cyclic_checks": [
+              {
+                "sorted_index": 0,
+                "frontier_xy": [
+                  1.092677669529661,
+                  -0.49267766952966385
+                ],
+                "cyclic": false,
+                "top_two_values": [
+                  0.11281679979875098
+                ]
+              }
+            ],
+            "branch": "highest_noncyclic",
+            "started_monotonic_ns": 756283592981058,
+            "sorted_frontiers_xy": [
+              [
+                1.092677669529661,
+                -0.49267766952966385
+              ]
+            ],
+            "sorted_values": [
+              0.11281679979875098
+            ],
+            "top_two_values": [
+              0.11281679979875098
+            ],
+            "sorted_to_input_matches": [
+              [
+                0
+              ]
+            ],
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              0
+            ],
+            "selected_frontier_xy": [
+              1.092677669529661,
+              -0.49267766952966385
+            ],
+            "selected_value": 0.11281679979875098,
+            "last_frontier_after": [
+              1.092677669529661,
+              -0.49267766952966385
+            ],
+            "last_value_after": 0.11281679979875098,
+            "decision_elapsed_ms": 0.862774,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv2",
+              "episode_key": "7MXmsvcQjpJ.basis.glb_5",
+              "step": 89,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                1.567677669529661,
+                0.9176776695296667
+              ],
+              [
+                2.523743686707644,
+                0.823743686707644
+              ]
+            ],
+            "robot_xy": [
+              -0.09447068721055984,
+              -2.299038887023926
+            ],
+            "last_frontier_before": [
+              2.523743686707644,
+              0.823743686707644
+            ],
+            "last_value_before": 0.10749359102813325,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756292192786504,
+            "sorted_frontiers_xy": [
+              [
+                2.523743686707644,
+                0.823743686707644
+              ],
+              [
+                1.567677669529661,
+                0.9176776695296667
+              ]
+            ],
+            "sorted_values": [
+              0.10721799838702532,
+              0.10690905898809433
+            ],
+            "top_two_values": [
+              0.10721799838702532,
+              0.10690905898809433
+            ],
+            "sorted_to_input_matches": [
+              [
+                1
+              ],
+              [
+                0
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 0,
+              "current_value": 0.10721799838702532,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              1
+            ],
+            "selected_frontier_xy": [
+              2.523743686707644,
+              0.823743686707644
+            ],
+            "selected_value": 0.10721799838702532,
+            "last_frontier_after": [
+              2.523743686707644,
+              0.823743686707644
+            ],
+            "last_value_after": 0.10721799838702532,
+            "decision_elapsed_ms": 0.786849,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          }
+        ]
+      },
+      "original_printed_value_matches": 120,
+      "printed_value_precision": "two decimals of percent, not full-precision original value"
+    },
+    {
+      "dataset": "hm3dv1",
+      "episode_key": "6s7QHgap2fW.basis.glb_5",
+      "stratum": "failure_budget500_no_return_control",
+      "original_success": false,
+      "original_steps": 500,
+      "frontier_decisions": 488,
+      "exact_frontier_decisions": 488,
+      "empty_frontier_stops": 0,
+      "decision_branch_counts": {
+        "highest_noncyclic": 9,
+        "keep_last": 479
+      },
+      "cyclic_checks": 9,
+      "cyclic_hits": 0,
+      "shadow_same_numeric_state_action_missed_steps": [],
+      "shadow_note": "Offline exact numeric tuple comparison only. Not a policy change, not a tolerance-based cycle detector, no counterfactual rollout.",
+      "total_traveled_xy_m": 42.27331065539323,
+      "observed_forward_actions": 179,
+      "forward_actions_without_translation_1e6m": 7,
+      "motion_note": "Pre-action to next pre-action pose, excludes final action without a saved next observation; lack of translation does not by itself identify a collision.",
+      "non_top_rank_selections": 5,
+      "delayed_known_frontier_switches": [
+        {
+          "step": 74,
+          "goal_xy": [
+            -4.05,
+            -1.5
+          ],
+          "distance_from_robot_xy_m": 7.428647026521235,
+          "earliest_matched_step": 12,
+          "earliest_matched_frontier_xy": [
+            -4.05,
+            -1.5
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.09817540168676242,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -3.3,
+            -0.75
+          ],
+          "nearest_frontier_distance_xy_m": 6.509258874411563,
+          "nearest_frontier_value": 0.09806974000080948,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 2
+        }
+      ],
+      "delayed_known_frontier_note": "A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
+      "old_pose_near_goal_selection_steps": [],
+      "old_pose_near_goal_note": "Per-decision count, not trip count. Goal >=3m away, <=0.5m from a pose >=20 actions old. No path-cost or low-gain inference.",
+      "processed_map_area_removed_on_steps": 16,
+      "total_seen_processed_map_m2": 7.045,
+      "first_return": null,
+      "original_printed_value_matches": 488,
+      "printed_value_precision": "two decimals of percent, not full-precision original value"
+    },
+    {
+      "dataset": "hm3dv2",
+      "episode_key": "6s7QHgap2fW.basis.glb_24",
+      "stratum": "failure_budget500_no_return_control",
+      "original_success": false,
+      "original_steps": 500,
+      "frontier_decisions": 488,
+      "exact_frontier_decisions": 488,
+      "empty_frontier_stops": 0,
+      "decision_branch_counts": {
+        "highest_noncyclic": 1,
+        "keep_last": 487
+      },
+      "cyclic_checks": 1,
+      "cyclic_hits": 0,
+      "shadow_same_numeric_state_action_missed_steps": [],
+      "shadow_note": "Offline exact numeric tuple comparison only. Not a policy change, not a tolerance-based cycle detector, no counterfactual rollout.",
+      "total_traveled_xy_m": 1.3610022832084114,
+      "observed_forward_actions": 198,
+      "forward_actions_without_translation_1e6m": 192,
+      "motion_note": "Pre-action to next pre-action pose, excludes final action without a saved next observation; lack of translation does not by itself identify a collision.",
+      "non_top_rank_selections": 0,
+      "delayed_known_frontier_switches": [],
+      "delayed_known_frontier_note": "A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
+      "old_pose_near_goal_selection_steps": [],
+      "old_pose_near_goal_note": "Per-decision count, not trip count. Goal >=3m away, <=0.5m from a pose >=20 actions old. No path-cost or low-gain inference.",
+      "processed_map_area_removed_on_steps": 10,
+      "total_seen_processed_map_m2": 3.7275,
+      "first_return": null,
+      "original_printed_value_matches": 488,
+      "printed_value_precision": "two decimals of percent, not full-precision original value"
+    },
+    {
+      "dataset": "hm3dv1",
+      "episode_key": "DYehNKdT76V.basis.glb_6",
+      "stratum": "success_return_control",
+      "original_success": true,
+      "original_steps": 232,
+      "frontier_decisions": 218,
+      "exact_frontier_decisions": 218,
+      "empty_frontier_stops": 0,
+      "decision_branch_counts": {
+        "highest_noncyclic": 31,
+        "keep_last": 187
+      },
+      "cyclic_checks": 31,
+      "cyclic_hits": 0,
+      "shadow_same_numeric_state_action_missed_steps": [],
+      "shadow_note": "Offline exact numeric tuple comparison only. Not a policy change, not a tolerance-based cycle detector, no counterfactual rollout.",
+      "total_traveled_xy_m": 24.576822468611454,
+      "observed_forward_actions": 116,
+      "forward_actions_without_translation_1e6m": 15,
+      "motion_note": "Pre-action to next pre-action pose, excludes final action without a saved next observation; lack of translation does not by itself identify a collision.",
+      "non_top_rank_selections": 61,
+      "delayed_known_frontier_switches": [
+        {
+          "step": 102,
+          "goal_xy": [
+            0.15,
+            -3.1396446609406725
+          ],
+          "distance_from_robot_xy_m": 4.501113426536979,
+          "earliest_matched_step": 12,
+          "earliest_matched_frontier_xy": [
+            0.15,
+            -3.1396446609406725
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.11146285402023826,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            0.15,
+            -3.1396446609406725
+          ],
+          "nearest_frontier_distance_xy_m": 4.501113426536979,
+          "nearest_frontier_value": 0.11146285402023826,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 3
+        },
+        {
+          "step": 153,
+          "goal_xy": [
+            -0.23838834764831915,
+            -3.2383883476483164
+          ],
+          "distance_from_robot_xy_m": 3.947747115058552,
+          "earliest_matched_step": 12,
+          "earliest_matched_frontier_xy": [
+            0.15,
+            -3.1396446609406725
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.1734814884384746,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            0.1,
+            -4.829289321881345
+          ],
+          "nearest_frontier_distance_xy_m": 2.777163857284998,
+          "nearest_frontier_value": 0.14566436821569045,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 5
+        },
+        {
+          "step": 176,
+          "goal_xy": [
+            -1.425,
+            -9.225
+          ],
+          "distance_from_robot_xy_m": 6.317553625530199,
+          "earliest_matched_step": 148,
+          "earliest_matched_frontier_xy": [
+            -1.4,
+            -9.214644660940673
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.13677103728859374,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -0.47928932188134465,
+            -3.8
+          ],
+          "nearest_frontier_distance_xy_m": 1.0319922658475846,
+          "nearest_frontier_value": 0.11506996820797147,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 6
+        },
+        {
+          "step": 202,
+          "goal_xy": [
+            -0.3353553390593277,
+            -4.35
+          ],
+          "distance_from_robot_xy_m": 3.344692882949915,
+          "earliest_matched_step": 162,
+          "earliest_matched_frontier_xy": [
+            -0.3353553390593277,
+            -4.35
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.1350839995268356,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            0.6573223304703391,
+            -8.59267766952966
+          ],
+          "nearest_frontier_distance_xy_m": 2.9153968110537463,
+          "nearest_frontier_value": 0.1277995890743309,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 6
+        }
+      ],
+      "delayed_known_frontier_note": "A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
+      "old_pose_near_goal_selection_steps": [],
+      "old_pose_near_goal_note": "Per-decision count, not trip count. Goal >=3m away, <=0.5m from a pose >=20 actions old. No path-cost or low-gain inference.",
+      "processed_map_area_removed_on_steps": 49,
+      "total_seen_processed_map_m2": 29.085,
+      "first_return": {
+        "screen_witness": {
+          "leave_step": 131,
+          "furthest_step": 147,
+          "return_step": 170,
+          "excursion_m": 3.201,
+          "return_distance_m": 0.3098
+        },
+        "full": {
+          "start_pre_action_step": 131,
+          "end_pre_action_step": 170,
+          "actions": 39,
+          "traveled_xy_m": 6.750001821946345,
+          "new_processed_map_m2": 15.46,
+          "new_processed_map_m2_per_traveled_m": 2.2903697521584006,
+          "mode_counts": {
+            "explore": 39
+          },
+          "decision_branch_counts": {
+            "highest_noncyclic": 9,
+            "keep_last": 30
+          }
+        },
+        "outward": {
+          "start_pre_action_step": 131,
+          "end_pre_action_step": 147,
+          "actions": 16,
+          "traveled_xy_m": 3.5000010330990765,
+          "new_processed_map_m2": 7.220000000000001,
+          "new_processed_map_m2_per_traveled_m": 2.0628565339613774,
+          "mode_counts": {
+            "explore": 16
+          },
+          "decision_branch_counts": {
+            "highest_noncyclic": 4,
+            "keep_last": 12
+          }
+        },
+        "return_leg": {
+          "start_pre_action_step": 147,
+          "end_pre_action_step": 170,
+          "actions": 23,
+          "traveled_xy_m": 3.2500007888472693,
+          "new_processed_map_m2": 8.239999999999998,
+          "new_processed_map_m2_per_traveled_m": 2.5353839999905396,
+          "mode_counts": {
+            "explore": 23
+          },
+          "decision_branch_counts": {
+            "keep_last": 18,
+            "highest_noncyclic": 5
+          }
+        },
+        "pure_explore": true,
+        "decision_examples": [
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv1",
+              "episode_key": "DYehNKdT76V.basis.glb_6",
+              "step": 131,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                2.0146446609406725,
+                -2.7
+              ],
+              [
+                3.375,
+                -5.625
+              ],
+              [
+                3.05,
+                -6.443933982822017
+              ],
+              [
+                0.1,
+                -4.829289321881345
+              ],
+              [
+                -0.22071067811865533,
+                -3.2207106781186554
+              ]
+            ],
+            "robot_xy": [
+              0.9423719644546509,
+              -3.2220394611358643
+            ],
+            "last_frontier_before": [
+              3.0207106781186552,
+              -6.3207106781186555
+            ],
+            "last_value_before": 0.1620657892116717,
+            "cyclic_checks": [
+              {
+                "sorted_index": 0,
+                "frontier_xy": [
+                  3.05,
+                  -6.443933982822017
+                ],
+                "cyclic": false,
+                "top_two_values": [
+                  0.14381873073923218,
+                  0.14276129007339478
+                ]
+              }
+            ],
+            "branch": "highest_noncyclic",
+            "started_monotonic_ns": 756625083009577,
+            "sorted_frontiers_xy": [
+              [
+                3.05,
+                -6.443933982822017
+              ],
+              [
+                2.0146446609406725,
+                -2.7
+              ],
+              [
+                3.375,
+                -5.625
+              ],
+              [
+                -0.22071067811865533,
+                -3.2207106781186554
+              ],
+              [
+                0.1,
+                -4.829289321881345
+              ]
+            ],
+            "sorted_values": [
+              0.14381873073923218,
+              0.14276129007339478,
+              0.13476492274314802,
+              0.12397777879427993,
+              0.1226498646607501
+            ],
+            "top_two_values": [
+              0.14381873073923218,
+              0.14276129007339478
+            ],
+            "sorted_to_input_matches": [
+              [
+                2
+              ],
+              [
+                0
+              ],
+              [
+                1
+              ],
+              [
+                4
+              ],
+              [
+                3
+              ]
+            ],
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              2
+            ],
+            "selected_frontier_xy": [
+              3.05,
+              -6.443933982822017
+            ],
+            "selected_value": 0.14381873073923218,
+            "last_frontier_after": [
+              3.05,
+              -6.443933982822017
+            ],
+            "last_value_after": 0.14381873073923218,
+            "decision_elapsed_ms": 0.965525,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv1",
+              "episode_key": "DYehNKdT76V.basis.glb_6",
+              "step": 147,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                2.0146446609406725,
+                -2.7
+              ],
+              [
+                0.6573223304703391,
+                -8.59267766952966
+              ],
+              [
+                0.5012563132923532,
+                -7.24874368670765
+              ],
+              [
+                0.1,
+                -4.829289321881345
+              ],
+              [
+                -0.22071067811865533,
+                -3.2207106781186554
+              ]
+            ],
+            "robot_xy": [
+              2.6499056816101074,
+              -5.929571151733398
+            ],
+            "last_frontier_before": [
+              0.5012563132923532,
+              -7.24874368670765
+            ],
+            "last_value_before": 0.15340660219243213,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756630022647677,
+            "sorted_frontiers_xy": [
+              [
+                0.5012563132923532,
+                -7.24874368670765
+              ],
+              [
+                2.0146446609406725,
+                -2.7
+              ],
+              [
+                0.6573223304703391,
+                -8.59267766952966
+              ],
+              [
+                -0.22071067811865533,
+                -3.2207106781186554
+              ],
+              [
+                0.1,
+                -4.829289321881345
+              ]
+            ],
+            "sorted_values": [
+              0.15340660219243213,
+              0.14276129007339478,
+              0.12598319596946594,
+              0.12397777879427993,
+              0.1226498646607501
+            ],
+            "top_two_values": [
+              0.15340660219243213,
+              0.14276129007339478
+            ],
+            "sorted_to_input_matches": [
+              [
+                2
+              ],
+              [
+                0
+              ],
+              [
+                1
+              ],
+              [
+                4
+              ],
+              [
+                3
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 0,
+              "current_value": 0.15340660219243213,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              2
+            ],
+            "selected_frontier_xy": [
+              0.5012563132923532,
+              -7.24874368670765
+            ],
+            "selected_value": 0.15340660219243213,
+            "last_frontier_after": [
+              0.5012563132923532,
+              -7.24874368670765
+            ],
+            "last_value_after": 0.15340660219243213,
+            "decision_elapsed_ms": 0.902119,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv1",
+              "episode_key": "DYehNKdT76V.basis.glb_6",
+              "step": 170,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -2.75,
+                -5.379289321881345
+              ],
+              [
+                -0.3353553390593277,
+                -4.35
+              ],
+              [
+                -0.425,
+                -3.6
+              ],
+              [
+                -1.25,
+                -3.225
+              ],
+              [
+                0.6573223304703391,
+                -8.59267766952966
+              ],
+              [
+                -1.425,
+                -9.225
+              ]
+            ],
+            "robot_xy": [
+              0.9758666157722473,
+              -3.5300519466400146
+            ],
+            "last_frontier_before": [
+              -2.75,
+              -5.379289321881345
+            ],
+            "last_value_before": 0.14636916390069854,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756637499071337,
+            "sorted_frontiers_xy": [
+              [
+                -0.3353553390593277,
+                -4.35
+              ],
+              [
+                -2.75,
+                -5.379289321881345
+              ],
+              [
+                -1.425,
+                -9.225
+              ],
+              [
+                0.6573223304703391,
+                -8.59267766952966
+              ],
+              [
+                -0.425,
+                -3.6
+              ],
+              [
+                -1.25,
+                -3.225
+              ]
+            ],
+            "sorted_values": [
+              0.14675970360016105,
+              0.14636916390069854,
+              0.13677103728859374,
+              0.13382105071792455,
+              0.11243415164515558,
+              0.11129375397482658
+            ],
+            "top_two_values": [
+              0.14675970360016105,
+              0.14636916390069854
+            ],
+            "sorted_to_input_matches": [
+              [
+                1
+              ],
+              [
+                0
+              ],
+              [
+                5
+              ],
+              [
+                4
+              ],
+              [
+                2
+              ],
+              [
+                3
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 1,
+              "current_value": 0.14636916390069854,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 1,
+            "selected_input_indices": [
+              0
+            ],
+            "selected_frontier_xy": [
+              -2.75,
+              -5.379289321881345
+            ],
+            "selected_value": 0.14636916390069854,
+            "last_frontier_after": [
+              -2.75,
+              -5.379289321881345
+            ],
+            "last_value_after": 0.14636916390069854,
+            "decision_elapsed_ms": 1.052312,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          }
+        ]
+      },
+      "original_printed_value_matches": 218,
+      "printed_value_precision": "two decimals of percent, not full-precision original value"
+    },
+    {
+      "dataset": "hm3dv2",
+      "episode_key": "4ok3usBNeis.basis.glb_10",
+      "stratum": "success_return_control",
+      "original_success": true,
+      "original_steps": 234,
+      "frontier_decisions": 213,
+      "exact_frontier_decisions": 213,
+      "empty_frontier_stops": 0,
+      "decision_branch_counts": {
+        "highest_noncyclic": 28,
+        "keep_last": 185
+      },
+      "cyclic_checks": 28,
+      "cyclic_hits": 0,
+      "shadow_same_numeric_state_action_missed_steps": [],
+      "shadow_note": "Offline exact numeric tuple comparison only. Not a policy change, not a tolerance-based cycle detector, no counterfactual rollout.",
+      "total_traveled_xy_m": 26.574320653985907,
+      "observed_forward_actions": 112,
+      "forward_actions_without_translation_1e6m": 4,
+      "motion_note": "Pre-action to next pre-action pose, excludes final action without a saved next observation; lack of translation does not by itself identify a collision.",
+      "non_top_rank_selections": 32,
+      "delayed_known_frontier_switches": [
+        {
+          "step": 80,
+          "goal_xy": [
+            -2.95,
+            -6.55
+          ],
+          "distance_from_robot_xy_m": 5.010962029222885,
+          "earliest_matched_step": 51,
+          "earliest_matched_frontier_xy": [
+            -2.9,
+            -6.704289321881345
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.12825660524437166,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -6.5,
+            -2.05
+          ],
+          "nearest_frontier_distance_xy_m": 1.9943408941430554,
+          "nearest_frontier_value": 0.11432160172650462,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 6
+        },
+        {
+          "step": 98,
+          "goal_xy": [
+            -6.575,
+            -2.05
+          ],
+          "distance_from_robot_xy_m": 3.1811621951488367,
+          "earliest_matched_step": 35,
+          "earliest_matched_frontier_xy": [
+            -6.5,
+            -2.05
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.16549415775716553,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -4.125,
+            -4.725
+          ],
+          "nearest_frontier_distance_xy_m": 1.3474349005938415,
+          "nearest_frontier_value": 0.1588803839813857,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 5
+        },
+        {
+          "step": 146,
+          "goal_xy": [
+            -4.417677669529664,
+            -6.467677669529661
+          ],
+          "distance_from_robot_xy_m": 5.053255965179135,
+          "earliest_matched_step": 51,
+          "earliest_matched_frontier_xy": [
+            -4.25,
+            -6.425
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.13522672150834936,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -4.125,
+            -4.725
+          ],
+          "nearest_frontier_distance_xy_m": 3.3683911842279533,
+          "nearest_frontier_value": 0.11981960410558748,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 4
+        },
+        {
+          "step": 223,
+          "goal_xy": [
+            -5.0676776695296635,
+            -8.11767766952966
+          ],
+          "distance_from_robot_xy_m": 3.269263084756503,
+          "earliest_matched_step": 172,
+          "earliest_matched_frontier_xy": [
+            -5.0676776695296635,
+            -8.11767766952966
+          ],
+          "branch": "highest_noncyclic",
+          "selected_value": 0.15561750119042594,
+          "sorted_rank": 1,
+          "nearest_frontier_xy": [
+            -0.4957106781186553,
+            -3.95
+          ],
+          "nearest_frontier_distance_xy_m": 3.265290543839318,
+          "nearest_frontier_value": 0.143735406404969,
+          "distance_note": "Euclidean proxy, not geodesic distance or proven reachable alternative",
+          "current_frontier_count": 3
+        }
+      ],
+      "delayed_known_frontier_note": "A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
+      "old_pose_near_goal_selection_steps": [],
+      "old_pose_near_goal_note": "Per-decision count, not trip count. Goal >=3m away, <=0.5m from a pose >=20 actions old. No path-cost or low-gain inference.",
+      "processed_map_area_removed_on_steps": 40,
+      "total_seen_processed_map_m2": 32.1275,
+      "first_return": {
+        "screen_witness": {
+          "leave_step": 173,
+          "furthest_step": 189,
+          "return_step": 222,
+          "excursion_m": 3.0181,
+          "return_distance_m": 0.4701
+        },
+        "full": {
+          "start_pre_action_step": 173,
+          "end_pre_action_step": 222,
+          "actions": 49,
+          "traveled_xy_m": 7.500002987937008,
+          "new_processed_map_m2": 9.647500000000003,
+          "new_processed_map_m2_per_traveled_m": 1.2863328208691416,
+          "mode_counts": {
+            "explore": 49
+          },
+          "decision_branch_counts": {
+            "keep_last": 43,
+            "highest_noncyclic": 6
+          }
+        },
+        "outward": {
+          "start_pre_action_step": 173,
+          "end_pre_action_step": 189,
+          "actions": 16,
+          "traveled_xy_m": 3.2500021432122916,
+          "new_processed_map_m2": 8.455,
+          "new_processed_map_m2_per_traveled_m": 2.6015367459552214,
+          "mode_counts": {
+            "explore": 16
+          },
+          "decision_branch_counts": {
+            "keep_last": 14,
+            "highest_noncyclic": 2
+          }
+        },
+        "return_leg": {
+          "start_pre_action_step": 189,
+          "end_pre_action_step": 222,
+          "actions": 33,
+          "traveled_xy_m": 4.250000844724716,
+          "new_processed_map_m2": 1.1925,
+          "new_processed_map_m2_per_traveled_m": 0.2805881795247599,
+          "mode_counts": {
+            "explore": 33
+          },
+          "decision_branch_counts": {
+            "highest_noncyclic": 4,
+            "keep_last": 29
+          }
+        },
+        "pure_explore": true,
+        "decision_examples": [
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv2",
+              "episode_key": "4ok3usBNeis.basis.glb_10",
+              "step": 173,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -1.375,
+                -4.225
+              ],
+              [
+                -2.75,
+                -6.564644660940672
+              ],
+              [
+                -5.0676776695296635,
+                -8.11767766952966
+              ],
+              [
+                -5.3073223304703365,
+                -6.907322330470339
+              ],
+              [
+                -4.15,
+                -4.725
+              ]
+            ],
+            "robot_xy": [
+              -3.305929660797119,
+              -4.821854591369629
+            ],
+            "last_frontier_before": [
+              -2.75,
+              -6.564644660940672
+            ],
+            "last_value_before": 0.1788060823010332,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756705291038645,
+            "sorted_frontiers_xy": [
+              [
+                -2.75,
+                -6.564644660940672
+              ],
+              [
+                -5.0676776695296635,
+                -8.11767766952966
+              ],
+              [
+                -4.15,
+                -4.725
+              ],
+              [
+                -5.3073223304703365,
+                -6.907322330470339
+              ],
+              [
+                -1.375,
+                -4.225
+              ]
+            ],
+            "sorted_values": [
+              0.1941219541142779,
+              0.17664270136309862,
+              0.15432992371320958,
+              0.14703308041893592,
+              0.11354131996631622
+            ],
+            "top_two_values": [
+              0.1941219541142779,
+              0.17664270136309862
+            ],
+            "sorted_to_input_matches": [
+              [
+                1
+              ],
+              [
+                2
+              ],
+              [
+                4
+              ],
+              [
+                3
+              ],
+              [
+                0
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 0,
+              "current_value": 0.1941219541142779,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              1
+            ],
+            "selected_frontier_xy": [
+              -2.75,
+              -6.564644660940672
+            ],
+            "selected_value": 0.1941219541142779,
+            "last_frontier_after": [
+              -2.75,
+              -6.564644660940672
+            ],
+            "last_value_after": 0.1941219541142779,
+            "decision_elapsed_ms": 0.812617,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv2",
+              "episode_key": "4ok3usBNeis.basis.glb_10",
+              "step": 189,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -1.375,
+                -4.225
+              ],
+              [
+                -2.5207106781186552,
+                -5.9
+              ],
+              [
+                -0.35,
+                -6.35
+              ],
+              [
+                -5.0676776695296635,
+                -8.11767766952966
+              ],
+              [
+                -5.3073223304703365,
+                -6.907322330470339
+              ],
+              [
+                -4.15,
+                -4.725
+              ]
+            ],
+            "robot_xy": [
+              -1.9064135551452637,
+              -7.495896816253662
+            ],
+            "last_frontier_before": [
+              -1.7,
+              -8.625
+            ],
+            "last_value_before": 0.21115926416263445,
+            "cyclic_checks": [
+              {
+                "sorted_index": 0,
+                "frontier_xy": [
+                  -5.0676776695296635,
+                  -8.11767766952966
+                ],
+                "cyclic": false,
+                "top_two_values": [
+                  0.1997386983778739,
+                  0.1806670049964803
+                ]
+              }
+            ],
+            "branch": "highest_noncyclic",
+            "started_monotonic_ns": 756709682594814,
+            "sorted_frontiers_xy": [
+              [
+                -5.0676776695296635,
+                -8.11767766952966
+              ],
+              [
+                -2.5207106781186552,
+                -5.9
+              ],
+              [
+                -4.15,
+                -4.725
+              ],
+              [
+                -0.35,
+                -6.35
+              ],
+              [
+                -5.3073223304703365,
+                -6.907322330470339
+              ],
+              [
+                -1.375,
+                -4.225
+              ]
+            ],
+            "sorted_values": [
+              0.1997386983778739,
+              0.1806670049964803,
+              0.15432992371320958,
+              0.15323624390636031,
+              0.14703308041893592,
+              0.11354131996631622
+            ],
+            "top_two_values": [
+              0.1997386983778739,
+              0.1806670049964803
+            ],
+            "sorted_to_input_matches": [
+              [
+                3
+              ],
+              [
+                1
+              ],
+              [
+                5
+              ],
+              [
+                2
+              ],
+              [
+                4
+              ],
+              [
+                0
+              ]
+            ],
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              3
+            ],
+            "selected_frontier_xy": [
+              -5.0676776695296635,
+              -8.11767766952966
+            ],
+            "selected_value": 0.1997386983778739,
+            "last_frontier_after": [
+              -5.0676776695296635,
+              -8.11767766952966
+            ],
+            "last_value_after": 0.1997386983778739,
+            "decision_elapsed_ms": 1.199218,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          },
+          {
+            "schema": "vlfm.frontier_decision.v1",
+            "event": "frontier_decision",
+            "upstream_commit": "584ed56008754fde7997d904983607def8328322",
+            "source_sha256": "a910ecb6ff7282c62116de9a33f7a73434833ed06c0cbd47f8e0cb8384e794ea",
+            "context": {
+              "dataset": "hm3dv2",
+              "episode_key": "4ok3usBNeis.basis.glb_10",
+              "step": 222,
+              "mode": "explore",
+              "historical_reconstruction": true
+            },
+            "input_frontiers_xy": [
+              [
+                -0.45,
+                -4.1
+              ],
+              [
+                0.575,
+                -6.2
+              ],
+              [
+                -5.0676776695296635,
+                -8.11767766952966
+              ]
+            ],
+            "robot_xy": [
+              -3.488943338394165,
+              -5.254868030548096
+            ],
+            "last_frontier_before": [
+              -0.45,
+              -4.1
+            ],
+            "last_value_before": 0.22812208349232266,
+            "cyclic_checks": [],
+            "branch": "keep_last",
+            "started_monotonic_ns": 756718990157131,
+            "sorted_frontiers_xy": [
+              [
+                -0.45,
+                -4.1
+              ],
+              [
+                -5.0676776695296635,
+                -8.11767766952966
+              ],
+              [
+                0.575,
+                -6.2
+              ]
+            ],
+            "sorted_values": [
+              0.22812208349232266,
+              0.15561750119042594,
+              0.1345999318585993
+            ],
+            "top_two_values": [
+              0.22812208349232266,
+              0.15561750119042594
+            ],
+            "sorted_to_input_matches": [
+              [
+                0
+              ],
+              [
+                2
+              ],
+              [
+                1
+              ]
+            ],
+            "keep_last": {
+              "sorted_index": 0,
+              "current_value": 0.22812208349232266,
+              "rule": "current_value + 0.01 > last_value_before",
+              "exact_or_near": "exact"
+            },
+            "selected_sorted_index": 0,
+            "selected_input_indices": [
+              0
+            ],
+            "selected_frontier_xy": [
+              -0.45,
+              -4.1
+            ],
+            "selected_value": 0.22812208349232266,
+            "last_frontier_after": [
+              -0.45,
+              -4.1
+            ],
+            "last_value_after": 0.22812208349232266,
+            "decision_elapsed_ms": 0.684737,
+            "check_coverage": "only checks actually executed; untested candidates are not assumed noncyclic"
+          }
+        ]
+      },
+      "original_printed_value_matches": 213,
+      "printed_value_precision": "two decimals of percent, not full-precision original value"
+    }
+  ],
+  "limitations": [
+    "Conditioned on historical mode, RGB-D and scores; no new action rollout.",
+    "Purposefully selected pilot; not overall failure prevalence.",
+    "Processed-map area is a proxy, not GT or true visible volume.",
+    "2D poses, stairs proxy only; no original per-step true height.",
+    "Returning can be useful. Positive or small gain alone does not prove failure causation."
+  ]
+}
