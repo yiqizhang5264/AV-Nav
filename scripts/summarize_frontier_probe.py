@@ -49,12 +49,20 @@ def delayed_known_frontiers(rows):
                    for old_step, points in history if old_step <= step-20 and len(points)
                    and np.linalg.norm(points - goal, axis=1).min() <= .5]
         if changed and np.linalg.norm(goal-robot) >= 3. and matches:
+            sorted_points = np.asarray(decision["sorted_frontiers_xy"])
+            distances = np.linalg.norm(sorted_points - robot, axis=1)
+            nearest = int(np.argmin(distances))
             events.append(dict(step=step, goal_xy=goal.tolist(),
                                distance_from_robot_xy_m=float(np.linalg.norm(goal-robot)),
                                earliest_matched_step=matches[0][0],
                                earliest_matched_frontier_xy=matches[0][1],
                                branch=decision["branch"],
+                               selected_value=decision["selected_value"],
                                sorted_rank=decision["selected_sorted_index"]+1,
+                               nearest_frontier_xy=sorted_points[nearest].tolist(),
+                               nearest_frontier_distance_xy_m=float(distances[nearest]),
+                               nearest_frontier_value=decision["sorted_values"][nearest],
+                               distance_note="Euclidean proxy, not geodesic distance or proven reachable alternative",
                                current_frontier_count=row["n_frontiers"]))
         history.append((step, np.asarray(decision["input_frontiers_xy"])))
         previous_goal = goal
