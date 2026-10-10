@@ -9,6 +9,7 @@ class SummaryUnitsTests(unittest.TestCase):
         for step, robot, goal in ((0, [0., 0.], [0., 1.]), (21, [8., 0.], [0., 4.])):
             rows.append(dict(step=step, robot_xy=robot, replayed_nav_goal=goal,
                              n_frontiers=2, decision=dict(input_frontiers_xy=[[0., 1.], [0., 4.]],
+                             sorted_frontiers_xy=[goal, [9., 9.]], sorted_values=[.2, .1], selected_value=.2,
                              branch="highest_noncyclic", selected_sorted_index=0)))
         result = delayed_known_frontiers(rows)
         self.assertEqual(len(result), 1)
