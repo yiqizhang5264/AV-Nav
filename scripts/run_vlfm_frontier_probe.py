@@ -2,12 +2,29 @@
 from __future__ import annotations
 
 import argparse
+import gzip
+import hashlib
 import json
 import os
 from pathlib import Path
 import sys
 
 from frontier_probe_recorder import install_environment
+
+
+def prepare_selected_case(selection, index):
+    case = json.loads(Path(selection).read_text(encoding="utf-8"))["episodes"][index]
+    content = Path(case["task_content_path"]).read_bytes()
+    if hashlib.sha256(content).hexdigest() != case["task_content_sha256"]:
+        raise ValueError("Original task content changed")
+    row = json.loads(gzip.decompress(content))["episodes"][case["task_loaded_index_in_content"]]
+    canonical = json.dumps(row, sort_keys=True, separators=(",", ":")).encode()
+    if hashlib.sha256(canonical).hexdigest() != case["task_row_sha256"]:
+        raise ValueError("Original task row identity changed")
+    return dict(case, identity=dict(scene_id=row["scene_id"],
+                                   episode_id=str(case["task_loaded_index_in_content"]),
+                                   object_category=row["object_category"],
+                                   start_position=row["start_position"], start_rotation=row["start_rotation"]))
 
 
 def extend_overlay(overlay):
@@ -44,17 +61,25 @@ def extend_overlay(overlay):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--probe-case", required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--probe-case")
+    source.add_argument("--probe-selection")
+    parser.add_argument("--case-index", type=int)
     args, remaining = parser.parse_known_args()
     if os.environ.get("VLFM_SKIP_EPISODES_FILE") or os.environ.get("AVNAV_ROOM_ONLINE_SETTINGS"):
         raise RuntimeError("probe must not be combined with resume or room interventions")
-    case_path = Path(args.probe_case).resolve()
-    case = json.loads(case_path.read_text(encoding="utf-8"))
+    if args.probe_selection:
+        if args.case_index is None:
+            raise ValueError("--probe-selection requires --case-index")
+        case = prepare_selected_case(args.probe_selection, args.case_index)
+    else:
+        case = json.loads(Path(args.probe_case).read_text(encoding="utf-8"))
     if "identity" not in case:
         raise ValueError("probe case requires full original episode identity")
     root = Path(os.environ["VLFM_EVIDENCE_DIR"])
     root.mkdir(parents=True, exist_ok=False)
-    (root / "probe_case.json").write_text(json.dumps(case, indent=2), encoding="utf-8")
+    case_path = (root / "probe_case.json").resolve()
+    case_path.write_text(json.dumps(case, indent=2), encoding="utf-8")
     os.environ["VLFM_FRONTIER_CASE"] = str(case_path)
     # Exactly one full-length episode; never silently use a shortened budget.
     for arg in remaining:
