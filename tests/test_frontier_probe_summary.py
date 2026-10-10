@@ -1,9 +1,17 @@
 import unittest
 
-from scripts.summarize_frontier_probe import interval, delayed_known_frontiers
+from scripts.summarize_frontier_probe import interval, delayed_known_frontiers, verify_printed_scores
 
 
 class SummaryUnitsTests(unittest.TestCase):
+    def test_original_display_score_verified_at_its_recorded_precision(self):
+        old = [dict(policy_info=dict(debug="debug: Best value: 10.63%"))]
+        new = [dict(step=0, replayed_nav_goal=[1., 2.], decision=dict(selected_value=.10633738))]
+        self.assertEqual(verify_printed_scores(old, new), 1)
+        new[0]["decision"]["selected_value"] = .11633738
+        with self.assertRaisesRegex(ValueError, "mismatch"):
+            verify_printed_scores(old, new)
+
     def test_known_frontier_is_not_the_same_as_visited_robot_pose(self):
         rows = []
         for step, robot, goal in ((0, [0., 0.], [0., 1.]), (21, [8., 0.], [0., 4.])):

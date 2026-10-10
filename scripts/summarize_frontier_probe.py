@@ -5,12 +5,31 @@ import argparse
 from collections import Counter
 import json
 from pathlib import Path
+import re
 
 import numpy as np
 
 
 def read_jsonl(path):
     return [json.loads(line) for line in Path(path).read_text(encoding="utf-8").splitlines()]
+
+
+def verify_printed_scores(original, replay):
+    if len(original) != len(replay):
+        raise ValueError("Source/replay row count mismatch")
+    checked = 0
+    for old, new in zip(original, replay):
+        if new["replayed_nav_goal"] is None:
+            continue
+        debug = old.get("policy_info", {}).get("debug", "")
+        match = re.search(r"Best value:\s*([-0-9.]+)%", debug)
+        if not match:
+            raise ValueError(f"Missing original printed frontier value at {new['step']}")
+        reconstructed = f"{new['decision']['selected_value'] * 100:.2f}"
+        if reconstructed != match.group(1):
+            raise ValueError(f"Printed frontier value mismatch at {new['step']}: {reconstructed} vs {match.group(1)}")
+        checked += 1
+    return checked
 
 
 def interval(rows, start, end):
@@ -158,7 +177,11 @@ def main():
         if (case["dataset"], case["episode_key"]) != (result["dataset"], result["episode_key"]):
             raise ValueError("Mismatched manifest identity")
         folder = root / f"{index:02d}_{case['dataset']}_{case['episode_key']}"
-        cases.append(case_summary(case, result, read_jsonl(folder / "steps.jsonl")))
+        rows = read_jsonl(folder / "steps.jsonl")
+        item = case_summary(case, result, rows)
+        item["original_printed_value_matches"] = verify_printed_scores(read_jsonl(case["trace_source"]), rows)
+        item["printed_value_precision"] = "two decimals of percent, not full-precision original value"
+        cases.append(item)
     report = dict(schema="vlfm.frontier_probe_analysis.v1", source_replay=str(root),
                   total_expected=len(selection["episodes"]), complete_cases=len(cases),
                   population_efficacy_claim=False, counterfactual_recovery_measured=False,
