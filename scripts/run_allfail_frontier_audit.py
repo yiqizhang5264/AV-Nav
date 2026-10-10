@@ -6,6 +6,7 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -145,8 +146,13 @@ def main():
     selection = json.loads(Path(args.selection).read_text())
     scripts = Path(__file__).parent
     files = [Path(__file__), scripts / "frontier_region_audit.py", scripts / "replay_frontier_probe.py",
-             scripts / "summarize_frontier_probe.py", scripts / "decision_trace.py", scripts / "depth_camera_filtering.py",
+             scripts / "summarize_frontier_probe.py", scripts / "decision_trace.py",
              scripts.parent / "docs/VLFM_ALL_FAILURE_REVISIT_PROTOCOL_20261010.md"]
+    # This is an installed dependency, not a repository script.
+    depth_spec = importlib.util.find_spec("depth_camera_filtering")
+    if depth_spec is None or depth_spec.origin is None:
+        raise RuntimeError("The pinned replay environment needs depth_camera_filtering")
+    files.append(Path(depth_spec.origin))
     upstream = Path(args.vlfm_root).resolve()
     files += [upstream / name for name in ("vlfm/policy/itm_policy.py", "vlfm/policy/utils/acyclic_enforcer.py",
               "vlfm/mapping/obstacle_map.py", "vlfm/mapping/value_map.py", "vlfm/mapping/base_map.py",

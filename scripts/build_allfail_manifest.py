@@ -39,7 +39,9 @@ def parse_console(path):
     indices, modes, actions, nf, edge = [], [], [], [], []
     if not path.is_file():
         return found
-    for line_no, line in enumerate(path.open(errors="replace"), 1):
+    with path.open(errors="replace") as stream:
+        lines = stream.readlines()
+    for line_no, line in enumerate(lines, 1):
         if "No frontiers found during exploration, stopping." in line:
             nf.append(line_no)
         if "Reached edge of map, stopping." in line:
