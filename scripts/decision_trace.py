@@ -7,6 +7,7 @@ Install only in an isolated diagnostic process, before starting episodes.
 """
 
 import ast
+import __future__
 import copy
 import functools
 import hashlib
@@ -233,7 +234,8 @@ def _compile_instrumented(original, recorder, source_text):
     ast.fix_missing_locations(tree)
     namespace = dict(original.__globals__)
     namespace[_GLOBAL] = recorder
-    exec(compile(tree, "<vlfm_frontier_decision_trace_20261010>", "exec"), namespace)
+    flags = original.__code__.co_flags & __future__.annotations.compiler_flag
+    exec(compile(tree, "<vlfm_frontier_decision_trace_20261010>", "exec", flags=flags), namespace)
     return functools.update_wrapper(namespace[original.__name__], original)
 
 
