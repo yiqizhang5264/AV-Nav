@@ -1,9 +1,19 @@
 import unittest
 
-from scripts.summarize_frontier_probe import interval
+from scripts.summarize_frontier_probe import interval, delayed_known_frontiers
 
 
 class SummaryUnitsTests(unittest.TestCase):
+    def test_known_frontier_is_not_the_same_as_visited_robot_pose(self):
+        rows = []
+        for step, robot, goal in ((0, [0., 0.], [0., 1.]), (21, [8., 0.], [0., 4.])):
+            rows.append(dict(step=step, robot_xy=robot, replayed_nav_goal=goal,
+                             n_frontiers=2, decision=dict(input_frontiers_xy=[[0., 1.], [0., 4.]],
+                             branch="highest_noncyclic", selected_sorted_index=0)))
+        result = delayed_known_frontiers(rows)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["earliest_matched_step"], 0)
+
     def test_pre_action_interval_distance_and_area_units(self):
         rows = [dict(robot_xy=[x, 0.], new_cumulative_seen_cells=cells,
                      normalization_pixels_per_meter=20., mode="explore", decision=None)

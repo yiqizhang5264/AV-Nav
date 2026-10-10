@@ -32,6 +32,35 @@ def interval(rows, start, end):
                 decision_branch_counts=dict(branches))
 
 
+def delayed_known_frontiers(rows):
+    """Spatial recurrence proxy, not a persistent frontier identity or causal label."""
+    history = []
+    previous_goal = None
+    events = []
+    for row in rows:
+        decision = row["decision"]
+        if decision is None or row["replayed_nav_goal"] is None:
+            continue
+        goal = np.asarray(row["replayed_nav_goal"])
+        step = row["step"]
+        robot = np.asarray(row["robot_xy"])
+        changed = previous_goal is None or np.linalg.norm(goal - previous_goal) > .5
+        matches = [(old_step, points[np.argmin(np.linalg.norm(points - goal, axis=1))].tolist())
+                   for old_step, points in history if old_step <= step-20 and len(points)
+                   and np.linalg.norm(points - goal, axis=1).min() <= .5]
+        if changed and np.linalg.norm(goal-robot) >= 3. and matches:
+            events.append(dict(step=step, goal_xy=goal.tolist(),
+                               distance_from_robot_xy_m=float(np.linalg.norm(goal-robot)),
+                               earliest_matched_step=matches[0][0],
+                               earliest_matched_frontier_xy=matches[0][1],
+                               branch=decision["branch"],
+                               sorted_rank=decision["selected_sorted_index"]+1,
+                               current_frontier_count=row["n_frontiers"]))
+        history.append((step, np.asarray(decision["input_frontiers_xy"])))
+        previous_goal = goal
+    return events
+
+
 def case_summary(case, result, rows):
     if not result["validated_to_end"] or not result["complete_episode_reconstruction"]:
         raise ValueError("Cannot summarize partial/unvalidated reconstruction")
@@ -66,6 +95,8 @@ def case_summary(case, result, rows):
                   decision_branch_counts=dict(branches), cyclic_checks=len(checks),
                   cyclic_hits=sum(bool(c["cyclic"]) for c in checks),
                   non_top_rank_selections=len(lower_rank),
+                  delayed_known_frontier_switches=delayed_known_frontiers(rows),
+                  delayed_known_frontier_note="A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
                   old_pose_near_goal_selection_steps=old_goal_selections,
                   old_pose_near_goal_note="Per-decision count, not trip count. Goal >=3m away, <=0.5m from a pose >=20 actions old. No path-cost or low-gain inference.",
                   processed_map_area_removed_on_steps=sum(r["removed_explored_cells"] > 0 for r in rows),
