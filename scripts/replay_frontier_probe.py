@@ -57,6 +57,9 @@ def main():
     parser.add_argument("--episode-key")
     parser.add_argument("--limit-steps", type=int)
     parser.add_argument("--save-raw-maps", action="store_true")
+    parser.add_argument("--save-audit-map", action="store_true",
+                        help="Save final masks for retrospective local-connectivity checks, not policy input")
+    parser.add_argument("--cpu-threads", type=int, default=1)
     args = parser.parse_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     for name in ("RECORD_VALUE_MAP", "PLAY_VALUE_MAP"):
@@ -65,6 +68,9 @@ def main():
     if os.environ.get("MAP_FUSION_TYPE"):
         raise RuntimeError("Unrecorded MAP_FUSION_TYPE override is not allowed")
     import cv2
+    if args.cpu_threads < 1:
+        raise ValueError("cpu-threads must be positive")
+    cv2.setNumThreads(args.cpu_threads)
     import numpy as np
     import yaml
     sys.path.insert(0, str(Path(args.vlfm_root).resolve()))
@@ -254,6 +260,7 @@ def main():
                     ever |= explored
                     record = {"step": step, "mode": modes[step], "original_action": row["action"],
                               "robot_xy": robot_xy.tolist(), "yaw_rad": yaw, "n_frontiers": len(obstacle.frontiers),
+                              "target_detected": row.get("policy_info", {}).get("target_detected"),
                               "recorded_nav_goal": recorded_goal.tolist(), "replayed_nav_goal": None if goal is None else goal.tolist(),
                               "nav_goal_exact": exact, "nav_goal_error_m": error,
                               "explored_cells": int(explored.sum()), "new_explored_cells": int((explored & ~previous).sum()),
@@ -272,6 +279,14 @@ def main():
                         print("REPLAY", case_index, case["episode_key"], step, flush=True)
             if n_steps == len(original_rows) and cursor != len(itm):
                 raise ValueError("Unused ITM events after complete replay")
+            if args.save_audit_map:
+                np.savez_compressed(case_out / "final_audit_map.npz",
+                                    navigable=obstacle._navigable_map,
+                                    ever_explored=ever, obstacle=obstacle._map,
+                                    pixels_per_meter=np.asarray(obstacle.pixels_per_meter),
+                                    episode_pixel_origin=obstacle._episode_pixel_origin)
+                result["final_audit_map_sha256"] = sha256(case_out / "final_audit_map.npz")
+                result["final_audit_map_role"] = "Retrospective exclusion of wall/unknown proximity; never a decision-time oracle"
             result["validated_to_end"] = True
         finally:
             handle.uninstall()
