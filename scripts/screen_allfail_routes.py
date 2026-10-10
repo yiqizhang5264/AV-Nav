@@ -17,19 +17,24 @@ def trajectory_screen(xy, departure=3.0, return_radius=0.75, gap=20):
     if len(xy) < 2:
         return dict(spatial_return=False, witness=None, observed_path_m=0.0, jumps_over_1m=0)
     moves = np.linalg.norm(np.diff(xy, axis=0), axis=1)
+    distance_matrix = np.linalg.norm(xy[:, None, :] - xy[None, :, :], axis=2)
+    # For anchor i and later end j, columns before i cannot introduce a larger
+    # distance: explicitly mask them before accumulating along time.
+    chronological = np.triu(distance_matrix)
+    max_departure = np.maximum.accumulate(chronological, axis=1)
     # No same-frontier or category identity is needed. This is deliberately a screen.
     for end in range(gap, len(xy)):
-        distances = np.linalg.norm(xy[:end + 1] - xy[end], axis=1)
-        near = np.flatnonzero(distances[:end - gap + 1] <= return_radius)
-        for start in near:
-            from_anchor = np.linalg.norm(xy[start:end + 1] - xy[start], axis=1)
-            if from_anchor.max() >= departure:
-                far = int(start + np.argmax(from_anchor))
-                return dict(spatial_return=True, witness=dict(old_step=int(start),
-                            farthest_step=far, returned_step=end,
-                            departure_m=float(from_anchor.max()),
-                            return_distance_m=float(np.linalg.norm(xy[start] - xy[end]))),
-                            observed_path_m=float(moves.sum()), jumps_over_1m=int((moves > 1).sum()))
+        matches = np.flatnonzero((distance_matrix[:end - gap + 1, end] <= return_radius) &
+                                 (max_departure[:end - gap + 1, end] >= departure))
+        if len(matches):
+            start = int(matches[0])
+            from_anchor = distance_matrix[start, start:end + 1]
+            far = int(start + np.argmax(from_anchor))
+            return dict(spatial_return=True, witness=dict(old_step=start,
+                        farthest_step=far, returned_step=end,
+                        departure_m=float(from_anchor.max()),
+                        return_distance_m=float(distance_matrix[start, end])),
+                        observed_path_m=float(moves.sum()), jumps_over_1m=int((moves > 1).sum()))
     return dict(spatial_return=False, witness=None, observed_path_m=float(moves.sum()),
                 jumps_over_1m=int((moves > 1).sum()))
 
