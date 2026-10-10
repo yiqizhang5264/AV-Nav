@@ -72,9 +72,22 @@ def case_summary(case, result, rows):
     selected = [row for row in rows if row["replayed_nav_goal"] is not None]
     branches = Counter(d["branch"] for d in decisions)
     checks = [check for d in decisions for check in d.get("cyclic_checks", [])]
+    history = set()
+    missed_exact_numeric_repeats = []
+    for decision in decisions:
+        if "selected_frontier_xy" not in decision:
+            continue
+        key_prefix = tuple(decision["robot_xy"])
+        for check in decision["cyclic_checks"]:
+            key = (key_prefix, tuple(check["frontier_xy"]), tuple(check["top_two_values"]))
+            if key in history and not check["cyclic"]:
+                missed_exact_numeric_repeats.append(decision["context"]["step"])
+        history.add((key_prefix, tuple(decision["selected_frontier_xy"]), tuple(decision["top_two_values"])))
     lower_rank = [row for row in selected if row["decision"]["selected_sorted_index"] > 0]
     old_goal_selections = []
     xy = np.asarray([row["robot_xy"] for row in rows])
+    displacements = np.linalg.norm(np.diff(xy, axis=0), axis=1)
+    forward = np.asarray([r["original_action"] == 1 for r in rows[:-1]])
     for row in selected:
         step = row["step"]
         if step < 20:
@@ -94,6 +107,12 @@ def case_summary(case, result, rows):
                   empty_frontier_stops=result["empty_frontier_stops"],
                   decision_branch_counts=dict(branches), cyclic_checks=len(checks),
                   cyclic_hits=sum(bool(c["cyclic"]) for c in checks),
+                  shadow_same_numeric_state_action_missed_steps=missed_exact_numeric_repeats,
+                  shadow_note="Offline exact numeric tuple comparison only. Not a policy change, not a tolerance-based cycle detector, no counterfactual rollout.",
+                  total_traveled_xy_m=float(displacements.sum()),
+                  observed_forward_actions=int(forward.sum()),
+                  forward_actions_without_translation_1e6m=int(np.sum(displacements[forward] <= 1e-6)),
+                  motion_note="Pre-action to next pre-action pose, excludes final action without a saved next observation; lack of translation does not by itself identify a collision.",
                   non_top_rank_selections=len(lower_rank),
                   delayed_known_frontier_switches=delayed_known_frontiers(rows),
                   delayed_known_frontier_note="A destination switch >0.5m; chosen point >=3m away and within0.5m of an available frontier >=20 actions earlier. Spatial recurrence only, not proven identity or low utility.",
