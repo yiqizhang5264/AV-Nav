@@ -109,6 +109,9 @@ def _local_connection(a_xy, b_xy, context, config):
             raise ValueError("map shape/origin/resolution")
         points = np.rint(np.asarray([a_xy, b_xy])[:, ::-1] * ppm).astype(int) + origin.astype(int)
         points[:, 0] = navigable.shape[0] - points[:, 0]
+        # Upstream BaseMap returns (pixel_x, pixel_y), whereas NumPy masks
+        # are indexed [row=pixel_y, column=pixel_x]; ObstacleMap swaps here too.
+        points = points[:, ::-1]
         start, goal = [tuple(int(v) for v in point) for point in points]
         height, width = navigable.shape
         def free(point):

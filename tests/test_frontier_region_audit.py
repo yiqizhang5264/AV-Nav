@@ -88,11 +88,20 @@ class RegionAuditTests(unittest.TestCase):
 
     def test_wall_guard_and_unknown_guard(self):
         rows, source, context = fixture()
-        context["navigable"][:, 123] = False
+        context["navigable"][123, :] = False
         connection = _local_connection([0.2, 0], [0.4, 0], context, AuditConfig())
         self.assertEqual(connection["status"], "unresolved")
         context["ever_explored"][:] = False
         self.assertEqual(_local_connection([0, 0], [0, 0], context, AuditConfig())["status"], "unresolved")
+
+    def test_pixel_xy_is_swapped_to_numpy_row_column(self):
+        free = np.zeros((200, 200), dtype=bool)
+        # World (x=2,y=3), origin(100,100), ppm10 -> pixelXY(70,120)
+        # -> NumPy row120,column70, not row70,column120.
+        free[120:123, 70] = True
+        context = dict(navigable=free, ever_explored=free, obstacle=np.zeros_like(free),
+                       pixels_per_meter=10, episode_pixel_origin=[100, 100])
+        self.assertEqual(_local_connection([2., 3.], [2.2, 3.], context, AuditConfig())["status"], "connected")
 
     def test_truncated_destination_not_called_low_yield(self):
         rows, source, context = fixture(terminal="budget")
