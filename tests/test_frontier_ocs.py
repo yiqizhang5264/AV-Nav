@@ -67,7 +67,31 @@ class OCS(unittest.TestCase):
         self.map.curves = []
         result = self.ocs.select(self.points, self.robot, self.map, scores, 0)
         np.testing.assert_array_equal(result[0], self.points[0])
-        self.assertIn("fallback", result[2]["reason"])
+        self.assertEqual(result[2]["fallback_kind"], "score_only")
+
+    def test_unknown_geometry_calls_full_baseline_not_highest_score(self):
+        self.map.curves = []
+        calls = []
+        def native_selector():
+            calls.append("native_keep_last_or_cyclic_selection")
+            return self.points[1].copy(), 3.
+        def forbidden_score_only(points):
+            raise AssertionError("Native fallback must not be replaced by score sorting")
+        result = self.ocs.select(self.points, self.robot, self.map, forbidden_score_only, 0,
+                                 baseline_select=native_selector)
+        np.testing.assert_array_equal(result[0], self.points[1])
+        self.assertEqual(result[1], 3.)
+        self.assertEqual(calls, ["native_keep_last_or_cyclic_selection"])
+        self.assertEqual(result[2]["fallback_kind"], "upstream_selection")
+        self.assertIsNone(self.ocs.active_id)
+
+    def test_available_geometry_does_not_call_baseline_fallback(self):
+        def forbidden_baseline():
+            raise AssertionError("Native fallback should only run without opportunities")
+        result = self.ocs.select(self.points, self.robot, self.map, scores, 0,
+                                 baseline_select=forbidden_baseline)
+        self.assertEqual(result[2]["opportunities"], 2)
+        self.assertNotIn("fallback_kind", result[2])
 
     def test_upstream_maps_are_unchanged(self):
         a, b = self.map.explored_area.copy(), self.map._navigable_map.copy()

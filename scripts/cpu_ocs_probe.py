@@ -168,6 +168,8 @@ class Probe:
         manifest = json.loads(Path(args.selection).read_text(encoding="utf-8"))
         self.cases = {(c["dataset"], c["episode_key"]): c for c in manifest["episodes"]}
         self.enable_ocs = args.with_ocs
+        self.shadow = ((self.output / "ocs_shadow.jsonl").open("w", encoding="utf-8")
+                       if self.enable_ocs else None)
 
     def install(self):
         import decision_trace
@@ -250,8 +252,39 @@ class Probe:
 
         previous_ocs_goal = np.array(state["previous_ocs_goal"], copy=True)
         ocs_consecutive = state["previous_ocs_step"] == step - 1
+
+        def baseline_on_copy(points):
+            # Missing geometry must use the actual upstream selector, including
+            # keep-last and cyclic handling, without mutating the replay oracle.
+            debug_before = os.environ.get("DEBUG_INFO")
+            try:
+                with contextlib.redirect_stdout(io.StringIO()):
+                    return original(clone_policy(policy), observations, points.copy())
+            finally:
+                if debug_before is None:
+                    os.environ.pop("DEBUG_INFO", None)
+                else:
+                    os.environ["DEBUG_INFO"] = debug_before
+
         if self.enable_ocs:
-            ocs_real = state["ocs"].select(frontiers.copy(), robot_xy.copy(), obstacle, score_fn, step)
+            shadow_start = time.perf_counter()
+            ocs_real = state["ocs"].select(frontiers.copy(), robot_xy.copy(), obstacle, score_fn, step,
+                                          baseline_select=lambda: baseline_on_copy(frontiers))
+            elapsed_ms = (time.perf_counter() - shadow_start) * 1000
+            shadow_reset = goal_reset_condition(ocs_real[0], previous_ocs_goal) if ocs_consecutive else None
+            shadow_counts = {
+                "ocs_calls": 1,
+                "ocs_geometry_fallback_calls": int(ocs_real[2]["reason"].startswith("geometry_unavailable")),
+                "ocs_consecutive_calls": int(ocs_consecutive),
+                "ocs_shadow_reset_conditions": int(shadow_reset is True),
+            }
+            self.counts.update(shadow_counts)
+            episode_counts["counts"].update(shadow_counts)
+            self.shadow.write(json.dumps(dict(context, goal=plain(ocs_real[0]), value=float(ocs_real[1]),
+                diagnostics=plain(ocs_real[2]), elapsed_ms=elapsed_ms,
+                consecutive_shadow_explore=ocs_consecutive, pointnav_reset_condition=shadow_reset,
+                actual_pointnav_executed=False, new_navigation_rollout=False), allow_nan=False) + "\n")
+            self.shadow.flush()
             state["previous_ocs_goal"] = np.array(ocs_real[0], copy=True)
             state["previous_ocs_step"] = step
         if trigger is None:
@@ -284,7 +317,9 @@ class Probe:
                               selector_stdout=capture.getvalue().strip())
                 if self.enable_ocs:
                     alternative = copy.deepcopy(ocs_before)
-                    alt_goal, alt_score, diagnostics = alternative.select(points.copy(), robot_xy.copy(), obstacle, score_fn, step)
+                    alt_goal, alt_score, diagnostics = alternative.select(
+                        points.copy(), robot_xy.copy(), obstacle, score_fn, step,
+                        baseline_select=lambda: baseline_on_copy(points))
                     record["ocs"] = dict(goal=plain(alt_goal), value=float(alt_score), diagnostics=plain(diagnostics),
                                          previous_shadow_goal=plain(previous_ocs_goal),
                                          consecutive_shadow_explore=ocs_consecutive,
@@ -344,6 +379,8 @@ class Probe:
             actual_pointnav_executed=False, reset_field_is_predicate_not_observed_execution=True,
             sampling_rule=f"every {self.args.every_explore} explore decisions plus every consecutive-explore goal movement in (0.1,0.5] m",
             source_sha256=digest(__file__), selection_sha256=digest(self.args.selection),
+            scheduler_sha256=(digest(Path(__file__).resolve().parents[1] / "av_nav/frontier_ocs.py")
+                              if self.enable_ocs else None),
             upstream_replay_sha256=digest(self.replay.__file__),
             frontier_perturbation_radius_m=0.2,
             limit_steps=self.args.limit_steps,
@@ -425,6 +462,8 @@ def main():
     finally:
         probe.records.close()
         probe.timeline.close()
+        if probe.shadow is not None:
+            probe.shadow.close()
 
 
 if __name__ == "__main__":

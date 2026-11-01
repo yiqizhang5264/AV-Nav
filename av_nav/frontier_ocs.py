@@ -242,7 +242,15 @@ class FrontierOCS:
                 counts[cell] += 1
         return list(counts.values())
 
-    def select(self, frontiers, robot_xy, obstacle_map, score_fn, step):
+    def select(self, frontiers, robot_xy, obstacle_map, score_fn, step,
+               baseline_select: Optional[Callable] = None):
+        """Select an exploration goal, preserving native selection on fallback.
+
+        ``baseline_select`` is a zero-argument callback running the full native
+        selector, including keep-last and cyclic-history behavior. Production
+        adapters must provide it. The score-only fallback exists for standalone
+        geometry tests and is explicitly distinguished in diagnostics.
+        """
         frontiers = np.asarray(frontiers, dtype=float).reshape(-1, 2)
         robot_xy = np.asarray(robot_xy, dtype=float)
         if not len(frontiers) or not np.isfinite(frontiers).all():
@@ -280,10 +288,20 @@ class FrontierOCS:
                 "opportunities": len(tasks), "coverage_kind": "processed_explored_mask_union_proxy",
                 "config": asdict(self.config), "task_records": [], "method_is_calibrated": False}
         if not tasks:
-            points, values = score_fn(frontiers.copy())
             self.active_id = None
-            diag.update(reason="geometry_unavailable_baseline_score_fallback", task_id=None)
-            return np.asarray(points[0]).copy(), float(values[0]), diag
+            if baseline_select is not None:
+                goal, value = baseline_select()
+                fallback_kind = "upstream_selection"
+            else:
+                points, values = score_fn(frontiers.copy())
+                goal, value = points[0], values[0]
+                fallback_kind = "score_only"
+            goal = np.asarray(goal, dtype=float)
+            if goal.shape != (2,) or not np.isfinite(goal).all() or not np.isfinite(value):
+                raise ValueError("Fallback selector must return a finite 2-D goal and score")
+            diag.update(reason=f"geometry_unavailable_{fallback_kind}_fallback",
+                        fallback_kind=fallback_kind, task_id=None)
+            return goal.copy(), float(value), diag
         anchors = np.asarray([task.anchor for task in tasks])
         ranked, values = score_fn(anchors.copy())
         scores = {}

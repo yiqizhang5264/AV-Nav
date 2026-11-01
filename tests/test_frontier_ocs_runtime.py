@@ -107,6 +107,32 @@ class RuntimeTests(unittest.TestCase):
         self.assertTrue(event["stop_allowed"])
         self.assertEqual(event["actual_resets_this_call"], 1)
 
+    def test_ocs_geometry_fallback_runs_native_keep_last_and_state_updates(self):
+        from av_nav.frontier_ocs import FrontierOCS
+        # Deliberately keep a lower-scoring goal: score-only fallback would select
+        # [3,8], whereas the saved native selector must be allowed to retain [6,4].
+        def native_keep_last(policy, observations, frontiers):
+            policy.selection_calls += 1
+            policy.native_history = ["native_history_updated"]
+            # Preserve this object identity too: the adapter must not redo native
+            # bookkeeping after calling the full fallback selector.
+            kept = policy._last_frontier
+            policy._last_value = 4.
+            return kept, 4.
+        self.Policy._get_best_frontier = native_keep_last
+        self.install("ocs", lambda: FrontierOCS(contour_extractor=lambda obstacle: []))
+        policy = self.Policy()
+        policy._obstacle_map.explored_area = np.ones((100, 100), bool)
+        policy._last_frontier = np.array([6., 4.])
+        prior_frontier = policy._last_frontier
+        goal, value = policy._get_best_frontier({}, np.array([[3., 8.], [6., 4.]]))
+        np.testing.assert_array_equal(goal, [6., 4.])
+        self.assertEqual(value, 4.)
+        self.assertEqual(policy.selection_calls, 1)
+        self.assertEqual(policy.native_history, ["native_history_updated"])
+        self.assertIs(policy._last_frontier, prior_frontier)
+        self.assertEqual(self.events[-1]["diagnostics"]["fallback_kind"], "upstream_selection")
+
     def test_actual_reset_not_inferred_from_predicate(self):
         self.install("original")
         policy = self.Policy()

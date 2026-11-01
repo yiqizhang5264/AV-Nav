@@ -153,13 +153,19 @@ def install_policy_hooks(*, policy_class=None, object_class=None,
         if mode == "ocs":
             def scorer(points):
                 return policy._sort_frontiers_by_value(observations, points)
+            def baseline_select():
+                return methods["select"](policy, observations, frontiers)
             goal, value, diag = state.scheduler.select(
-                frontiers, robot, policy._obstacle_map, scorer, int(policy._num_steps))
+                frontiers, robot, policy._obstacle_map, scorer, int(policy._num_steps),
+                baseline_select=baseline_select)
             goal = np.asarray(goal, dtype=float).reshape(2)
             # Display/state bookkeeping only; the OCS condition does not claim to
             # execute the original cyclic selector or a separately fixed version.
-            policy._last_frontier = goal.copy()
-            policy._last_value = float(value)
+            # A geometry fallback has already run the complete original selector:
+            # preserve its state updates rather than rewriting any of them.
+            if diag.get("fallback_kind") != "upstream_selection":
+                policy._last_frontier = goal.copy()
+                policy._last_value = float(value)
         else:
             goal, value = methods["select"](policy, observations, frontiers)
             goal = np.array(goal, copy=True)
