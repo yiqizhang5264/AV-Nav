@@ -180,7 +180,8 @@ def main():
             "dataset": case["dataset"], "episode_key": case["episode_key"], "step": current["step"],
             "mode": modes[current["step"]], "historical_reconstruction": True}, **options)
         result = {"case_index": case_index, "episode_key": case["episode_key"], "dataset": case["dataset"],
-                  "pilot_stratum": case["pilot_stratum"], "source_steps": len(original_rows), "replayed_steps": 0,
+                  "pilot_stratum": case.get("pilot_stratum", case.get("ocs_stratum", "unspecified")),
+                  "source_steps": len(original_rows), "replayed_steps": 0,
                   "source_steps_sha256": sha256(case["trace_source"]), "config_sha256": sha256(config_path),
                   "frontier_decisions": 0, "exact_frontier_goals": 0, "empty_frontier_stops": 0,
                   "mismatches": [], "policy_name": policy_cfg["name"], "itm_calls_consumed": 0,
