@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 import gzip
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import shutil
@@ -45,6 +46,12 @@ def git_head(root):
 
 def physical_identity(row):
     """Source IDs can be re-numbered by Habitat; compare task content instead."""
+    if row.get("object_category") in (None, "", "unknown"):
+        raise ValueError("Incomplete recorded identity: object_category missing")
+    for field, size in (("start_position", 3), ("start_rotation", 4)):
+        value = row.get(field)
+        if value is None or len(value) != size or not all(math.isfinite(float(v)) for v in value):
+            raise ValueError(f"Incomplete recorded identity: {field} missing or invalid")
     return (str(row["scene_id"]).replace("\\", "/").split("/")[-1],
             str(row["object_category"]), tuple(float(v) for v in row["start_position"]),
             tuple(float(v) for v in row["start_rotation"]))
@@ -61,6 +68,19 @@ def verify_completed_identities(run, expected):
         observed.append(metadata)
     match = Counter(map(physical_identity, observed)) == Counter(map(physical_identity, expected))
     return len(paths), match
+
+
+def completion_record(run, expected, returncode):
+    verification_error = None
+    completed_count = len(list((Path(run) / "evidence/episodes").glob("*/result.json")))
+    identities_match = False
+    try:
+        completed_count, identities_match = verify_completed_identities(run, expected)
+    except (ValueError, TypeError, KeyError, OSError) as exc:
+        verification_error = f"{type(exc).__name__}: {exc}"
+    return {"returncode": returncode, "completed_result_files": completed_count,
+            "expected_episodes": len(expected), "physical_identities_match": identities_match,
+            "verification_error": verification_error, "complete": returncode == 0 and identities_match}
 
 
 def prepare(args):
@@ -120,6 +140,7 @@ def prepare(args):
     source_paths = [Path(__file__).resolve(), ROOT / "av_nav/frontier_ocs_runtime.py",
                     ROOT / "scripts/run_vlfm_evidence.py", ROOT / "scripts/vlfm_evidence_adapter.py",
                     ROOT / "scripts/vlfm_evidence_recorder.py",
+                    ROOT / "scripts/vlfm_episode_identity.py",
                     upstream / "vlfm/policy/itm_policy.py", upstream / "vlfm/policy/base_objectnav_policy.py",
                     upstream / "vlfm/policy/utils/acyclic_enforcer.py"]
     if args.mode == "ocs":
@@ -167,11 +188,10 @@ def execute(args):
     with (run / "console.log").open("w", encoding="utf-8") as stream:
         result = subprocess.run(manifest["command"], cwd=manifest["cwd"], env=env,
                                 stdout=stream, stderr=subprocess.STDOUT)
-    completed_count, identities_match = verify_completed_identities(run, manifest["identities"])
-    completion = {"returncode": result.returncode, "completed_result_files": completed_count,
-                  "expected_episodes": len(manifest["identities"]),
-                  "physical_identities_match": identities_match,
-                  "complete": result.returncode == 0 and identities_match}
+    # Preserve the actual worker exit separately from the post-run verifier.
+    with (run / "worker_exit.json").open("x", encoding="utf-8") as stream:
+        json.dump({"returncode": result.returncode, "finished_utc": datetime.now(timezone.utc).isoformat()}, stream)
+    completion = completion_record(run, manifest["identities"], result.returncode)
     (run / "completion.json").write_text(json.dumps(completion, indent=2), encoding="utf-8")
     print(json.dumps(completion, indent=2))
     raise SystemExit(0 if completion["complete"] else (result.returncode or 2))

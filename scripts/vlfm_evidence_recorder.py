@@ -12,6 +12,11 @@ from typing import Any
 import cv2
 import numpy as np
 
+if __package__:
+    from .vlfm_episode_identity import validate_full_episode
+else:
+    from vlfm_episode_identity import validate_full_episode
+
 
 def _plain(value: Any) -> Any:
     if value is None or isinstance(value, (str, int, float, bool)):
@@ -45,6 +50,7 @@ def _safe(text: Any) -> str:
 
 
 def _episode_meta(episode: Any) -> dict[str, Any]:
+    validate_full_episode(episode)
     goals = []
     for goal in getattr(episode, "goals", []) or []:
         goals.append(

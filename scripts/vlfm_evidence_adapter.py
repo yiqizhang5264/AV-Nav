@@ -18,6 +18,7 @@ def create_vlfm_evidence_overlay(vlfm_root: pathlib.Path, room_online: bool = Fa
         import_anchor,
         import_anchor
         + "from vlfm_evidence_recorder import get_evidence_recorder\n"
+        + "from vlfm_episode_identity import FullEpisodeCache\n"
         + "from vlfm_episode_resume import skip_completed_initial_episodes\n",
         1,
     )
@@ -25,13 +26,14 @@ def create_vlfm_evidence_overlay(vlfm_root: pathlib.Path, room_online: bool = Fa
     reset_patch = (
         "        observations = self.envs.reset()\n"
         "        observations = skip_completed_initial_episodes(self.envs, observations)\n"
+        "        evidence_episode_cache = FullEpisodeCache()\n"
         "        batch = batch_obs(observations, device=self.device)"
     )
     if source.count(reset_anchor) != 1:
         raise RuntimeError("pinned VLFM initial reset site changed")
     source = source.replace(reset_anchor, reset_patch, 1)
     loop_anchor = "            current_episodes_info = self.envs.current_episodes()\n\n            with inference_mode():"
-    loop_patch = "            current_episodes_info = self.envs.current_episodes()\n            evidence_recorder = get_evidence_recorder()\n            for evidence_i, evidence_episode in enumerate(current_episodes_info):\n                evidence_recorder.record_observation(evidence_episode, observations[evidence_i])\n\n            with inference_mode():"
+    loop_patch = "            current_episodes_info = self.envs.current_episodes()\n            evidence_recorder = get_evidence_recorder()\n            for evidence_i, evidence_episode in enumerate(current_episodes_info):\n                evidence_full_episode = evidence_episode_cache.resolve(self.envs, evidence_i, evidence_episode)\n                evidence_recorder.record_observation(evidence_full_episode, observations[evidence_i])\n\n            with inference_mode():"
     if source.count(loop_anchor) != 1:
         raise RuntimeError("pinned VLFM evaluation loop changed")
     source = source.replace(loop_anchor, loop_patch, 1)
