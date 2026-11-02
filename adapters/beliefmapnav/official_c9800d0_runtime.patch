@@ -1,0 +1,61 @@
+diff --git a/vlfm/mapping/openfusion/slam.py b/vlfm/mapping/openfusion/slam.py
+index fce3cc1..383edd3 100755
+--- a/vlfm/mapping/openfusion/slam.py
++++ b/vlfm/mapping/openfusion/slam.py
+@@ -1,4 +1,5 @@
+ import numpy as np
++import os
+ import torch
+ import torch.nn.functional as F
+ import torch.utils.dlpack
+@@ -125,7 +126,9 @@ class VLSLAM(BaseSLAM):
+         self.clip_model, self.vis_processors, self.text_processors = \
+             load_model_and_preprocess("clip_feature_extractor",model_type="ViT-B-32",is_eval=True, device=self.clip_device)
+         
+-        self.sam2_model = SAM("/home/ubuntu/DATA2/zzb/sam2.1_b.pt")
++        self.sam2_model = SAM(
++            os.environ.get("BELIEFMAPNAV_SAM2_WEIGHTS", "data/sam2.1_b.pt")
++        )
+ 
+     @torch.no_grad()
+     def reset(self):
+diff --git a/vlfm/policy/itm_policy.py b/vlfm/policy/itm_policy.py
+index 7f94bba..2e010dc 100755
+--- a/vlfm/policy/itm_policy.py
++++ b/vlfm/policy/itm_policy.py
+@@ -72,7 +72,12 @@ class BaseITMPolicy(BaseObjectNavPolicy):
+             use_max_confidence=use_max_confidence,
+             obstacle_map=self._obstacle_map if sync_explored_areas else None,
+         )
+-        self.gpt_client = OpenAI(api_key="your key",base_url = "your url")
++        self.gpt_client = OpenAI(
++            api_key=os.environ.get("OPENAI_API_KEY", "missing"),
++            base_url=os.environ.get(
++                "OPENAI_BASE_URL", "https://api.openai.com/v1"
++            ),
++        )
+         self.RoomProcessor = PointLabelRegionProcessor()
+         self._acyclic_enforcer = AcyclicEnforcer()
+         self.result_path = os.environ.get("result_path")
+diff --git a/vlfm/vlm/openai_api.py b/vlfm/vlm/openai_api.py
+index 379bd13..c91a876 100755
+--- a/vlfm/vlm/openai_api.py
++++ b/vlfm/vlm/openai_api.py
+@@ -1,12 +1,15 @@
+ from openai import OpenAI
+ import base64
+ import cv2
++import os
+ 
+ 
+ class OpenAI_API:
+     def __init__(self):
+-        self.api_key = "your api"
+-        self.base_url = "you url"
++        self.api_key = os.environ.get("OPENAI_API_KEY", "missing")
++        self.base_url = os.environ.get(
++            "OPENAI_BASE_URL", "https://api.openai.com/v1"
++        )
+         self.gpt_client = OpenAI(api_key=self.api_key, base_url = self.base_url)
+         # self.gpt_client = OpenAI(api_key=self.api_key)
+    
