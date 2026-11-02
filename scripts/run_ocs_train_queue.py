@@ -1,4 +1,4 @@
-"""Run the three pre-prepared train smoke5 conditions sequentially.
+"""Run an explicit ordered subset of the prepared train smoke5 conditions.
 
 Resources/services must already have been checked by the operator. This program
 does not load models, select GPUs, start services, resume runs, or alter settings.
@@ -51,12 +51,26 @@ def assert_unstarted(run):
             raise ValueError(f"Refusing previously started/completed run: {run / name}")
 
 
-def prepare_queue(run_root, runner):
+def validate_modes(modes):
+    if isinstance(modes, str):
+        raise ValueError("Modes must be a nonempty ordered sequence, not a string")
+    modes = tuple(modes)
+    if not modes or any(mode not in MODES for mode in modes):
+        raise ValueError(f"Modes must be a nonempty subset of {MODES}")
+    if len(set(modes)) != len(modes):
+        raise ValueError("Duplicate modes are not allowed")
+    if modes != tuple(sorted(modes, key=MODES.index)):
+        raise ValueError(f"Modes must retain the canonical order {MODES}")
+    return modes
+
+
+def prepare_queue(run_root, runner, modes=None):
+    modes = validate_modes(MODES if modes is None else modes)
     root, runner = Path(run_root).resolve(), Path(runner).resolve()
     if not root.is_dir() or not runner.is_file():
         raise ValueError("Existing run root and runner file are required")
     records, reference = [], None
-    for mode in MODES:
+    for mode in modes:
         run = root / mode
         assert_unstarted(run)
         path = run / "manifest.json"
@@ -79,7 +93,7 @@ def prepare_queue(run_root, runner):
         if reference is None:
             reference = (dataset_sha, identity_sha)
         elif reference != (dataset_sha, identity_sha):
-            raise ValueError("The three conditions must use identical data and ordered full identities")
+            raise ValueError("Selected conditions must use identical data and ordered full identities")
         command = [sys.executable, str(runner), "execute", "--run-dir", str(run),
                    "--resources-ready"]
         records.append({"mode": mode, "run_dir": str(run), "manifest_path": str(path),
@@ -90,7 +104,7 @@ def prepare_queue(run_root, runner):
     manifest = {"schema": "vlfm.ocs.train_queue.v1", "created_utc": utc_now(),
                 "run_root": str(root), "expected_episodes_per_mode": EXPECTED_EPISODES,
                 "dataset_sha256": reference[0], "identities_sha256": reference[1],
-                "identities": identities, "conditions": records,
+                "identities": identities, "modes": list(modes), "conditions": records,
                 "resources_checked_by_operator": True,
                 "source_hashes": {str(Path(__file__).resolve()): file_sha(__file__),
                                   str(runner): file_sha(runner)}}
@@ -120,6 +134,9 @@ def completion_ok(completion):
 def supervise(queue, run_command=None):
     queue = Path(queue).resolve()
     manifest = read_json(queue / "manifest.json")
+    modes = validate_modes([condition["mode"] for condition in manifest["conditions"]])
+    if "modes" in manifest and tuple(manifest["modes"]) != modes:
+        raise ValueError("Queue modes do not match the frozen conditions")
     run_command = run_command or subprocess.run
     write_new(queue / "supervisor.json", {"pid": os.getpid(), "started_utc": utc_now(),
               "session_id": os.getsid(0) if hasattr(os, "getsid") else None,
@@ -156,10 +173,11 @@ def supervise(queue, run_command=None):
         if exit_code:
             break
     summary = {"schema": "vlfm.ocs.train_queue_summary.v1", "finished_utc": utc_now(),
-               "complete": exit_code == 0 and len(records) == len(MODES),
+               "complete": exit_code == 0 and len(records) == len(manifest["conditions"]),
                "exit_code": exit_code, "elapsed_seconds": time.monotonic() - started,
+               "requested_modes": list(modes),
                "completed_modes": [r["mode"] for r in records if r["complete"]],
-               "not_started_modes": list(MODES[len(records):]), "conditions": records}
+               "not_started_modes": list(modes[len(records):]), "conditions": records}
     write_new(queue / "summary.json", summary)
     print(json.dumps(summary, indent=2), flush=True)
     return exit_code
@@ -182,16 +200,22 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-root")
     parser.add_argument("--runner")
+    parser.add_argument("--modes", nargs="+", choices=MODES,
+                        help="Ordered nonempty subset; default: original anchor_only ocs")
     parser.add_argument("--detach", action="store_true")
     parser.add_argument("--worker", help=argparse.SUPPRESS)
     args = parser.parse_args()
     if args.worker:
-        if args.run_root or args.runner or args.detach:
+        if args.run_root or args.runner or args.detach or args.modes is not None:
             parser.error("--worker may not be combined with launch options")
         raise SystemExit(supervise(args.worker))
     if not args.run_root or not args.runner:
         parser.error("--run-root and --runner are required")
-    queue = prepare_queue(args.run_root, args.runner)
+    try:
+        modes = validate_modes(MODES if args.modes is None else args.modes)
+    except ValueError as exc:
+        parser.error(str(exc))
+    queue = prepare_queue(args.run_root, args.runner, modes=modes)
     if args.detach:
         print(json.dumps(detach(queue), indent=2))
     else:

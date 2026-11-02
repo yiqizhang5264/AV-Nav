@@ -38,8 +38,8 @@ class QueueTests(unittest.TestCase):
     def put_manifest(self, mode, manifest):
         (self.root / mode / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
 
-    def prepared(self):
-        return queue.prepare_queue(self.root, self.runner)
+    def prepared(self, modes=None):
+        return queue.prepare_queue(self.root, self.runner, modes=modes)
 
     def fake_run(self, command, **kwargs):
         self.assertEqual(command[2], "execute")
@@ -59,6 +59,7 @@ class QueueTests(unittest.TestCase):
         manifest = queue.read_json(target / "manifest.json")
         self.assertEqual(len(manifest["conditions"]), 3)
         self.assertEqual(manifest["identities"], self.identities)
+        self.assertEqual(manifest["modes"], list(queue.MODES))
         with patch("builtins.print"):
             self.assertEqual(queue.supervise(target, self.fake_run), 0)
         self.assertEqual(self.calls, list(queue.MODES))
@@ -66,6 +67,53 @@ class QueueTests(unittest.TestCase):
         self.assertTrue(summary["complete"])
         self.assertEqual(summary["completed_modes"], list(queue.MODES))
         self.assertTrue(all(r["elapsed_seconds"] >= 0 for r in summary["conditions"]))
+
+    def test_subset_runs_only_selected_modes_and_finishes(self):
+        # No original manifest is required: this queue does not rerun or resume it.
+        (self.root / "original/manifest.json").unlink()
+        target = self.prepared(["anchor_only", "ocs"])
+        self.assertEqual(queue.read_json(target / "manifest.json")["modes"], ["anchor_only", "ocs"])
+        with patch("builtins.print"):
+            self.assertEqual(queue.supervise(target, self.fake_run), 0)
+        self.assertEqual(self.calls, ["anchor_only", "ocs"])
+        summary = queue.read_json(target / "summary.json")
+        self.assertTrue(summary["complete"])
+        self.assertEqual(summary["requested_modes"], ["anchor_only", "ocs"])
+        self.assertEqual(summary["not_started_modes"], [])
+        self.assertFalse((self.root / "original/started.json").exists())
+
+    def test_single_selected_mode_finishes(self):
+        target = self.prepared(["ocs"])
+        with patch("builtins.print"):
+            self.assertEqual(queue.supervise(target, self.fake_run), 0)
+        self.assertEqual(self.calls, ["ocs"])
+        self.assertTrue(queue.read_json(target / "summary.json")["complete"])
+
+    def test_invalid_subsets_rejected_without_creating_queue(self):
+        for modes in ([], (), ["original", "original"], ["unknown"],
+                      ["ocs", "anchor_only"], ["anchor_only", "original"], "ocs"):
+            with self.subTest(modes=modes), self.assertRaises(ValueError):
+                self.prepared(modes)
+            self.assertFalse((self.root / "queue").exists())
+
+    def test_subset_failure_does_not_start_next_condition(self):
+        target = self.prepared(["anchor_only", "ocs"])
+        def fail(command, **kwargs):
+            self.calls.append(Path(command[4]).name)
+            return SimpleNamespace(returncode=9)
+        with patch("builtins.print"):
+            self.assertEqual(queue.supervise(target, fail), 9)
+        self.assertEqual(self.calls, ["anchor_only"])
+        summary = queue.read_json(target / "summary.json")
+        self.assertFalse(summary["complete"])
+        self.assertEqual(summary["not_started_modes"], ["ocs"])
+
+    def test_subset_still_refuses_started_selected_run(self):
+        path = self.root / "anchor_only/started.json"
+        path.write_text("preserve")
+        with self.assertRaises(ValueError):
+            self.prepared(["anchor_only", "ocs"])
+        self.assertEqual(path.read_text(), "preserve")
 
     def test_nonzero_stops_before_next_condition(self):
         target = self.prepared()
