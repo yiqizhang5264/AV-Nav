@@ -42,7 +42,7 @@ def extend_overlay(overlay):
     if source.count(anchor) != 1:
         raise RuntimeError("unexpected initial reset hook")
     source = source.replace(anchor, "        observations = select_episode(self.envs, observations)\n")
-    anchor = "                evidence_recorder.record_observation(evidence_episode, observations[evidence_i])\n"
+    anchor = "                evidence_recorder.record_observation(evidence_full_episode, observations[evidence_i])\n"
     if source.count(anchor) != 1:
         raise RuntimeError("unexpected observation hook")
     source = source.replace(anchor, anchor + "            record_environment(self.envs)\n")

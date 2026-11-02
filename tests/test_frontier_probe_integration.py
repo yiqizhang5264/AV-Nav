@@ -47,6 +47,10 @@ class ProbeIntegrationTests(unittest.TestCase):
             for path in (trainer, policy):
                 py_compile.compile(str(path), doraise=True)
             source = trainer.read_text()
+            self.assertLess(source.index("evidence_episode_cache.resolve("),
+                            source.index("record_observation(evidence_full_episode,"))
+            self.assertLess(source.index("record_observation(evidence_full_episode,"),
+                            source.index("record_environment(self.envs)"))
             self.assertLess(source.index("record_environment(self.envs)"), source.index("outputs = self.envs.step(step_data)"))
             self.assertIn("observations = select_episode(self.envs, observations)", source)
             self.assertIn("record_policy_frame(self, mode)", policy.read_text())
