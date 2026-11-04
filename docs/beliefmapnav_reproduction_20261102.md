@@ -60,7 +60,7 @@
 | 20 步，未修 `time` | 第 13 步进入探索后 `NameError: time is not defined` | `.../outputs/repro_adapted_h025_smoke4_planner_20261102` |
 | 20 步，修复 `time` | exit 0；覆盖 3D 信息增益与探索动作，201.72 秒 | `.../outputs/repro_adapted_h025_smoke5_import_time_20261102` |
 
-最终 20 步诊断的动作序列是：步骤 0–12 全部右转，步骤 13–15 右转，步骤 16–17 前进，步骤 18 左转，步骤 19 前进。episode 因人为 20 步上限结束，`success=0`、`SPL=0`、`target_detected=0`。这些数字不是效能结论。
+最终 20 步诊断的动作序列是：步骤 0–12 全部左转，步骤 13–15 左转，步骤 16–17 前进，步骤 18 右转，步骤 19 前进。episode 因人为 20 步上限结束，`success=0`、`SPL=0`、`target_detected=0`。这些数字不是效能结论。
 
 测试中观察到 Open3D range map 从约 72 fragments 动态扩到 1592 fragments；兼容环境峰值显存约 32 GB。由于使用 CPU DINO、PyTorch 2.6 且仅单 episode，这些资源数据不能与论文声称的约 13 GB 直接比较，但说明官方实现存在明显的动态分配和部署敏感性。
 
@@ -100,7 +100,7 @@ HM3D 的六个类别（couch、tv、bed、toilet、potted plant、chair）拥有
 
 ### 7. 初始化和运行开销偏高
 
-首个 episode 实测步骤 0–12 连续执行 13 次 30° 右转，即 390°，比完整环视多一次动作。之后每步还组合了 SAM2、RedNet、CLIP 多尺度特征、DINO/YOLO、Open3D raycasting 和 simulated annealing。论文没有报告每步延迟、吞吐或组件耗时，使得“效果提升是否值得计算代价”无法判断。
+首个 episode 实测步骤 0–12 连续执行 13 次 30° 左转，即 390°，比完整环视多一次动作。官方动作枚举中 `2` 是左转、`3` 才是右转；此前把动作 `2` 记为右转属于报告表述错误，现已更正。之后每步还组合了 SAM2、RedNet、CLIP 多尺度特征、DINO/YOLO、Open3D raycasting 和 simulated annealing。论文没有报告每步延迟、吞吐或组件耗时，使得“效果提升是否值得计算代价”无法判断。
 
 ### 8. 论文自身结果已经暴露核心瓶颈
 
