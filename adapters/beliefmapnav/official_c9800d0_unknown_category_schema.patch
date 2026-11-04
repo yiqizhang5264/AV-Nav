@@ -1,0 +1,48 @@
+diff --git a/vlfm/policy/itm_policy.py b/vlfm/policy/itm_policy.py
+index 7f94bba..65459f4 100755
+--- a/vlfm/policy/itm_policy.py
++++ b/vlfm/policy/itm_policy.py
+@@ -297,7 +297,34 @@ class BaseITMPolicy(BaseObjectNavPolicy):
+         ],
+         )
+         attributes_list = ast.literal_eval(completion.choices[0].message.content)
+-        return attributes_list
++        if not isinstance(attributes_list, list) or len(attributes_list) != 3:
++            raise ValueError(
++                f"Expected three attribute levels for {target!r}, got {attributes_list!r}"
++            )
++
++        normalized_attributes = []
++        normalized_probability = []
++        for level in attributes_list:
++            if not isinstance(level, list):
++                raise ValueError(f"Expected an attribute list, got {level!r}")
++            cleaned_level = [
++                value.strip()
++                for value in level
++                if isinstance(value, str) and value.strip()
++            ]
++            if not cleaned_level:
++                raise ValueError(f"Attribute level is empty for {target!r}")
++            normalized_attributes.append(cleaned_level)
++            normalized_probability.append(
++                [1.0 / len(cleaned_level)] * len(cleaned_level)
++            )
++
++        normalized_attributes.append([target])
++        normalized_probability.append([1.0])
++        return {
++            "attributes": normalized_attributes,
++            "probability": normalized_probability,
++        }
+     
+     
+     def _get_observation_range_attributes(self,target):
+@@ -337,7 +364,6 @@ class BaseITMPolicy(BaseObjectNavPolicy):
+     def _get_max_information_gain(self,observation,frontiers): 
+         if self._target_object not in self._objects_attributes_dict.keys():
+             objects_attributes = self._get_object_attributes(self._target_object)
+-            objects_attributes += [[self._target_object]]
+             self._objects_attributes_dict.update({self._target_object:objects_attributes})
+         
+         query_attributes = self._objects_attributes_dict[self._target_object]["attributes"]

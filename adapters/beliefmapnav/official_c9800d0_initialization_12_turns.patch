@@ -1,0 +1,19 @@
+diff --git a/vlfm/policy/habitat_policies.py b/vlfm/policy/habitat_policies.py
+index 696756c..225bb71 100755
+--- a/vlfm/policy/habitat_policies.py
++++ b/vlfm/policy/habitat_policies.py
+@@ -195,11 +195,10 @@ class HabitatMixin:
+ 
+     def _initialize(self) -> Tensor:
+         """Turn left 30 degrees 12 times to get a 360 view at the beginning"""
+-        if self._initialize_step > 11: 
++        self._initialize_step += 1
++        if self._initialize_step >= 12:
+             self._done_initializing = True
+-            self._obstacle_map._tight_search_thresh = False 
+-        else:
+-            self._initialize_step += 1 
++            self._obstacle_map._tight_search_thresh = False
+         return TorchActionIDs.TURN_LEFT
+ 
+     def _reset(self) -> None:

@@ -1,0 +1,24 @@
+diff --git a/scripts/launch_multi_eval.sh b/scripts/launch_multi_eval.sh
+index c430955..5f06d8e 100755
+--- a/scripts/launch_multi_eval.sh
++++ b/scripts/launch_multi_eval.sh
+@@ -8,7 +8,18 @@ session_name=split_run_${RANDOM}
+ 
+ 
+ start_splits=(0 200 400 650 850 1050 1450 1750)
+-end_splits=(99 400 650 850 1050 1450 1750 2000)
++end_splits=(200 400 650 850 1050 1450 1750 2000)
++
++if [[ ${start_splits[0]} -ne 0 || ${end_splits[7]} -ne 2000 ]]; then
++    echo "Evaluation splits must cover [0, 2000)." >&2
++    exit 1
++fi
++for i in {1..7}; do
++    if [[ ${start_splits[$i]} -ne ${end_splits[$((i-1))]} ]]; then
++        echo "Evaluation splits must be contiguous at worker ${i}." >&2
++        exit 1
++    fi
++done
+ 
+ 
+ gpu_ids=(0 1 2 3 4 9 10 11)

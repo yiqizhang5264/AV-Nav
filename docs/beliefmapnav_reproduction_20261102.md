@@ -39,6 +39,9 @@
 - `adapters/beliefmapnav/official_c9800d0_import_time.patch`：修复进入信息增益计算后必现的 `time` 未定义。
 - `adapters/beliefmapnav/official_c9800d0_cpu_dino_timeout.patch`：CPU DINO 诊断时把 HTTP 单请求超时从 1 秒改为 60 秒，避免重复请求风暴；不属于效能基线。
 - `adapters/beliefmapnav/groundingdino_torch26.patch`：仅用于诊断环境中重编译 GroundingDINO CUDA 扩展；不属于论文环境。
+- `adapters/beliefmapnav/official_c9800d0_complete_split.patch`：把首段从 `[0:99]` 修正为 `[0:200]`，并在启动任务前验证八段连续覆盖 `[0, 2000)`。
+- `adapters/beliefmapnav/official_c9800d0_unknown_category_schema.patch`：将未知类别的三层属性包装成与六类先验相同的 `attributes`/`probability` 字典；生成属性使用层内均匀概率，目标名称概率为 1.0，并拒绝空或畸形响应。
+- `adapters/beliefmapnav/official_c9800d0_initialization_12_turns.patch`：在第 12 次 30° 左转时标记初始化完成，消除第 13 次额外旋转。
 
 最终成功诊断中记录的 patch SHA256：
 
@@ -46,6 +49,9 @@
 - CPU DINO timeout：`a1dcd86e2196cb3b4415ef8a8cb5f57e78cca96eb65ea9fc212cbc88174e800a`
 - GroundingDINO torch 2.6：`31ceb89a17e92b948c43be3d4fb15e795964d5e177ed3336b6b6e07d20e9cde5`
 - import time：`20cf3e2dfa0521f13bf8f3c8dce5fa56a5fbac0ef8ac43e5dbb7c6a71fa5afb6`
+- complete split：`33e7575500338540c154c9b80618797c423508a972f96754e8377b2e34804eea`
+- unknown category schema：`fda10c9eb2f0dbeb31471bb41770e0a611820e21b718d32311069f18c246b7e1`
+- 12-turn initialization：`8a9b348698a079ccc867538d7c862ce841685822c914727620d72449d7711565`
 
 ## 运行证据
 
