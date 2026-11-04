@@ -1,0 +1,70 @@
+diff --git a/vlfm/policy/itm_policy.py b/vlfm/policy/itm_policy.py
+index f10af50..f74ef31 100755
+--- a/vlfm/policy/itm_policy.py
++++ b/vlfm/policy/itm_policy.py
+@@ -80,6 +80,14 @@ class BaseITMPolicy(BaseObjectNavPolicy):
+             ),
+         )
+         self.gpt_model = os.environ.get("BELIEFMAPNAV_LLM_MODEL", "gpt-4o")
++        disable_thinking = os.environ.get(
++            "BELIEFMAPNAV_DISABLE_THINKING", "0"
++        ).strip().lower() in {"1", "true", "yes", "on"}
++        self.gpt_request_kwargs = (
++            {"extra_body": {"chat_template_kwargs": {"enable_thinking": False}}}
++            if disable_thinking
++            else {}
++        )
+         self.RoomProcessor = PointLabelRegionProcessor()
+         self._acyclic_enforcer = AcyclicEnforcer()
+         self.result_path = os.environ.get("result_path")
+@@ -281,6 +289,7 @@ class BaseITMPolicy(BaseObjectNavPolicy):
+     def _get_object_attributes(self,target):
+         completion = self.gpt_client.chat.completions.create(
+         model=self.gpt_model,
++        **self.gpt_request_kwargs,
+         messages=[
+             {"role": "system", "content": "You are a helpful robot to find an object in an unkown environment."},
+             {
+@@ -304,6 +313,7 @@ class BaseITMPolicy(BaseObjectNavPolicy):
+     def _get_observation_range_attributes(self,target):
+         completion = self.gpt_client.chat.completions.create(
+         model=self.gpt_model,
++        **self.gpt_request_kwargs,
+         messages=[
+             {"role": "system", "content": "You are a helpful robot to find an object in an unkown environment."},
+             {
+diff --git a/vlfm/vlm/openai_api.py b/vlfm/vlm/openai_api.py
+index 68bdc33..fbf084c 100755
+--- a/vlfm/vlm/openai_api.py
++++ b/vlfm/vlm/openai_api.py
+@@ -11,6 +11,14 @@ class OpenAI_API:
+             "OPENAI_BASE_URL", "https://api.openai.com/v1"
+         )
+         self.model = os.environ.get("BELIEFMAPNAV_LLM_MODEL", "gpt-4o")
++        disable_thinking = os.environ.get(
++            "BELIEFMAPNAV_DISABLE_THINKING", "0"
++        ).strip().lower() in {"1", "true", "yes", "on"}
++        self.request_kwargs = (
++            {"extra_body": {"chat_template_kwargs": {"enable_thinking": False}}}
++            if disable_thinking
++            else {}
++        )
+         self.gpt_client = OpenAI(api_key=self.api_key, base_url = self.base_url)
+         # self.gpt_client = OpenAI(api_key=self.api_key)
+     
+@@ -58,6 +66,7 @@ class OpenAI_API:
+         
+         completion = self.gpt_client.chat.completions.create(
+         model=self.model,
++        **self.request_kwargs,
+         messages=[
+             {
+                 "role": "user",
+@@ -90,6 +99,7 @@ class OpenAI_API:
+             prompt = f"There are {len(color_string_list)} {object} in the image with {color_string_list} color contour line/bbox. you should choose only one object that best matches the feature of {object}. Please give the color of contour line/bbox of the chosen object. Only output one color in {color_string_list} of the contour line/bbox"
+         completion = self.gpt_client.chat.completions.create(
+         model=self.model,
++        **self.request_kwargs,
+         messages=[
+             {
+                 "role": "user",

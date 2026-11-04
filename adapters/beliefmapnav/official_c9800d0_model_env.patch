@@ -1,0 +1,60 @@
+diff --git a/vlfm/policy/itm_policy.py b/vlfm/policy/itm_policy.py
+index 2e010dc..f10af50 100755
+--- a/vlfm/policy/itm_policy.py
++++ b/vlfm/policy/itm_policy.py
+@@ -79,6 +79,7 @@ class BaseITMPolicy(BaseObjectNavPolicy):
+                 "OPENAI_BASE_URL", "https://api.openai.com/v1"
+             ),
+         )
++        self.gpt_model = os.environ.get("BELIEFMAPNAV_LLM_MODEL", "gpt-4o")
+         self.RoomProcessor = PointLabelRegionProcessor()
+         self._acyclic_enforcer = AcyclicEnforcer()
+         self.result_path = os.environ.get("result_path")
+@@ -279,7 +280,7 @@ class BaseITMPolicy(BaseObjectNavPolicy):
+ 
+     def _get_object_attributes(self,target):
+         completion = self.gpt_client.chat.completions.create(
+-        model="gpt-4o",
++        model=self.gpt_model,
+         messages=[
+             {"role": "system", "content": "You are a helpful robot to find an object in an unkown environment."},
+             {
+@@ -302,7 +303,7 @@ class BaseITMPolicy(BaseObjectNavPolicy):
+     
+     def _get_observation_range_attributes(self,target):
+         completion = self.gpt_client.chat.completions.create(
+-        model="gpt-4o",
++        model=self.gpt_model,
+         messages=[
+             {"role": "system", "content": "You are a helpful robot to find an object in an unkown environment."},
+             {
+diff --git a/vlfm/vlm/openai_api.py b/vlfm/vlm/openai_api.py
+index c91a876..68bdc33 100755
+--- a/vlfm/vlm/openai_api.py
++++ b/vlfm/vlm/openai_api.py
+@@ -10,6 +10,7 @@ class OpenAI_API:
+         self.base_url = os.environ.get(
+             "OPENAI_BASE_URL", "https://api.openai.com/v1"
+         )
++        self.model = os.environ.get("BELIEFMAPNAV_LLM_MODEL", "gpt-4o")
+         self.gpt_client = OpenAI(api_key=self.api_key, base_url = self.base_url)
+         # self.gpt_client = OpenAI(api_key=self.api_key)
+     
+@@ -56,7 +57,7 @@ class OpenAI_API:
+             Answer: yes or no'''
+         
+         completion = self.gpt_client.chat.completions.create(
+-        model="gpt-4o",
++        model=self.model,
+         messages=[
+             {
+                 "role": "user",
+@@ -88,7 +89,7 @@ class OpenAI_API:
+         else:
+             prompt = f"There are {len(color_string_list)} {object} in the image with {color_string_list} color contour line/bbox. you should choose only one object that best matches the feature of {object}. Please give the color of contour line/bbox of the chosen object. Only output one color in {color_string_list} of the contour line/bbox"
+         completion = self.gpt_client.chat.completions.create(
+-        model="gpt-4o",
++        model=self.model,
+         messages=[
+             {
+                 "role": "user",
