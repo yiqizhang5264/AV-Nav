@@ -38,10 +38,12 @@ episode 证据图、`couch .` 查询：
 ## 正式切换结果
 
 - 旧 CPU 服务 PID `698635` 已停止。
-- 正式 GPU 服务在端口 `14181` 启动，启动时设置 `CUDA_VISIBLE_DEVICES=2`。
-- 服务日志：`/home/zyq/AV-Nav/runs/gdino_gpu_14181_20261108/stdout.log`。
+- 正式 GPU 服务在端口 `14181` 启动，启动时设置 `CUDA_VISIBLE_DEVICES=0`。
+- 服务日志：`/home/zyq/AV-Nav/runs/gdino_gpu0_14181_20261108/stdout.log`。
 - 模型加载后占用约 1.56 GB GPU 显存。
 - 使用导航分辨率图像对 `14181` 发起真实检测请求成功。
 - GroundingDINO、BLIP2-ITM、MobileSAM、YOLOv7 四服务联合健康检查全部返回 `ok`。
 
 该服务运行在 tmux 会话 `beliefmapnav_gdino_gpu_14181` 中。服务器重启后需要通过启动脚本重新拉起，不应假设 tmux 服务具备系统级自动恢复能力。
+
+最初在完全空闲的 GPU 2 完成兼容性探测并短暂启动正式服务。切换期间其他用户在 GPU 2 新启动了持续训练任务，因此正式服务在二次健康检查后迁移至当时计算利用率为 0% 的 GPU 0。GPU 0 上另有约 4.98 GB 的空闲常驻服务；GroundingDINO 与其合计约 6.57 GB，没有停止或修改该既有进程。

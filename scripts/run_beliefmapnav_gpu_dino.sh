@@ -8,7 +8,7 @@ DINO_ROOT="${BELIEFMAPNAV_DINO_ROOT:-/home/zyq/BeliefMapNav-repro/GroundingDINO-
 CONFIG="${BELIEFMAPNAV_DINO_CONFIG:-${DINO_ROOT}/groundingdino/config/GroundingDINO_SwinT_OGC.py}"
 WEIGHTS="${BELIEFMAPNAV_DINO_WEIGHTS:-/home/zyq/vlfm/data/groundingdino_swint_ogc.pth}"
 PORT="${GROUNDING_DINO_PORT:-14181}"
-GPU="${BELIEFMAPNAV_DINO_GPU:-2}"
+GPU="${BELIEFMAPNAV_DINO_GPU:-0}"
 
 for path in "$PYTHON" "$AV_NAV_ROOT" "$VLFM_ROOT" "$DINO_ROOT" "$CONFIG" "$WEIGHTS"; do
   if [[ ! -e "$path" ]]; then
