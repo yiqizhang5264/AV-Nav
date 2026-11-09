@@ -65,7 +65,7 @@ if [[ -n "$EXPECTED_POLICY_SHA256" ]]; then
 fi
 
 gpu_uuid=$(nvidia-smi --query-gpu=index,uuid --format=csv,noheader \
-  | awk -F', ' -v index="$PHYSICAL_GPU" '$1 == index {print $2}')
+  | awk -F', ' -v gpu_index="$PHYSICAL_GPU" '$1 == gpu_index {print $2}')
 if [[ -z "$gpu_uuid" ]]; then
   echo "GPU index does not exist: $PHYSICAL_GPU" >&2
   exit 2
