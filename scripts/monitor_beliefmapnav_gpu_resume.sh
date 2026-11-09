@@ -20,6 +20,13 @@ MAX_IDLE_MEMORY_MIB="${BELIEFMAPNAV_GPU_IDLE_MEMORY_MIB:-1024}"
 MAX_IDLE_UTILIZATION="${BELIEFMAPNAV_GPU_IDLE_UTILIZATION:-5}"
 BELIEFMAP_ROOT="${BELIEFMAP_ROOT:-/home/zyq/BeliefMapNav-repro/c9800d0}"
 EXPECTED_POLICY_SHA256="${BELIEFMAPNAV_POLICY_SHA256:-}"
+RESUME_OF="${BELIEFMAPNAV_RESUME_OF:-}"
+BELIEFMAP_COMMIT="${BELIEFMAPNAV_COMMIT:-unknown}"
+ADAPTER_COMMIT="${BELIEFMAPNAV_ADAPTER_COMMIT:-unknown}"
+AV_NAV_COMMIT="${AV_NAV_COMMIT:-unknown}"
+DATASET_SHA256="${BELIEFMAPNAV_DATASET_SHA256:-unknown}"
+QWEN_SNAPSHOT="${BELIEFMAPNAV_QWEN_SNAPSHOT:-unknown}"
+HABITAT_SIM_VERSION="${BELIEFMAPNAV_HABITAT_SIM_VERSION:-unknown}"
 REQUIRED_PORTS=(14181 14182 14183 14184 16000)
 
 for integer in \
@@ -67,7 +74,27 @@ fi
 mkdir -p "$SUITE_DIR"
 MONITOR_LOG="$SUITE_DIR/gpu_wait.log"
 MONITOR_STATE="$SUITE_DIR/gpu_wait.status"
+SUITE_MANIFEST="$SUITE_DIR/suite_manifest.txt"
 exec > >(tee -a "$MONITOR_LOG") 2>&1
+
+{
+  echo "suite=$(basename "$SUITE_DIR")"
+  echo "state=queued_waiting_for_gpu"
+  echo "queued_at=$(date --iso-8601=seconds)"
+  echo "worker_count=1"
+  echo "habitat_gpu=$PHYSICAL_GPU"
+  echo "save_video=0"
+  echo "video_option=none"
+  echo "ranges=${RANGES[*]}"
+  echo "resume_of=$RESUME_OF"
+  echo "beliefmap_commit=$BELIEFMAP_COMMIT"
+  echo "adapter_commit=$ADAPTER_COMMIT"
+  echo "av_nav_commit=$AV_NAV_COMMIT"
+  echo "policy_sha256=$(sha256sum "$POLICY_FILE" | awk '{print $1}')"
+  echo "habitat_sim=$HABITAT_SIM_VERSION"
+  echo "dataset_sha256=$DATASET_SHA256"
+  echo "qwen_snapshot=$QWEN_SNAPSHOT"
+} > "$SUITE_MANIFEST"
 
 {
   echo "state=waiting"
