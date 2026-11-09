@@ -42,8 +42,8 @@ if (( STABLE_CHECKS < 1 )); then
   echo "BELIEFMAPNAV_GPU_STABLE_CHECKS must be at least 1" >&2
   exit 2
 fi
-if [[ ! -x "$WORKER_SCRIPT" ]]; then
-  echo "Worker script is missing or not executable: $WORKER_SCRIPT" >&2
+if [[ ! -r "$WORKER_SCRIPT" ]]; then
+  echo "Worker script is missing or not readable: $WORKER_SCRIPT" >&2
   exit 2
 fi
 if [[ -e "$SUITE_DIR" ]]; then
@@ -174,4 +174,4 @@ done
 } > "$MONITOR_STATE"
 
 echo "GPU $PHYSICAL_GPU is stably idle and all services are reachable; launching evaluation"
-exec "$WORKER_SCRIPT" "$WORKER_NAME" "$PHYSICAL_GPU" "$SUITE_DIR" "${RANGES[@]}"
+exec bash "$WORKER_SCRIPT" "$WORKER_NAME" "$PHYSICAL_GPU" "$SUITE_DIR" "${RANGES[@]}"
