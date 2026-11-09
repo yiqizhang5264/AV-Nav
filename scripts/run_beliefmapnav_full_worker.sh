@@ -17,6 +17,12 @@ BELIEFMAP_PYTHON="${BELIEFMAP_PYTHON:-/home/zyq/venvs/beliefmapnav-c9800d0/bin/p
 SAM2_WEIGHTS="${BELIEFMAPNAV_SAM2_WEIGHTS:-${BELIEFMAP_ROOT}/data/sam2.1_b.pt}"
 QWEN_BASE_URL="${OPENAI_BASE_URL:-http://127.0.0.1:16000/v1}"
 QWEN_MODEL="${BELIEFMAPNAV_LLM_MODEL:-Qwen/Qwen3.5-9B}"
+SAVE_VIDEO="${BELIEFMAPNAV_SAVE_VIDEO:-0}"
+
+if [[ "$SAVE_VIDEO" != "0" && "$SAVE_VIDEO" != "1" ]]; then
+  echo "BELIEFMAPNAV_SAVE_VIDEO must be 0 or 1, got: $SAVE_VIDEO" >&2
+  exit 2
+fi
 
 for required in "$BELIEFMAP_ROOT" "$BELIEFMAP_PYTHON" "$SAM2_WEIGHTS"; do
   if [[ ! -e "$required" ]]; then
@@ -64,6 +70,11 @@ for range in "${RANGES[@]}"; do
     exit 2
   fi
   mkdir -p "$attempt_dir"
+  video_option_override="habitat_baselines.eval.video_option=[]"
+  if [[ "$SAVE_VIDEO" == "1" ]]; then
+    mkdir -p "$attempt_dir/videos"
+    video_option_override="habitat_baselines.eval.video_option=[disk]"
+  fi
 
   {
     echo "worker=$WORKER_NAME"
@@ -75,6 +86,8 @@ for range in "${RANGES[@]}"; do
     echo "beliefmap_python=$BELIEFMAP_PYTHON"
     echo "qwen_base_url=$QWEN_BASE_URL"
     echo "qwen_model=$QWEN_MODEL"
+    echo "save_video=$SAVE_VIDEO"
+    echo "video_dir=$attempt_dir/videos"
     echo "grounding_dino_port=14181"
     echo "blip2itm_port=14182"
     echo "sam_port=14183"
@@ -106,7 +119,8 @@ for range in "${RANGES[@]}"; do
     /usr/bin/time -f 'ELAPSED_SECONDS=%e' "$BELIEFMAP_PYTHON" -u -m vlfm.run \
       "habitat_baselines.test_episode_count=$count" \
       habitat.environment.max_episode_steps=500 \
-      habitat_baselines.eval.video_option=[] \
+      "$video_option_override" \
+      "habitat_baselines.video_dir=$attempt_dir/videos" \
       habitat_baselines.torch_gpu_id=0 \
       habitat_baselines.rl.policy.use_vqa=true \
       > "$attempt_dir/stdout.log" \
