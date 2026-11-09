@@ -18,6 +18,7 @@ STABLE_CHECKS="${BELIEFMAPNAV_GPU_STABLE_CHECKS:-2}"
 STABLE_SECONDS="${BELIEFMAPNAV_GPU_STABLE_SECONDS:-60}"
 MAX_IDLE_MEMORY_MIB="${BELIEFMAPNAV_GPU_IDLE_MEMORY_MIB:-1024}"
 MAX_IDLE_UTILIZATION="${BELIEFMAPNAV_GPU_IDLE_UTILIZATION:-5}"
+ALLOWED_PIDS="${BELIEFMAPNAV_GPU_ALLOWED_PIDS:-}"
 BELIEFMAP_ROOT="${BELIEFMAP_ROOT:-/home/zyq/BeliefMapNav-repro/c9800d0}"
 EXPECTED_POLICY_SHA256="${BELIEFMAPNAV_POLICY_SHA256:-}"
 RESUME_OF="${BELIEFMAPNAV_RESUME_OF:-}"
@@ -83,6 +84,9 @@ exec > >(tee -a "$MONITOR_LOG") 2>&1
   echo "queued_at=$(date --iso-8601=seconds)"
   echo "worker_count=1"
   echo "habitat_gpu=$PHYSICAL_GPU"
+  echo "allowed_gpu_pids=$ALLOWED_PIDS"
+  echo "idle_memory_limit_mib=$MAX_IDLE_MEMORY_MIB"
+  echo "idle_utilization_limit=$MAX_IDLE_UTILIZATION"
   echo "save_video=0"
   echo "video_option=none"
   echo "ranges=${RANGES[*]}"
@@ -105,6 +109,7 @@ exec > >(tee -a "$MONITOR_LOG") 2>&1
   echo "stable_seconds=$STABLE_SECONDS"
   echo "max_idle_memory_mib=$MAX_IDLE_MEMORY_MIB"
   echo "max_idle_utilization=$MAX_IDLE_UTILIZATION"
+  echo "allowed_pids=$ALLOWED_PIDS"
   echo "worker_script=$WORKER_SCRIPT"
   echo "worker_name=$WORKER_NAME"
   echo "ranges=${RANGES[*]}"
@@ -114,19 +119,26 @@ exec > >(tee -a "$MONITOR_LOG") 2>&1
 } > "$MONITOR_STATE"
 
 gpu_is_idle() {
-  local memory_used utilization process_count
+  local memory_used utilization blocking_processes pid
+  local -a gpu_pids=()
   read -r memory_used utilization < <(
     nvidia-smi --id="$PHYSICAL_GPU" \
       --query-gpu=memory.used,utilization.gpu \
       --format=csv,noheader,nounits \
       | awk -F', ' '{print $1, $2}'
   )
-  process_count=$(
+  mapfile -t gpu_pids < <(
     nvidia-smi --query-compute-apps=gpu_uuid,pid --format=csv,noheader \
-      | awk -F', ' -v uuid="$gpu_uuid" '$1 == uuid {count++} END {print count + 0}'
+      | awk -F', ' -v uuid="$gpu_uuid" '$1 == uuid {print $2}'
   )
-  echo "$(date --iso-8601=seconds) gpu=$PHYSICAL_GPU memory_mib=$memory_used utilization=$utilization compute_processes=$process_count"
-  (( process_count == 0 )) \
+  blocking_processes=0
+  for pid in "${gpu_pids[@]}"; do
+    if [[ ",$ALLOWED_PIDS," != *",$pid,"* ]]; then
+      blocking_processes=$((blocking_processes + 1))
+    fi
+  done
+  echo "$(date --iso-8601=seconds) gpu=$PHYSICAL_GPU memory_mib=$memory_used utilization=$utilization compute_processes=${#gpu_pids[@]} blocking_processes=$blocking_processes"
+  (( blocking_processes == 0 )) \
     && (( memory_used <= MAX_IDLE_MEMORY_MIB )) \
     && (( utilization <= MAX_IDLE_UTILIZATION ))
 }
