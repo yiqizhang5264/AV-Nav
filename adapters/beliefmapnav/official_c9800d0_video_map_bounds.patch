@@ -1,0 +1,19 @@
+diff --git a/vlfm/utils/habitat_visualizer.py b/vlfm/utils/habitat_visualizer.py
+index 3596c2a..6ced51d 100755
+--- a/vlfm/utils/habitat_visualizer.py
++++ b/vlfm/utils/habitat_visualizer.py
+@@ -248,7 +248,13 @@ def color_point_cloud_on_map(infos: List[Dict[str, Any]], policy_info: List[Dic
+     )
+ 
+     new_map = infos[0]["top_down_map"]["map"].copy()
+-    new_map[grid_xy[:, 0], grid_xy[:, 1]] = MAP_TARGET_POINT_INDICATOR
++    valid_grid_xy = grid_xy[
++        (grid_xy[:, 0] >= 0)
++        & (grid_xy[:, 0] < new_map.shape[0])
++        & (grid_xy[:, 1] >= 0)
++        & (grid_xy[:, 1] < new_map.shape[1])
++    ]
++    new_map[valid_grid_xy[:, 0], valid_grid_xy[:, 1]] = MAP_TARGET_POINT_INDICATOR
+ 
+     infos[0]["top_down_map"]["map"] = new_map
+ 

@@ -21,6 +21,19 @@ def _added_lines(patch: str) -> list[str]:
 
 
 class BeliefMapNavOfficialFixTests(unittest.TestCase):
+    def test_video_map_filters_out_of_bounds_points(self) -> None:
+        patch = _patch_text("official_c9800d0_video_map_bounds.patch")
+        added = "\n".join(_added_lines(patch))
+        self.assertIn("valid_grid_xy = grid_xy[", added)
+        self.assertIn("grid_xy[:, 0] < new_map.shape[0]", added)
+        self.assertIn("grid_xy[:, 1] < new_map.shape[1]", added)
+        self.assertIn("grid_xy[:, 0] >= 0", added)
+        self.assertIn("grid_xy[:, 1] >= 0", added)
+        self.assertIn(
+            "new_map[valid_grid_xy[:, 0], valid_grid_xy[:, 1]]",
+            added,
+        )
+
     def test_complete_split_covers_every_episode_once(self) -> None:
         patch = _patch_text("official_c9800d0_complete_split.patch")
         starts_match = re.search(r"^ start_splits=\(([^)]+)\)$", patch, re.MULTILINE)
