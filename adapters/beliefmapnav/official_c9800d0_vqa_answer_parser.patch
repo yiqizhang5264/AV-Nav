@@ -2,7 +2,7 @@ diff --git a/vlfm/policy/base_objectnav_policy.py b/vlfm/policy/base_objectnav_p
 index 46b9198..9b0d536 100644
 --- a/vlfm/policy/base_objectnav_policy.py
 +++ b/vlfm/policy/base_objectnav_policy.py
-@@ -32,6 +32,27 @@ except Exception:
+@@ -32,6 +32,29 @@ except Exception:
      class BasePolicy:
          pass
  
@@ -32,7 +32,7 @@ index 46b9198..9b0d536 100644
  STAIR_CLASS_ID = 17
  def check_stairs_in_upper_50_percent(mask):
      height = mask.shape[0]
-@@ -740,11 +761,7 @@ class BaseObjectNavPolicy(BasePolicy):
+@@ -740,10 +763,7 @@ class BaseObjectNavPolicy(BasePolicy):
                      annotated_rgb = cv2.drawContours(rgb.copy(), contours, -1, (255, 0, 0), 2)
                      answer = self.openai_client.detection_refinement(annotated_rgb, detections.phrases[idx])
                      print("answer nomal: ",answer)
@@ -44,7 +44,7 @@ index 46b9198..9b0d536 100644
                      if "yes" in determine.lower():
                          self.fist_detect = False
  
-@@ -777,11 +794,7 @@ class BaseObjectNavPolicy(BasePolicy):
+@@ -777,10 +797,7 @@ class BaseObjectNavPolicy(BasePolicy):
                      annotated_rgb = cv2.drawContours(rgb.copy(), contours, -1, (255, 0, 0), 2)
                      answer = self.openai_client.detection_refinement(annotated_rgb, detections.phrases[idx])
                      print("answer choose: ",answer)
