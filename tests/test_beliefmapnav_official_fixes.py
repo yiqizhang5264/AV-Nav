@@ -21,6 +21,43 @@ def _added_lines(patch: str) -> list[str]:
 
 
 class BeliefMapNavOfficialFixTests(unittest.TestCase):
+    def test_vqa_answer_parser_accepts_explicit_and_final_line_answers(self) -> None:
+        patch = _patch_text("official_c9800d0_vqa_answer_parser.patch")
+        added = _added_lines(patch)
+        start = added.index("def parse_vqa_binary_answer(answer: str) -> str:")
+        end = added.index(
+            '    raise ValueError("VQA response has no unambiguous yes/no final answer")'
+        )
+        source = "\n".join(added[start : end + 1])
+        namespace = {"re": re}
+        exec(source, namespace)
+        parse = namespace["parse_vqa_binary_answer"]
+
+        self.assertEqual(parse("Answer: yes"), "yes")
+        self.assertEqual(parse("**Answer:** No"), "no")
+        self.assertEqual(
+            parse("Reasoning: There is no bed in this dining room.\nNo"),
+            "no",
+        )
+        self.assertEqual(parse("Some explanation.\n**YES**."), "yes")
+
+    def test_vqa_answer_parser_rejects_ambiguous_reasoning(self) -> None:
+        patch = _patch_text("official_c9800d0_vqa_answer_parser.patch")
+        added = _added_lines(patch)
+        start = added.index("def parse_vqa_binary_answer(answer: str) -> str:")
+        end = added.index(
+            '    raise ValueError("VQA response has no unambiguous yes/no final answer")'
+        )
+        source = "\n".join(added[start : end + 1])
+        namespace = {"re": re}
+        exec(source, namespace)
+        parse = namespace["parse_vqa_binary_answer"]
+
+        with self.assertRaises(ValueError):
+            parse("There is no bed in the image, so the detection is incorrect.")
+        with self.assertRaises(ValueError):
+            parse("yes or no cannot be determined")
+
     def test_video_map_filters_out_of_bounds_points(self) -> None:
         patch = _patch_text("official_c9800d0_video_map_bounds.patch")
         added = "\n".join(_added_lines(patch))

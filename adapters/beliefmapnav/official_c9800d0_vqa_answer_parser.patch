@@ -1,0 +1,58 @@
+diff --git a/vlfm/policy/base_objectnav_policy.py b/vlfm/policy/base_objectnav_policy.py
+index 46b9198..9b0d536 100644
+--- a/vlfm/policy/base_objectnav_policy.py
++++ b/vlfm/policy/base_objectnav_policy.py
+@@ -32,6 +32,27 @@ except Exception:
+     class BasePolicy:
+         pass
+ 
++
++def parse_vqa_binary_answer(answer: str) -> str:
++    """Parse a yes/no VQA answer without matching words in its reasoning."""
++    explicit = re.search(
++        r"(?im)^\s*(?:\*\*)?answer(?:\*\*)?\s*:\s*(?:\*\*)?\s*(yes|no)\b",
++        answer,
++    )
++    if explicit:
++        return explicit.group(1).lower()
++
++    nonempty_lines = [line.strip() for line in answer.splitlines() if line.strip()]
++    if nonempty_lines:
++        final_line = re.fullmatch(
++            r"[\s*_`]*(yes|no)[\s*_`.!]*",
++            nonempty_lines[-1],
++            re.IGNORECASE,
++        )
++        if final_line:
++            return final_line.group(1).lower()
++
++    raise ValueError("VQA response has no unambiguous yes/no final answer")
++
++
+ STAIR_CLASS_ID = 17
+ def check_stairs_in_upper_50_percent(mask):
+     height = mask.shape[0]
+@@ -740,11 +761,7 @@ class BaseObjectNavPolicy(BasePolicy):
+                     annotated_rgb = cv2.drawContours(rgb.copy(), contours, -1, (255, 0, 0), 2)
+                     answer = self.openai_client.detection_refinement(annotated_rgb, detections.phrases[idx])
+                     print("answer nomal: ",answer)
+-                    answer_yn = re.search(r'(?:\*\*Answer:\*\*|Answer:)\s*(yes|no)', answer, re.IGNORECASE)
+-                    if not answer_yn:
+-                        raise ValueError("找不到格式为 'answer: yes/no' 的行")
+-                    determine = answer_yn.group(1).lower()
++                    determine = parse_vqa_binary_answer(answer)
+                     if "yes" in determine.lower():
+                         self.fist_detect = False
+ 
+@@ -777,11 +794,7 @@ class BaseObjectNavPolicy(BasePolicy):
+                     annotated_rgb = cv2.drawContours(rgb.copy(), contours, -1, (255, 0, 0), 2)
+                     answer = self.openai_client.detection_refinement(annotated_rgb, detections.phrases[idx])
+                     print("answer choose: ",answer)
+-                    answer_yn = re.search(r'(?:\*\*Answer:\*\*|Answer:)\s*(yes|no)', answer, re.IGNORECASE)
+-                    if not answer_yn:
+-                        raise ValueError("找不到格式为 'answer: yes/no' 的行")
+-                    determine = answer_yn.group(1).lower()
++                    determine = parse_vqa_binary_answer(answer)
+                     if not ("yes" in determine.lower()):
+                         print("ignore the detection")
+                         self.double_detect = True
