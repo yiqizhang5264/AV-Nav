@@ -2,7 +2,7 @@ diff --git a/vlfm/policy/base_objectnav_policy.py b/vlfm/policy/base_objectnav_p
 index 26be5f8..1a9e5ac 100644
 --- a/vlfm/policy/base_objectnav_policy.py
 +++ b/vlfm/policy/base_objectnav_policy.py
-@@ -35,13 +35,13 @@ except Exception:
+@@ -35,12 +35,12 @@ except Exception:
  
  def parse_vqa_binary_answer(answer: str) -> str:
      """Parse a yes/no VQA answer without matching words in its reasoning."""
