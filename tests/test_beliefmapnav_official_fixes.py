@@ -36,6 +36,14 @@ class BeliefMapNavOfficialFixTests(unittest.TestCase):
         self.assertEqual(parse("Answer: yes"), "yes")
         self.assertEqual(parse("**Answer:** No"), "no")
         self.assertEqual(
+            parse("Reasoning: The outlined couch is valid. Answer: yes"),
+            "yes",
+        )
+        self.assertEqual(
+            parse("Answer: no was considered. Final Answer: yes"),
+            "yes",
+        )
+        self.assertEqual(
             parse("Reasoning: There is no bed in this dining room.\nNo"),
             "no",
         )
@@ -57,6 +65,16 @@ class BeliefMapNavOfficialFixTests(unittest.TestCase):
             parse("There is no bed in the image, so the detection is incorrect.")
         with self.assertRaises(ValueError):
             parse("yes or no cannot be determined")
+
+        self.assertEqual(patch.count("except ValueError as error:"), 2)
+        self.assertEqual(patch.count('determine = "no"'), 2)
+
+    def test_vqa_parser_v2_updates_existing_server_adapter(self) -> None:
+        patch = _patch_text("official_c9800d0_vqa_answer_parser_v2.patch")
+        self.assertIn("explicit_answers = re.findall(", patch)
+        self.assertIn("return explicit_answers[-1].lower()", patch)
+        self.assertEqual(patch.count("except ValueError as error:"), 2)
+        self.assertEqual(patch.count('determine = "no"'), 2)
 
     def test_video_map_filters_out_of_bounds_points(self) -> None:
         patch = _patch_text("official_c9800d0_video_map_bounds.patch")
